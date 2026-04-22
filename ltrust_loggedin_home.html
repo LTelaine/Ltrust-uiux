@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LTrust — 首頁（登入後）</title>
+</head>
+<body>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',sans-serif;background:#F5F7FB;color:#1a1a1a}
+
+.nav{height:64px;background:#fff;border-bottom:1px solid #EAECF0;display:flex;align-items:center;justify-content:space-between;padding:0 40px;position:sticky;top:0;z-index:100}
+.nav-left{display:flex;align-items:center;gap:40px}
+.nav-logo{font-size:20px;font-weight:900;color:#1976D2;letter-spacing:-.5px;display:flex;align-items:center;gap:6px}
+.nav-links{display:flex;gap:28px}
+.nav-link{font-size:14px;color:#666;cursor:pointer;padding:4px 0;border-bottom:2px solid transparent}
+.nav-link.active{color:#1976D2;border-bottom-color:#1976D2;font-weight:500}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-points{display:flex;align-items:center;gap:6px;background:#FFF8E1;border:1px solid #FFE082;border-radius:99px;padding:5px 12px;font-size:13px;font-weight:700;color:#F57F17}
+.nav-notif{width:36px;height:36px;border-radius:50%;background:#F5F7FB;border:1px solid #EAECF0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;position:relative}
+.notif-dot{width:8px;height:8px;background:#E63946;border-radius:50%;position:absolute;top:6px;right:6px;border:1.5px solid #fff}
+.nav-avatar{width:36px;height:36px;border-radius:50%;background:#DBEAFE;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#1565C0;cursor:pointer}
+
+.page{max-width:100%;padding:24px 40px 48px}
+
+/* WELCOME BAND */
+.welcome{background:#fff;border-radius:16px;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;border:1px solid #EAECF0}
+.welcome-left{}
+.welcome-greeting{font-size:13px;color:#888;margin-bottom:2px}
+.welcome-name{font-size:20px;font-weight:900;color:#1a1a1a;margin-bottom:4px}
+.welcome-streak{display:flex;align-items:center;gap:8px;font-size:13px;color:#555}
+.streak-fire{font-size:16px}
+.streak-badge{background:#FFF3E0;color:#E65100;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
+.welcome-right{display:flex;align-items:center;gap:16px}
+.countdown{text-align:center;background:#F0F7FF;border-radius:12px;padding:12px 20px}
+.cd-label{font-size:11px;color:#888;margin-bottom:2px}
+.cd-num{font-size:28px;font-weight:900;color:#E63946;line-height:1}
+.cd-unit{font-size:11px;color:#888;margin-top:2px}
+.welcome-cta{background:#1976D2;color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+
+/* MAIN GRID */
+.main-grid{display:grid;grid-template-columns:1fr 340px;gap:20px;margin-bottom:20px}
+
+/* CONTINUE LEARNING */
+.continue-card{background:#fff;border-radius:16px;border:1px solid #EAECF0;padding:24px}
+.card-title{font-size:16px;font-weight:700;color:#1a1a1a;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.card-title-more{font-size:13px;color:#1976D2;font-weight:400;cursor:pointer}
+.course-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid #F5F7FB}
+.course-item:last-child{border-bottom:none;padding-bottom:0}
+.course-thumb{width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ct-blue{background:#DBEAFE}
+.ct-green{background:#DCFCE7}
+.ct-amber{background:#FEF3C7}
+.course-info{flex:1}
+.course-name{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.course-meta{font-size:12px;color:#888;margin-bottom:6px}
+.progress-wrap{display:flex;align-items:center;gap:8px}
+.prog-bar-bg{flex:1;height:6px;background:#F0F0F0;border-radius:99px;overflow:hidden}
+.prog-bar{height:6px;border-radius:99px;background:#1976D2}
+.prog-pct{font-size:11px;color:#888;flex-shrink:0;min-width:28px;text-align:right}
+.course-btn{background:#F0F7FF;color:#1976D2;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:16px}
+.task-card{background:#fff;border-radius:16px;border:1px solid #EAECF0;padding:20px}
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #F5F7FB}
+.task-item:last-child{border-bottom:none;padding-bottom:0}
+.task-check{width:20px;height:20px;border-radius:6px;border:1.5px solid #DBEAFE;background:#F0F7FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.task-check.done{background:#1976D2;border-color:#1976D2}
+.task-check.done svg{display:block}
+.task-check svg{display:none;width:10px;height:10px}
+.task-info{flex:1}
+.task-name{font-size:13px;color:#1a1a1a;line-height:1.4}
+.task-name.done{color:#aaa;text-decoration:line-through}
+.task-pts{font-size:11px;color:#F57F17;margin-top:2px;font-weight:500}
+.points-summary{background:#FFF8E1;border-radius:10px;padding:10px 12px;margin-top:10px;display:flex;align-items:center;justify-content:space-between}
+.ps-label{font-size:12px;color:#888}
+.ps-num{font-size:16px;font-weight:900;color:#F57F17}
+
+/* SERVICE GRID */
+.service-card{background:#fff;border-radius:16px;border:1px solid #EAECF0;padding:24px;margin-bottom:20px}
+.service-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.svc-item{border:1.5px solid #EAECF0;border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .15s;position:relative}
+.svc-item:hover{border-color:#1976D2;background:#F0F7FF}
+.svc-item.new::after{content:'NEW';position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;background:#E63946;color:#fff;padding:2px 5px;border-radius:4px}
+.svc-item.soon{opacity:.55;cursor:default}
+.svc-item.soon::after{content:'即將推出';position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;background:#aaa;color:#fff;padding:2px 5px;border-radius:4px}
+.svc-icon{font-size:28px;margin-bottom:8px}
+.svc-name{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:3px}
+.svc-desc{font-size:11px;color:#888;line-height:1.4}
+
+/* PROMO SECTION */
+.promo-label{font-size:11px;font-weight:700;color:#E63946;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.promo-dot{width:6px;height:6px;background:#E63946;border-radius:50%;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.promo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.promo-card{border-radius:16px;overflow:hidden;border:1px solid #EAECF0;background:#fff;cursor:pointer;transition:transform .15s}
+.promo-card:hover{transform:translateY(-3px)}
+.promo-card.featured{grid-column:span 1;border-color:#1976D2;border-width:1.5px}
+.promo-header{padding:20px 20px 14px;position:relative}
+.ph-blue{background:linear-gradient(135deg,#1976D2,#42A5F5)}
+.ph-orange{background:linear-gradient(135deg,#F4A261,#E76F51)}
+.ph-purple{background:linear-gradient(135deg,#7B61FF,#A78BFA)}
+.promo-tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;background:rgba(255,255,255,.25);color:#fff;margin-bottom:8px}
+.promo-title{font-size:16px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:4px}
+.promo-subtitle{font-size:12px;color:rgba(255,255,255,.8)}
+.promo-badge{position:absolute;top:16px;right:16px;background:#FFD600;color:#1a1a1a;font-size:11px;font-weight:900;padding:4px 10px;border-radius:99px}
+.promo-body{padding:14px 20px 18px}
+.promo-price{display:flex;align-items:baseline;gap:6px;margin-bottom:8px}
+.price-orig{font-size:12px;color:#aaa;text-decoration:line-through}
+.price-now{font-size:22px;font-weight:900;color:#E63946}
+.price-unit{font-size:12px;color:#888}
+.promo-features{margin-bottom:14px}
+.pf-item{font-size:12px;color:#555;padding:3px 0;display:flex;align-items:center;gap:6px}
+.pf-check{color:#1976D2;font-weight:700;flex-shrink:0}
+.btn-promo{width:100%;padding:11px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-promo-primary{background:#1976D2;color:#fff}
+.btn-promo-orange{background:#F4A261;color:#fff}
+.btn-promo-purple{background:#7B61FF;color:#fff}
+.promo-expire{font-size:11px;color:#aaa;text-align:center;margin-top:6px}
+
+/* NEWS */
+.news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+.news-item{display:flex;gap:12px;padding:12px;border:1px solid #EAECF0;border-radius:12px;background:#fff;cursor:pointer}
+.news-thumb{width:64px;height:64px;border-radius:8px;background:#F0F7FF;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px}
+.news-info{}
+.news-tag{font-size:10px;font-weight:700;color:#1976D2;background:#DBEAFE;padding:2px 7px;border-radius:99px;display:inline-block;margin-bottom:4px}
+.news-title{font-size:13px;font-weight:700;color:#1a1a1a;line-height:1.4;margin-bottom:4px}
+.news-date{font-size:11px;color:#aaa}
+
+/* ── WELCOME 3-COL ── */
+.welcome{display:grid;grid-template-columns:220px 1fr 220px;gap:14px;margin-bottom:20px;align-items:stretch}
+.welcome-left{background:#fff;border-radius:16px;padding:18px 20px;border:1px solid #EAECF0;display:flex;flex-direction:column;justify-content:space-between}
+.welcome-greeting{font-size:12px;color:#888;margin-bottom:2px}
+.welcome-name{font-size:17px;font-weight:900;color:#1a1a1a;margin-bottom:6px}
+.welcome-streak{display:flex;align-items:center;gap:6px;font-size:12px;color:#555;margin-bottom:12px}
+.streak-fire{font-size:16px}
+.streak-badge{background:#FFF3E0;color:#E65100;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
+.welcome-cd{display:flex;align-items:center;gap:10px;background:#F0F7FF;border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.welcome-cd-num{font-size:24px;font-weight:900;color:#E63946}
+.welcome-cd-label{font-size:10px;color:#888}
+.welcome-cta{background:#1976D2;color:#fff;border:none;border-radius:9px;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;width:100%}
+
+/* BANNER SLIDER */
+.welcome-banner{border-radius:16px;overflow:hidden;position:relative;border:1px solid #EAECF0}
+.bn-track{display:flex;transition:transform .4s ease;height:100%}
+.bn-slide{flex-shrink:0;width:100%;min-height:160px;padding:20px 22px;display:flex;flex-direction:column;justify-content:center}
+.bn-1{background:linear-gradient(135deg,#FF6B35,#F4A261)}
+.bn-2{background:linear-gradient(135deg,#1976D2,#42A5F5)}
+.bn-3{background:linear-gradient(135deg,#7B61FF,#A78BFA)}
+.bn-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.25);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;margin-bottom:6px;align-self:flex-start}
+.bn-title{font-size:15px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:4px}
+.bn-sub{font-size:11px;color:rgba(255,255,255,.85);line-height:1.4;margin-bottom:10px}
+.btn-bn{font-size:12px;font-weight:700;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;align-self:flex-start}
+.bn-dots{position:absolute;bottom:8px;right:10px;display:flex;gap:5px}
+.bn-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
+.bn-dot.active{background:#fff;width:14px;border-radius:99px}
+
+/* EXAM QUICK */
+.welcome-exam{background:#fff;border-radius:16px;border:1px solid #EAECF0;padding:14px 16px;display:flex;flex-direction:column;overflow:hidden}
+.ex-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.ex-title{font-size:13px;font-weight:700;color:#1a1a1a}
+.ex-more{font-size:11px;color:#1976D2;cursor:pointer}
+.ex-tabs{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.ex-tab{font-size:10px;padding:3px 8px;border-radius:99px;border:1px solid #EAECF0;color:#888;cursor:pointer;background:#fff;transition:all .15s;font-family:inherit}
+.ex-tab.active{background:#1976D2;color:#fff;border-color:#1976D2}
+.ex-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:.5px solid #F0F0F0}
+.ex-item:last-child{border-bottom:none;padding-bottom:0}
+.ex-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.ex-dot.red{background:#E63946}.ex-dot.orange{background:#F4A261}.ex-dot.blue{background:#1976D2}.ex-dot.gray{background:#ccc}
+.ex-name{font-size:11px;font-weight:700;color:#1a1a1a;line-height:1.3}
+.ex-date{font-size:10px;color:#888;margin-top:1px}
+.ex-cd{font-size:10px;font-weight:700;margin-top:2px}
+.ex-cd.red{color:#E63946}.ex-cd.orange{color:#F4A261}.ex-cd.blue{color:#1976D2}.ex-cd.gray{color:#aaa}
+
+/* SOCIAL */
+.social-card{background:#fff;border-radius:14px;border:1px solid #EAECF0;padding:18px 20px;margin-bottom:16px}
+.social-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.social-title{font-size:14px;font-weight:700;color:#1a1a1a}
+.social-tabs{display:flex;gap:6px}
+.stab{font-size:12px;padding:4px 12px;border-radius:99px;border:1px solid #EAECF0;color:#888;cursor:pointer;background:#fff;transition:all .15s;font-family:inherit}
+.stab.active{background:#1976D2;color:#fff;border-color:#1976D2}
+.online-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:12px}
+.ou{text-align:center;cursor:pointer}
+.ou-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;margin:0 auto 4px;position:relative;border:2px solid #fff;box-shadow:0 0 0 2px #EAECF0}
+.ou-av.on::after{content:'';position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:#4CAF50;border-radius:50%;border:2px solid #fff}
+.ou-name{font-size:10px;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ou-act{font-size:9px;color:#aaa;margin-top:1px}
+.rank-list{display:flex;flex-direction:column;gap:8px}
+.rank-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:#F8FAFE}
+.rank-item.me{background:#F0F7FF;border:1.5px solid #1976D2}
+.rank-num{font-size:13px;font-weight:900;min-width:22px;text-align:center}
+.rank-num.g{color:#F59E0B}.rank-num.s{color:#888}.rank-num.b{color:#CD7F32}.rank-num.n{color:#1976D2}
+.rank-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.rank-name{font-size:12px;font-weight:700;color:#1a1a1a}
+.rank-det{font-size:10px;color:#aaa;margin-top:1px}
+.rank-score{font-size:13px;font-weight:900;color:#1976D2;margin-left:auto;flex-shrink:0}
+.add-row{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid #EAECF0}
+.add-input{flex:1;background:#F5F7FB;border:1px solid #EAECF0;border-radius:8px;padding:8px 12px;font-size:12px;font-family:inherit;outline:none}
+.add-input:focus{border-color:#1976D2}
+.btn-add{font-size:12px;font-weight:700;color:#fff;background:#1976D2;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-family:inherit;white-space:nowrap}
+
+/* TAB BAR */
+.tab-bar{display:none}
+
+/* MOBILE */
+@media(max-width:768px){
+  body{padding-bottom:64px}
+  .nav{padding:0 16px;height:52px}
+  .nav-links{display:none}
+  .page{padding:12px 16px 32px}
+  .welcome{grid-template-columns:1fr;gap:10px}
+  .bn-slide{min-height:130px}
+  .welcome-exam{max-height:none}
+  .main-grid{grid-template-columns:1fr}
+  .service-grid{grid-template-columns:repeat(4,1fr)}
+  .promo-grid{grid-template-columns:1fr}
+  .news-grid{grid-template-columns:1fr}
+  .online-grid{grid-template-columns:repeat(4,1fr)}
+  .social-hd{flex-direction:column;align-items:flex-start;gap:8px}
+  .island-band{flex-direction:column;gap:10px;padding:14px 16px}
+  .tab-bar{display:flex;position:fixed;bottom:0;left:0;right:0;height:60px;background:#fff;border-top:.5px solid #EAECF0;z-index:200;align-items:center;justify-content:space-around;padding-bottom:env(safe-area-inset-bottom)}
+  .tab-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;flex:1;cursor:pointer;padding:6px 0;color:#aaa;font-size:10px;font-weight:500;transition:color .15s}
+  .tab-item.active{color:#1976D2}
+  .tab-item svg{width:22px;height:22px}
+}
+
+/* ONBOARDING */
+.ob-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;transition:opacity .3s}
+.ob-dialog{background:#fff;border-radius:20px;width:480px;max-width:100%;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.18);transition:all .3s}
+.ob-prog-wrap{height:3px;background:#EAECF0}
+.ob-prog{height:3px;background:#1976D2;transition:width .4s ease;border-radius:0 99px 99px 0}
+.ob-hd{padding:18px 22px 0;display:flex;align-items:center;justify-content:space-between}
+.ob-step-lbl{font-size:11px;font-weight:700;color:#1976D2;letter-spacing:.06em;text-transform:uppercase}
+.ob-skip{font-size:12px;color:#aaa;cursor:pointer;padding:4px 8px;border-radius:6px}
+.ob-skip:hover{background:#F5F7FB}
+.ob-body{padding:18px 22px 22px}
+.ob-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
+.ob-ic-b{background:#DBEAFE}.ob-ic-g{background:#DCFCE7}.ob-ic-a{background:#FEF3C7}
+.ob-title{font-size:17px;font-weight:900;color:#1a1a1a;margin-bottom:5px;line-height:1.3}
+.ob-desc{font-size:13px;color:#555;line-height:1.6;margin-bottom:16px}
+.ob-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.ob-opt{background:#F8FAFE;border:1.5px solid #DBEAFE;border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .15s}
+.ob-opt:hover,.ob-opt.sel{background:#1976D2;border-color:#1976D2}
+.ob-opt:hover .ob-opt-t,.ob-opt.sel .ob-opt-t{color:#fff}
+.ob-opt:hover .ob-opt-s,.ob-opt.sel .ob-opt-s{color:rgba(255,255,255,.8)}
+.ob-opt-t{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:2px}
+.ob-opt-s{font-size:11px;color:#888}
+.ob-demo{background:#F8FAFE;border:1px solid #EAECF0;border-radius:12px;padding:12px;margin-bottom:14px}
+.ob-demo-lbl{font-size:10px;font-weight:700;color:#1976D2;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
+.ob-cq{background:#DBEAFE;border-radius:8px;padding:8px 10px;font-size:12px;color:#1a1a1a;margin-bottom:6px}
+.ob-ca{background:#fff;border:1px solid #DBEAFE;border-radius:8px;padding:8px 10px}
+.ob-cal{font-size:9px;font-weight:700;color:#4CAF50;margin-bottom:3px;text-transform:uppercase}
+.ob-cat{font-size:11px;color:#333;line-height:1.5}
+.ob-cstep{font-size:10px;color:#555;padding:3px 6px;background:#F0F7FF;border-radius:4px;margin-top:3px;display:flex;align-items:center;gap:4px}
+.ob-csn{width:12px;height:12px;border-radius:50%;background:#1976D2;color:#fff;font-size:7px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ob-navhl{background:#F8FAFE;border:1px solid #EAECF0;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.ob-cd-row{display:flex;align-items:center;justify-content:space-between;background:#FEF3C7;border-radius:10px;padding:10px 14px;margin-bottom:12px}
+.ob-cd-l{font-size:12px;color:#92400E}
+.ob-cd-n{font-size:20px;font-weight:900;color:#E63946}
+.ob-task{background:#F8FAFE;border:1px solid #EAECF0;border-radius:12px;padding:11px 13px;margin-bottom:6px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .15s}
+.ob-task:hover{border-color:#1976D2;background:#F0F7FF}
+.ob-task-chk{width:18px;height:18px;border-radius:5px;border:1.5px solid #DBEAFE;background:#fff;flex-shrink:0}
+.ob-task-n{font-size:12px;font-weight:700;color:#1a1a1a;margin-bottom:1px}
+.ob-task-p{font-size:10px;color:#F57F17;font-weight:500}
+.ob-dots{display:flex;gap:6px;justify-content:center;padding:0 22px 14px}
+.ob-dot{width:7px;height:7px;border-radius:50%;background:#DBEAFE;transition:all .2s}
+.ob-dot.active{background:#1976D2;width:18px;border-radius:99px}
+.ob-ft{padding:0 22px 18px;display:flex;gap:8px}
+.btn-ob-back{font-size:13px;color:#888;padding:10px 16px;border-radius:10px;border:1px solid #EAECF0;background:#fff;cursor:pointer;font-family:inherit}
+.btn-ob-next{flex:1;font-size:14px;font-weight:700;color:#fff;padding:12px;border-radius:10px;border:none;background:#1976D2;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-ob-next:hover{background:#1565C0}
+.btn-ob-next.green{background:#4CAF50}
+</style>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-left">
+    <div class="nav-logo">🐦 LTrust</div>
+    <div class="nav-links">
+      <span class="nav-link active">首頁</span>
+      <span class="nav-link">學習儀表</span>
+      <span class="nav-link">任務</span>
+      <span class="nav-link">服務</span>
+      <span class="nav-link">個人</span>
+      <span class="nav-link">學習快訊</span>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-points">🌟 點數 0 ／ 紅利 25</div>
+    <div class="nav-notif">🔔<div class="notif-dot"></div></div>
+    <div class="nav-avatar">涵</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- WELCOME 3-COL -->
+  <div class="welcome">
+    <!-- 左：歡迎 + 倒數 -->
+    <div class="welcome-left">
+      <div>
+        <div class="welcome-greeting">早安，歡迎回來 👋</div>
+        <div class="welcome-name">小涵，繼續加油！</div>
+        <div class="welcome-streak">
+          <span class="streak-fire">🔥</span>連續學習 7 天
+          <span class="streak-badge">本週達成中</span>
+        </div>
+      </div>
+      <div>
+        <div class="welcome-cd">
+          <div class="welcome-cd-num">142</div>
+          <div><div class="welcome-cd-label">距離學測</div><div style="font-size:10px;color:#aaa">2027/01/17</div></div>
+        </div>
+        <button class="welcome-cta">繼續今天的學習 →</button>
+      </div>
+    </div>
+    <!-- 中：行銷 BN 輪播 -->
+    <div class="welcome-banner">
+      <div class="bn-track" id="bnTrack">
+        <div class="bn-slide bn-1">
+          <div class="bn-badge">🏝️ 限時活動</div>
+          <div class="bn-title">登島大募集！<br>完成任務免費拿 CoCo 奶茶</div>
+          <div class="bn-sub">新會員限定 · 限前 1,000 名 · 截止 2026-03-02</div>
+          <button class="btn-bn" style="background:#fff;color:#FF6B35">查看任務 →</button>
+        </div>
+        <div class="bn-slide bn-2">
+          <div class="bn-badge">🎯 限時 7 折</div>
+          <div class="bn-title">Qbot 練題 30 天方案<br>NT$419，只到 4/30</div>
+          <div class="bn-sub">學測、分科全科無限刷 · AI 自動整理錯題</div>
+          <button class="btn-bn" style="background:#fff;color:#1976D2">立即購買 →</button>
+        </div>
+        <div class="bn-slide bn-3">
+          <div class="bn-badge">✍️ 限時免費</div>
+          <div class="bn-title">WriteAhead 英文批閱<br>免費 5 題包，先領先用</div>
+          <div class="bn-sub">對應學測評分標準 · 每篇詳細批閱建議</div>
+          <button class="btn-bn" style="background:#fff;color:#7B61FF">免費領取 →</button>
+        </div>
+      </div>
+      <div class="bn-dots">
+        <div class="bn-dot active" id="bd0" onclick="goBn(0)"></div>
+        <div class="bn-dot" id="bd1" onclick="goBn(1)"></div>
+        <div class="bn-dot" id="bd2" onclick="goBn(2)"></div>
+      </div>
+    </div>
+    <!-- 右：考試行事曆快覽 -->
+    <div class="welcome-exam">
+      <div class="ex-hd">
+        <div class="ex-title">即將到來的考試</div>
+        <div class="ex-more">完整行事曆 ›</div>
+      </div>
+      <div class="ex-tabs">
+        <button class="ex-tab active" onclick="filterExam(this,'all')">全部</button>
+        <button class="ex-tab" onclick="filterExam(this,'exam')">學測/分科</button>
+        <button class="ex-tab" onclick="filterExam(this,'english')">英檢</button>
+        <button class="ex-tab" onclick="filterExam(this,'art')">術科</button>
+      </div>
+      <div id="exList"></div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID: 繼續學習 + 任務 -->
+  <div class="main-grid">
+
+    <!-- 繼續學習 -->
+    <div class="continue-card">
+      <div class="card-title">
+        繼續學習
+        <span class="card-title-more">查看全部 ›</span>
+      </div>
+      <div class="course-item">
+        <div class="course-thumb ct-blue">🤖</div>
+        <div class="course-info">
+          <div class="course-name">S.E.N.S.E.I 數學 — 排列組合</div>
+          <div class="course-meta">上次學習：昨天・已完成 18/25 題</div>
+          <div class="progress-wrap">
+            <div class="prog-bar-bg"><div class="prog-bar" style="width:72%"></div></div>
+            <div class="prog-pct">72%</div>
+          </div>
+        </div>
+        <button class="course-btn">繼續 →</button>
+      </div>
+      <div class="course-item">
+        <div class="course-thumb ct-green">✍️</div>
+        <div class="course-info">
+          <div class="course-name">英文作文練習 — 學測主題寫作</div>
+          <div class="course-meta">上次學習：3 天前・已批閱 9/20 篇</div>
+          <div class="progress-wrap">
+            <div class="prog-bar-bg"><div class="prog-bar" style="width:45%"></div></div>
+            <div class="prog-pct">45%</div>
+          </div>
+        </div>
+        <button class="course-btn">繼續 →</button>
+      </div>
+      <div class="course-item">
+        <div class="course-thumb ct-amber">📊</div>
+        <div class="course-info">
+          <div class="course-name">Qbot 模擬考 — 學測自然科</div>
+          <div class="course-meta">上次學習：5 天前・已完成 2/10 回</div>
+          <div class="progress-wrap">
+            <div class="prog-bar-bg"><div class="prog-bar" style="width:20%"></div></div>
+            <div class="prog-pct">20%</div>
+          </div>
+        </div>
+        <button class="course-btn">繼續 →</button>
+      </div>
+    </div>
+
+    <!-- 今日任務 -->
+    <div class="sidebar">
+      <div class="task-card">
+        <div class="card-title">
+          今日任務
+          <span class="card-title-more">查看更多 ›</span>
+        </div>
+        <div class="task-item">
+          <div class="task-check done">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L3.5 7L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="task-info">
+            <div class="task-name done">吸收學習新知</div>
+            <div class="task-pts">+ 10 點數 已獲得</div>
+          </div>
+        </div>
+        <div class="task-item">
+          <div class="task-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L3.5 7L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="task-info">
+            <div class="task-name">參見 Qbot 王 — 完成 5 題</div>
+            <div class="task-pts">+ 50 點數</div>
+          </div>
+        </div>
+        <div class="task-item">
+          <div class="task-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L3.5 7L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="task-info">
+            <div class="task-name">WriteAhead 提交一篇作文</div>
+            <div class="task-pts">+ 30 點數</div>
+          </div>
+        </div>
+        <div class="task-item">
+          <div class="task-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L3.5 7L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="task-info">
+            <div class="task-name">完成學習人格測驗</div>
+            <div class="task-pts">+ 100 點數 ＋ Qbot 7 日體驗</div>
+          </div>
+        </div>
+        <div class="points-summary">
+          <span class="ps-label">今日可獲得</span>
+          <span class="ps-num">🌟 190 點</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE GRID -->
+  <div class="service-card">
+    <div class="card-title">
+      我的服務
+      <span class="card-title-more">查看全部服務 ›</span>
+    </div>
+    <div class="service-grid">
+      <div class="svc-item">
+        <div class="svc-icon">🤖</div>
+        <div class="svc-name">S.E.N.S.E.I</div>
+        <div class="svc-desc">AI 即時解題</div>
+      </div>
+      <div class="svc-item">
+        <div class="svc-icon">🎯</div>
+        <div class="svc-name">Qbot</div>
+        <div class="svc-desc">AI 題庫練習</div>
+      </div>
+      <div class="svc-item">
+        <div class="svc-icon">✍️</div>
+        <div class="svc-name">WriteAhead</div>
+        <div class="svc-desc">英文作文批閱</div>
+      </div>
+      <div class="svc-item new">
+        <div class="svc-icon">📖</div>
+        <div class="svc-name">學測專屬通行證</div>
+        <div class="svc-desc">全科刷題計畫</div>
+      </div>
+      <div class="svc-item">
+        <div class="svc-icon">🏆</div>
+        <div class="svc-name">龍騰高中聲</div>
+        <div class="svc-desc">模擬考平台</div>
+      </div>
+      <div class="svc-item">
+        <div class="svc-icon">📚</div>
+        <div class="svc-name">龍騰線上書城</div>
+        <div class="svc-desc">教材購買</div>
+      </div>
+      <div class="svc-item soon">
+        <div class="svc-icon">🤖</div>
+        <div class="svc-name">國寫 AI 批閱</div>
+        <div class="svc-desc">國文作文批閱</div>
+      </div>
+      <div class="svc-item">
+        <div class="svc-icon">📊</div>
+        <div class="svc-name">學習儀表</div>
+        <div class="svc-desc">進度總覽</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMO -->
+  <div class="service-card">
+    <div class="promo-label">
+      <span class="promo-dot"></span>
+      限時活動 · 馬上把握
+    </div>
+    <div class="promo-grid">
+
+      <!-- 活動一：Qbot 30天 -->
+      <div class="promo-card featured">
+        <div class="promo-header ph-blue">
+          <div class="promo-tag">🔥 最多人購買</div>
+          <div class="promo-title">Qbot 練題<br>30 天方案</div>
+          <div class="promo-subtitle">學測衝刺必備，無限刷題不卡關</div>
+          <div class="promo-badge">限時 7 折</div>
+        </div>
+        <div class="promo-body">
+          <div class="promo-price">
+            <span class="price-orig">NT$599</span>
+            <span class="price-now">NT$419</span>
+            <span class="price-unit">/ 30 天</span>
+          </div>
+          <div class="promo-features">
+            <div class="pf-item"><span class="pf-check">✓</span>學測、分科全科題庫無限刷</div>
+            <div class="pf-item"><span class="pf-check">✓</span>AI 自動整理錯題，考前重點複習</div>
+            <div class="pf-item"><span class="pf-check">✓</span>每日 Combo 任務，維持學習節奏</div>
+          </div>
+          <button class="btn-promo btn-promo-primary">立即購買 →</button>
+          <div class="promo-expire">優惠至 4/30 截止</div>
+        </div>
+      </div>
+
+      <!-- 活動二：新生入學禮包 -->
+      <div class="promo-card">
+        <div class="promo-header ph-orange">
+          <div class="promo-tag">🎁 新會員專屬</div>
+          <div class="promo-title">登島大募集<br>限量 CoCo 奶茶</div>
+          <div class="promo-subtitle">完成任務即可免費領取三兄弟</div>
+          <div class="promo-badge">免費</div>
+        </div>
+        <div class="promo-body">
+          <div class="promo-price">
+            <span class="price-now" style="font-size:16px;color:#F4A261">完成任務，免費兌換</span>
+          </div>
+          <div class="promo-features">
+            <div class="pf-item"><span class="pf-check" style="color:#F4A261">✓</span>完成學習人格測驗</div>
+            <div class="pf-item"><span class="pf-check" style="color:#F4A261">✓</span>參見 Qbot 王 5 題</div>
+            <div class="pf-item"><span class="pf-check" style="color:#F4A261">✓</span>抽 Switch 2 ＋ 3,500 學學金</div>
+          </div>
+          <button class="btn-promo btn-promo-orange">查看任務清單 →</button>
+          <div class="promo-expire">2026-03-02 截止・限前 1,000 名</div>
+        </div>
+      </div>
+
+      <!-- 活動三：S.E.N.S.E.I 英數物 combo -->
+      <div class="promo-card">
+        <div class="promo-header ph-purple">
+          <div class="promo-tag">⚡ 組合優惠</div>
+          <div class="promo-title">S.E.N.S.E.I<br>英數物 10 題包</div>
+          <div class="promo-subtitle">最適合衝刺期的高頻練題組合</div>
+        </div>
+        <div class="promo-body">
+          <div class="promo-price">
+            <span class="price-orig">NT$450</span>
+            <span class="price-now" style="color:#7B61FF">NT$299</span>
+            <span class="price-unit">/ 組</span>
+          </div>
+          <div class="promo-features">
+            <div class="pf-item"><span class="pf-check" style="color:#7B61FF">✓</span>英文、數學、物理各 10 題</div>
+            <div class="pf-item"><span class="pf-check" style="color:#7B61FF">✓</span>AI 詳解 ＋ 相似題推薦</div>
+            <div class="pf-item"><span class="pf-check" style="color:#7B61FF">✓</span>買完即用，無期限限制</div>
+          </div>
+          <button class="btn-promo btn-promo-purple">加入購物車 →</button>
+          <div class="promo-expire">庫存剩餘 87 組</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SOCIAL -->
+  <div class="social-card">
+    <div class="social-hd">
+      <div class="social-title">社交圈</div>
+      <div class="social-tabs">
+        <button class="stab active" onclick="switchSocial(this,'online')">同校在線</button>
+        <button class="stab" onclick="switchSocial(this,'rank')">全站排行</button>
+      </div>
+    </div>
+    <!-- 同校在線 -->
+    <div id="socialOnline">
+      <div class="online-grid">
+        <div class="ou"><div class="ou-av on" style="background:#DBEAFE;color:#1565C0">宇</div><div class="ou-name">陳宇翔</div><div class="ou-act">刷數學題</div></div>
+        <div class="ou"><div class="ou-av on" style="background:#DCFCE7;color:#166534">芸</div><div class="ou-name">林芸希</div><div class="ou-act">寫英文作文</div></div>
+        <div class="ou"><div class="ou-av on" style="background:#EDE9FE;color:#5B21B6">翰</div><div class="ou-name">王大翰</div><div class="ou-act">刷物理題</div></div>
+        <div class="ou"><div class="ou-av" style="background:#FEF3C7;color:#92400E">柔</div><div class="ou-name">張柔安</div><div class="ou-act">1 小時前</div></div>
+        <div class="ou"><div class="ou-av" style="background:#FEE2E2;color:#991B1B">哲</div><div class="ou-name">黃子哲</div><div class="ou-act">2 小時前</div></div>
+        <div class="ou"><div class="ou-av" style="background:#F0F7FF;color:#1976D2;font-size:20px">+</div><div class="ou-name" style="color:#1976D2">加好友</div><div class="ou-act"></div></div>
+      </div>
+      <div class="add-row">
+        <input class="add-input" placeholder="輸入學號或暱稱搜尋好友..." />
+        <button class="btn-add">搜尋 ＋ 加入</button>
+      </div>
+    </div>
+    <!-- 全站排行 -->
+    <div id="socialRank" style="display:none">
+      <div class="rank-list">
+        <div class="rank-item"><div class="rank-num g">🥇</div><div class="rank-av" style="background:#FEF3C7;color:#92400E">翔</div><div><div class="rank-name">學習之神_翔</div><div class="rank-det">本週 142 題 · 連續 21 天</div></div><div class="rank-score">4,280</div></div>
+        <div class="rank-item"><div class="rank-num s">🥈</div><div class="rank-av" style="background:#EDE9FE;color:#5B21B6">慧</div><div><div class="rank-name">慧慧加油中</div><div class="rank-det">本週 128 題 · 連續 14 天</div></div><div class="rank-score">3,910</div></div>
+        <div class="rank-item"><div class="rank-num b">🥉</div><div class="rank-av" style="background:#DCFCE7;color:#166534">安</div><div><div class="rank-name">安安讀書中</div><div class="rank-det">本週 115 題 · 連續 9 天</div></div><div class="rank-score">3,540</div></div>
+        <div class="rank-item me"><div class="rank-num n">24</div><div class="rank-av" style="background:#DBEAFE;color:#1565C0">涵</div><div><div class="rank-name">小涵（我）</div><div class="rank-det">本週 47 題 · 連續 7 天</div></div><div class="rank-score" style="color:#1976D2">1,240</div></div>
+      </div>
+      <div style="font-size:11px;color:#aaa;text-align:center;margin-top:10px">本週排行每日更新 · 依完成題數計算</div>
+    </div>
+  </div>
+
+  <!-- NEWS -->
+  <div class="service-card">
+    <div class="card-title">
+      學習快訊
+      <span class="card-title-more">查看更多 ›</span>
+    </div>
+    <div class="news-grid">
+      <div class="news-item">
+        <div class="news-thumb">📰</div>
+        <div class="news-info">
+          <span class="news-tag">活動分享</span>
+          <div class="news-title">LTrust 開學《登島計畫》：新會員大募集！限量 CoCo 奶茶三兄弟免費請你喝</div>
+          <div class="news-date">2026-03-02</div>
+        </div>
+      </div>
+      <div class="news-item">
+        <div class="news-thumb">📖</div>
+        <div class="news-info">
+          <span class="news-tag">統測報導</span>
+          <div class="news-title">統測剩 4 天：現在不是拼奇蹟的時候，是把自己穩下來的時候</div>
+          <div class="news-date">2026-04-20</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <div class="tab-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>首頁</div>
+  <div class="tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>學習儀表</div>
+  <div class="tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="M8 14h2M14 14h2M8 18h2M14 18h2"/></svg>任務</div>
+  <div class="tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>服務</div>
+  <div class="tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>個人</div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="ob-bg" id="obBg">
+  <div class="ob-dialog" id="obDlg">
+    <div class="ob-prog-wrap"><div class="ob-prog" id="obProg" style="width:33%"></div></div>
+    <div class="ob-hd"><div class="ob-step-lbl" id="obLbl">步驟 1 / 3</div><div class="ob-skip" onclick="obFinish()">略過 ›</div></div>
+    <div id="obS1" class="ob-body">
+      <div class="ob-icon ob-ic-b">🎯</div>
+      <div class="ob-title">你現在最想補強哪個方向？</div>
+      <div class="ob-desc">根據你的目標，直接帶你到最相關的工具。</div>
+      <div class="ob-opts" id="obOpts">
+        <div class="ob-opt" onclick="obSel(this)"><div class="ob-opt-t">學測衝刺</div><div class="ob-opt-s">高三 · 準備學測</div></div>
+        <div class="ob-opt" onclick="obSel(this)"><div class="ob-opt-t">統測準備</div><div class="ob-opt-s">技職 · 四技二專</div></div>
+        <div class="ob-opt" onclick="obSel(this)"><div class="ob-opt-t">平時學科補強</div><div class="ob-opt-s">高一高二 · 段考</div></div>
+        <div class="ob-opt" onclick="obSel(this)"><div class="ob-opt-t">英文作文提升</div><div class="ob-opt-s">作文批改 · 評分練習</div></div>
+      </div>
+    </div>
+    <div id="obS2" class="ob-body" style="display:none">
+      <div class="ob-icon ob-ic-g">⚡</div>
+      <div class="ob-title">30 秒，先試試 S.E.N.S.E.I</div>
+      <div class="ob-desc">不需要買課。直接問一題，看看 AI 怎麼解析你的弱點。</div>
+      <div class="ob-demo">
+        <div class="ob-demo-lbl">S.E.N.S.E.I 解題示意</div>
+        <div class="ob-cq">排列組合：P 和 C 怎麼判斷用哪個？</div>
+        <div class="ob-ca"><div class="ob-cal">🤖 S.E.N.S.E.I</div><div class="ob-cat">有順序就用 P，沒順序就用 C！</div><div class="ob-cstep"><span class="ob-csn">1</span>「排成一列」→ 有順序 → P(5,3) = 60 種</div><div class="ob-cstep"><span class="ob-csn">2</span>「選成一組」→ 沒順序 → C(5,3) = 10 種</div></div>
+      </div>
+      <div class="ob-navhl"><span style="font-size:18px">📐</span><span style="font-size:12px;color:#555">點「<strong style="color:#1976D2">服務</strong>」→「<strong style="color:#1976D2">S.E.N.S.E.I</strong>」→ 選科目，每科免費試 1 次</span></div>
+    </div>
+    <div id="obS3" class="ob-body" style="display:none">
+      <div class="ob-icon ob-ic-a">🔥</div>
+      <div class="ob-title">今天先完成這三件事</div>
+      <div class="ob-desc">完成任務累積點數，可以換 Qbot 免費體驗。</div>
+      <div class="ob-cd-row"><span class="ob-cd-l">📅 距離學測還有</span><span class="ob-cd-n">142 天</span></div>
+      <div class="ob-task"><div class="ob-task-chk"></div><div><div class="ob-task-n">完成學習人格測驗</div><div class="ob-task-p">+ 100 點數 ＋ Qbot 7 日免費體驗</div></div><span style="margin-left:auto;color:#aaa">›</span></div>
+      <div class="ob-task"><div class="ob-task-chk"></div><div><div class="ob-task-n">用 S.E.N.S.E.I 免費試問第一題</div><div class="ob-task-p">+ 30 點數</div></div><span style="margin-left:auto;color:#aaa">›</span></div>
+      <div class="ob-task"><div class="ob-task-chk"></div><div><div class="ob-task-n">領取 WriteAhead 免費 5 題包</div><div class="ob-task-p">限時免費，領了就用</div></div><span style="margin-left:auto;color:#aaa">›</span></div>
+    </div>
+    <div class="ob-dots"><div class="ob-dot active" id="od1"></div><div class="ob-dot" id="od2"></div><div class="ob-dot" id="od3"></div></div>
+    <div class="ob-ft">
+      <button class="btn-ob-back" id="obBack" onclick="obPrev()" style="display:none">← 上一步</button>
+      <button class="btn-ob-next" id="obNext" onclick="obNext()">繼續 →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* BANNER SLIDER */
+let bnCur=0;
+function goBn(n){
+  bnCur=n;
+  document.getElementById('bnTrack').style.transform='translateX(-'+(bnCur*100)+'%)';
+  [0,1,2].forEach(function(i){document.getElementById('bd'+i).classList.toggle('active',i===bnCur);});
+}
+setInterval(function(){goBn((bnCur+1)%3);},4000);
+
+/* EXAM FILTER */
+var EXAMS=[
+  {name:'統測',date:'4/25–4/26',days:4,type:'exam',color:'red'},
+  {name:'全民英檢 中級初試',date:'4/12',days:-10,type:'english',color:'gray'},
+  {name:'全民英檢 中高級初試',date:'5/31',days:40,type:'english',color:'orange'},
+  {name:'分科測驗',date:'7/11–7/12',days:81,type:'exam',color:'blue'},
+  {name:'術科聯招（設計群）',date:'6/15',days:55,type:'art',color:'blue'},
+];
+function filterExam(el,type){
+  document.querySelectorAll('.ex-tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  var list=document.getElementById('exList');
+  var filtered=type==='all'?EXAMS:EXAMS.filter(function(e){return e.type===type;});
+  list.innerHTML=filtered.slice(0,4).map(function(e){
+    var cd=e.days>0?'<div class="ex-cd '+e.color+'">還有 '+e.days+' 天</div>':e.days===0?'<div class="ex-cd red">今天！</div>':'<div class="ex-cd gray">已結束</div>';
+    return '<div class="ex-item"><div class="ex-dot '+e.color+'"></div><div><div class="ex-name">'+e.name+'</div><div class="ex-date">'+e.date+'</div>'+cd+'</div></div>';
+  }).join('');
+}
+filterExam(document.querySelector('.ex-tab'),'all');
+
+/* SOCIAL TABS */
+function switchSocial(el,tab){
+  document.querySelectorAll('.stab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  document.getElementById('socialOnline').style.display=tab==='online'?'block':'none';
+  document.getElementById('socialRank').style.display=tab==='rank'?'block':'none';
+}
+
+/* ONBOARDING */
+var obCur=1;
+var obTotal=3;
+function obUpdate(){
+  [1,2,3].forEach(function(i){
+    document.getElementById('obS'+i).style.display=i===obCur?'block':'none';
+    document.getElementById('od'+i).classList.toggle('active',i===obCur);
+  });
+  document.getElementById('obLbl').textContent='步驟 '+obCur+' / '+obTotal;
+  document.getElementById('obProg').style.width=Math.round((obCur/obTotal)*100)+'%';
+  document.getElementById('obBack').style.display=obCur>1?'block':'none';
+  var nb=document.getElementById('obNext');
+  if(obCur===obTotal){nb.textContent='開始學習 →';nb.classList.add('green');}
+  else{nb.textContent='繼續 →';nb.classList.remove('green');}
+}
+function obNext(){
+  if(obCur===1 && !document.querySelector('.ob-opt.sel')){
+    var og=document.getElementById('obOpts');
+    og.style.outline='2px solid #E63946';og.style.borderRadius='8px';
+    setTimeout(function(){og.style.outline='';},800);return;
+  }
+  if(obCur<obTotal){obCur++;obUpdate();}else obFinish();
+}
+function obPrev(){if(obCur>1){obCur--;obUpdate();}}
+function obSel(el){
+  document.querySelectorAll('.ob-opt').forEach(function(b){b.classList.remove('sel');});
+  el.classList.add('sel');
+}
+function obFinish(){
+  var bg=document.getElementById('obBg');
+  var dlg=document.getElementById('obDlg');
+  dlg.style.cssText='opacity:0;transform:scale(.97);transition:all .3s';
+  bg.style.cssText='opacity:0;transition:opacity .3s';
+  setTimeout(function(){bg.style.display='none';},300);
+}
+obUpdate();
+
+/* TAB BAR */
+document.querySelectorAll('.tab-item').forEach(function(item){
+  item.addEventListener('click',function(){
+    document.querySelectorAll('.tab-item').forEach(function(t){t.classList.remove('active');});
+    item.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

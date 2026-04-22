@@ -1,0 +1,1378 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LTrust — 專為高中生設計的 AI 學習平台</title>
+</head>
+<body>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',sans-serif;background:#fff;color:#1a1a1a;font-size:14px}
+
+.nav{height:60px;background:#fff;border-bottom:1px solid #EAECF0;display:flex;align-items:center;justify-content:space-between;padding:0 40px;position:sticky;top:0;z-index:100}
+.nav-logo{font-size:18px;font-weight:900;color:#1976D2;display:flex;align-items:center;gap:6px}
+.nav-links{display:flex;gap:24px}
+.nl{font-size:13px;color:#666;cursor:pointer}.nl.active{color:#1976D2;font-weight:500}
+.nav-r{display:flex;gap:8px;align-items:center}
+.btn-ln{font-size:13px;color:#555;padding:7px 14px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;font-family:inherit}
+.btn-rg{font-size:13px;font-weight:700;color:#fff;padding:8px 18px;border-radius:8px;border:none;background:#1976D2;cursor:pointer;font-family:inherit}
+.btn-ct{font-size:13px;color:#1976D2;padding:7px 14px;border-radius:8px;border:1.5px solid #1976D2;background:#fff;cursor:pointer;font-family:inherit}
+
+.hero{background:#F0F7FF;padding:52px 40px 0;display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:end;overflow:hidden}
+.h-ey{display:inline-flex;align-items:center;gap:6px;background:#DBEAFE;color:#1565C0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;margin-bottom:14px}
+.h-title{font-size:34px;font-weight:900;line-height:1.25;margin-bottom:6px}
+.h-title em{color:#1976D2;font-style:normal}
+.h-sub{font-size:18px;font-weight:500;color:#1976D2;margin-bottom:14px}
+.h-desc{font-size:14px;color:#555;line-height:1.7;margin-bottom:20px;max-width:440px}
+.h-cta{display:flex;gap:10px;margin-bottom:20px}
+.btn-h1{font-size:14px;font-weight:700;color:#fff;padding:12px 24px;border-radius:10px;border:none;background:#1976D2;cursor:pointer;font-family:inherit}
+.btn-h2{font-size:14px;color:#1976D2;padding:11px 20px;border-radius:10px;border:1.5px solid #1976D2;background:#fff;cursor:pointer;font-family:inherit}
+.h-trust{display:flex;gap:16px;padding-bottom:20px;flex-wrap:wrap}
+.tp{display:flex;align-items:center;gap:5px;font-size:12px;color:#555}
+.tck{width:16px;height:16px;border-radius:50%;background:#1976D2;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tck svg{width:9px;height:9px}
+.hero-demo{display:flex;flex-direction:column;gap:10px;align-self:flex-end}
+.demo-label{font-size:11px;font-weight:700;color:#1976D2;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px;text-align:center}
+.subj-badge-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.sbadge{font-size:11px;padding:4px 10px;border-radius:99px;border:1.5px solid #DBEAFE;color:#1976D2;background:#F0F7FF;font-weight:500}
+.sbadge.on{background:#1976D2;color:#fff;border-color:#1976D2}
+.demo-card{background:#fff;border-radius:16px 16px 0 0;padding:18px;box-shadow:0 -4px 20px rgba(0,0,0,.06)}
+.dc-q{background:#F0F7FF;border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:13px;color:#333;line-height:1.55}
+.dc-ql{font-size:10px;font-weight:700;color:#1976D2;margin-bottom:4px;letter-spacing:.04em;text-transform:uppercase}
+.dc-a{background:#fff;border:1px solid #DBEAFE;border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.dc-al{font-size:10px;font-weight:700;color:#4CAF50;margin-bottom:4px;text-transform:uppercase;display:flex;align-items:center;gap:4px}
+.dc-at{font-size:12px;color:#333;line-height:1.6}
+.dc-steps{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.dc-step{font-size:11px;color:#555;padding:4px 8px;background:#F8FAFE;border-radius:5px;display:flex;align-items:flex-start;gap:5px}
+.sn{width:14px;height:14px;border-radius:50%;background:#1976D2;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.dc-input-row{display:flex;gap:6px;margin-top:8px}
+.dc-input{flex:1;background:#F5F7FB;border:1px solid #EAECF0;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;font-family:inherit}
+.dc-send{background:#1976D2;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:700}
+
+/* SLIDER */
+.slider-wrap{position:relative;overflow:hidden}
+.slider-track{display:flex;transition:transform .4s ease}
+.slide{flex-shrink:0;width:100%;padding:28px 40px;display:grid;align-items:center}
+.slide-1{background:linear-gradient(135deg,#FF6B35,#F4A261);grid-template-columns:1fr auto;gap:24px}
+.slide-2{background:linear-gradient(135deg,#1976D2,#42A5F5);grid-template-columns:1fr auto;gap:24px}
+.slide-3{background:linear-gradient(135deg,#4CAF50,#81C784);grid-template-columns:1fr auto;gap:24px}
+.sl-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.25);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;margin-bottom:8px}
+.sl-dot{width:6px;height:6px;background:#FFD600;border-radius:50%}
+.sl-title{font-size:22px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:4px}
+.sl-sub{font-size:13px;color:rgba(255,255,255,.85);line-height:1.5;margin-bottom:12px}
+.sl-items{display:flex;gap:16px;flex-wrap:wrap}
+.sl-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#fff}
+.sl-chk{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sl-chk svg{width:8px;height:8px}
+.sl-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.sl-prize{background:#fff;border-radius:12px;padding:12px 18px;text-align:center}
+.sl-prize-icon{font-size:24px;margin-bottom:4px}
+.sl-prize-t{font-size:12px;font-weight:700;color:#1a1a1a}
+.sl-prize-s{font-size:11px;color:#888}
+.btn-sl{font-size:14px;font-weight:700;padding:11px 24px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;white-space:nowrap}
+.sl-note{font-size:11px;color:rgba(255,255,255,.7);text-align:right}
+.slider-nav{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:#fff}
+.sdot{width:8px;height:8px;border-radius:50%;background:#DBEAFE;cursor:pointer;transition:all .2s}
+.sdot.active{background:#1976D2;width:20px;border-radius:99px}
+.sarr{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.9);border:none;cursor:pointer;font-size:18px;color:#333;display:flex;align-items:center;justify-content:center;z-index:10}
+.sarr-p{left:12px}.sarr-n{right:12px}
+
+/* STATS */
+.stats{background:#1976D2;padding:18px 40px;display:flex;justify-content:center;gap:72px}
+.st{text-align:center}
+.st-n{font-size:22px;font-weight:900;color:#fff}
+.st-l{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
+
+/* SECTION */
+.sec{padding:48px 40px}
+.sec-bg{background:#F8FAFE}
+.sec-hd{text-align:center;margin-bottom:28px}
+.sec-ey{font-size:11px;font-weight:700;color:#1976D2;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.sec-ti{font-size:24px;font-weight:900;color:#1a1a1a;margin-bottom:6px}
+.sec-su{font-size:13px;color:#777;line-height:1.6}
+
+/* SUBJECT */
+.subj-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.sj{background:#fff;border:1.5px solid #E8EEF8;border-radius:14px;padding:18px 10px;text-align:center;cursor:pointer;transition:all .15s}
+.sj:hover{border-color:#1976D2;background:#F0F7FF;transform:translateY(-2px)}
+.sj-icon{font-size:26px;margin-bottom:6px}
+.sj-name{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:3px}
+.sj-tag{font-size:10px;color:#888;line-height:1.4}
+
+/* NOTION TOOL */
+.tool-intro{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin-bottom:56px}
+.tool-intro:last-child{margin-bottom:0}
+.tool-intro.rev{direction:rtl}
+.tool-intro.rev>*{direction:ltr}
+.ti-brand{font-size:11px;font-weight:700;color:#1976D2;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.ti-title{font-size:22px;font-weight:900;color:#1a1a1a;line-height:1.3;margin-bottom:8px}
+.ti-title em{color:#1976D2;font-style:normal}
+.ti-desc{font-size:14px;color:#555;line-height:1.7;margin-bottom:16px}
+.ti-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.ti-feat{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#444}
+.ti-fd{width:18px;height:18px;border-radius:50%;background:#1976D2;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ti-fd svg{width:10px;height:10px}
+.ti-cta{display:flex;align-items:center;gap:12px}
+.btn-ti{font-size:13px;font-weight:700;color:#fff;padding:10px 20px;border-radius:9px;border:none;background:#1976D2;cursor:pointer;font-family:inherit}
+.ti-trial{font-size:12px;color:#1976D2;font-weight:500}
+.ti-ui{border-radius:16px;overflow:hidden;border:1px solid #EAECF0;box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.ui-bar{background:#F8FAFE;padding:10px 14px;border-bottom:1px solid #EAECF0;display:flex;align-items:center;gap:6px}
+.ui-dot{width:9px;height:9px;border-radius:50%}
+.ui-bar-title{font-size:11px;font-weight:700;color:#888;margin-left:6px}
+.ui-body{background:#fff;padding:18px}
+.ui-cq{background:#F0F7FF;border-radius:9px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:#333;line-height:1.5}
+.ui-cql{font-size:9px;font-weight:700;color:#1976D2;margin-bottom:3px;text-transform:uppercase}
+.ui-ca{background:#fff;border:1px solid #DBEAFE;border-radius:9px;padding:10px 12px;margin-bottom:8px}
+.ui-cal{font-size:9px;font-weight:700;color:#4CAF50;margin-bottom:3px;text-transform:uppercase;display:flex;align-items:center;gap:3px}
+.ui-st{font-size:11px;color:#555;padding:3px 6px;background:#F8FAFE;border-radius:4px;margin-top:3px;display:flex;align-items:center;gap:4px}
+.ui-sn{width:13px;height:13px;border-radius:50%;background:#1976D2;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ui-essay{font-size:11px;color:#333;line-height:1.7;border:1px solid #EAECF0;border-radius:7px;padding:8px 10px;margin-bottom:8px}
+.ui-srow{display:flex;gap:6px;margin-bottom:8px}
+.ui-sc{background:#F0F7FF;border-radius:7px;padding:7px 10px;text-align:center;flex:1}
+.ui-sc-n{font-size:16px;font-weight:900;color:#1976D2}
+.ui-sc-l{font-size:9px;color:#888;margin-top:1px}
+.ui-fb{font-size:11px;color:#555;background:#FFFBEB;border-left:3px solid #F4A261;border-radius:0 5px 5px 0;padding:7px 9px;line-height:1.5}
+.ui-qrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ui-qnum{font-size:11px;color:#888}
+.ui-combo{font-size:10px;font-weight:700;background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:99px}
+.ui-question{font-size:12px;color:#1a1a1a;margin-bottom:7px;line-height:1.5}
+.ui-opts{display:flex;flex-direction:column;gap:4px;margin-bottom:7px}
+.ui-opt{font-size:11px;padding:5px 9px;border-radius:6px;border:1px solid #EAECF0;color:#555}
+.ui-opt.ok{background:#DCFCE7;border-color:#86EFAC;color:#166534;font-weight:700}
+.ui-opt.err{background:#FEE2E2;border-color:#FCA5A5;color:#991B1B}
+.ui-prog{background:#F0F7FF;border-radius:7px;padding:7px 10px;display:flex;align-items:center;justify-content:space-between}
+.ui-pb-bg{flex:1;height:4px;background:#DBEAFE;border-radius:99px;overflow:hidden;margin:0 8px}
+.ui-pb{height:4px;background:#1976D2;border-radius:99px}
+
+/* SHOP */
+.shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.shop-card{background:#fff;border:1px solid #E8EEF8;border-radius:14px;overflow:hidden;cursor:pointer;transition:all .15s}
+.shop-card:hover{border-color:#1976D2;transform:translateY(-2px)}
+.shop-thumb{height:80px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.st-b{background:#DBEAFE}.st-g{background:#DCFCE7}.st-a{background:#FEF3C7}.st-p{background:#EDE9FE}
+.shop-body{padding:12px}
+.shop-brand{font-size:10px;color:#1976D2;font-weight:700;margin-bottom:3px}
+.shop-name{font-size:12px;font-weight:700;color:#1a1a1a;margin-bottom:4px;line-height:1.4}
+.shop-subj{font-size:10px;color:#888;margin-bottom:8px}
+.shop-bot{display:flex;align-items:center;justify-content:space-between}
+.shop-price{font-size:14px;font-weight:900;color:#E63946}
+.shop-orig{font-size:11px;color:#aaa;text-decoration:line-through;margin-right:4px}
+.shop-btn{font-size:11px;font-weight:700;color:#fff;background:#1976D2;border:none;border-radius:6px;padding:5px 10px;cursor:pointer;font-family:inherit}
+
+/* VIDEO */
+.video-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.vc{border-radius:14px;overflow:hidden;cursor:pointer;border:1px solid #E8EEF8;transition:transform .15s}
+.vc:hover{transform:translateY(-3px)}
+.vc-thumb{height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.vt-1{background:linear-gradient(135deg,#E63946,#FF8A80)}
+.vt-2{background:linear-gradient(135deg,#1976D2,#64B5F6)}
+.vt-3{background:linear-gradient(135deg,#F4A261,#FFD54F)}
+.vt-4{background:linear-gradient(135deg,#7B61FF,#CE93D8)}
+.vc-play{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:14px;position:relative;z-index:2}
+.vc-label{position:absolute;bottom:7px;left:7px;background:rgba(0,0,0,.6);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;z-index:2}
+.vc-overlay{position:absolute;top:7px;left:7px;right:7px;font-size:12px;font-weight:700;color:#fff;line-height:1.3;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.vc-body{background:#fff;padding:10px 12px}
+.vc-tag{font-size:10px;font-weight:700;color:#E63946;background:#FEE2E2;padding:2px 6px;border-radius:99px;display:inline-block;margin-bottom:4px}
+.vc-title{font-size:12px;font-weight:700;color:#1a1a1a;line-height:1.4;margin-bottom:4px}
+.vc-meta{font-size:10px;color:#aaa}
+.ig-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#1976D2;border:1px solid #DBEAFE;border-radius:99px;padding:6px 14px;margin-top:16px;cursor:pointer;background:#F0F7FF}
+
+/* CALENDAR */
+.cal-layout{display:grid;grid-template-columns:1fr 290px;gap:20px;align-items:start}
+.cal-wrap{background:#fff;border:1px solid #EAECF0;border-radius:16px;overflow:hidden}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #EAECF0}
+.cal-nav-btn{width:30px;height:30px;border-radius:7px;border:1px solid #EAECF0;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:#555}
+.cal-nav-btn:hover{background:#F0F7FF;border-color:#1976D2;color:#1976D2}
+.cal-ml{font-size:15px;font-weight:700;color:#1a1a1a}
+.cal-week-hd{display:grid;grid-template-columns:repeat(7,1fr);background:#F8FAFE;padding:7px 10px}
+.wh{text-align:center;font-size:10px;font-weight:700;color:#aaa}
+.wh.sun{color:#E63946}.wh.sat{color:#1976D2}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:6px 10px 10px;gap:2px}
+.day{min-height:66px;padding:5px 3px;border-radius:7px;position:relative}
+.day.today{background:#F0F7FF}
+.day-num{font-size:11px;font-weight:500;color:#333;margin-bottom:3px;display:block;text-align:center}
+.day.today .day-num{width:20px;height:20px;background:#1976D2;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin:0 auto 3px}
+.day.sun .day-num{color:#E63946}
+.day.sat .day-num{color:#1976D2}
+.day.other-month .day-num{color:#ddd}
+.ev{font-size:9px;font-weight:700;padding:2px 4px;border-radius:3px;margin-bottom:2px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev-exam{background:#FEE2E2;color:#991B1B}
+.ev-reg{background:#DBEAFE;color:#1E40AF}
+.ev-result{background:#DCFCE7;color:#166534}
+.cal-legend{display:flex;gap:12px;padding:10px 18px;border-top:1px solid #EAECF0;flex-wrap:wrap}
+.lg{display:flex;align-items:center;gap:4px;font-size:10px;color:#666}
+.lg-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.exam-item{background:#fff;border:1px solid #EAECF0;border-radius:11px;padding:11px 13px;margin-bottom:9px;cursor:pointer;border-left:3px solid transparent}
+.exam-item.urgent{border-left-color:#E63946}
+.exam-item.soon{border-left-color:#F4A261}
+.exam-item.normal{border-left-color:#1976D2}
+.exam-item.done{border-left-color:#aaa}
+.ei-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:5px}
+.ei-name{font-size:12px;font-weight:700;color:#1a1a1a;line-height:1.4;flex:1;margin-right:6px}
+.ei-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.b-urgent{background:#FEE2E2;color:#991B1B}
+.b-soon{background:#FEF3C7;color:#92400E}
+.b-normal{background:#DBEAFE;color:#1E40AF}
+.b-done{background:#F0F0F0;color:#888}
+.ei-row{display:flex;align-items:center;gap:5px;font-size:10px;color:#666;margin-bottom:2px}
+.ei-rl{color:#aaa;min-width:32px}
+.ei-cd{font-size:11px;font-weight:700;margin-top:5px;padding-top:5px;border-top:1px solid #F5F7FB}
+
+/* PARENT */
+.par-bg{background:#EEF4FF}
+.par-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.par-ey{font-size:11px;font-weight:700;color:#3D5AFE;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.par-ti{font-size:24px;font-weight:900;line-height:1.3;margin-bottom:12px}
+.par-su{font-size:13px;color:#555;line-height:1.7;margin-bottom:20px}
+.par-items{display:flex;flex-direction:column;gap:12px}
+.par-item{display:flex;align-items:flex-start;gap:10px}
+.par-chk{width:20px;height:20px;border-radius:50%;background:#3D5AFE;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.par-chk svg{width:10px;height:10px}
+.pi-t{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:2px}
+.pi-d{font-size:12px;color:#666;line-height:1.5}
+.par-cards{display:flex;flex-direction:column;gap:10px}
+.par-card{background:#fff;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.pct{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:2px}
+.pcd{font-size:11px;color:#777;line-height:1.4}
+
+/* TESTI */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.testi{background:#fff;border:1px solid #E8EEF8;border-radius:14px;padding:18px}
+.testi-stars{color:#F4A261;font-size:13px;margin-bottom:8px}
+.testi-q{font-size:12px;color:#333;line-height:1.7;margin-bottom:12px}
+.testi-m{display:flex;align-items:center;gap:8px}
+.testi-av{width:28px;height:28px;border-radius:50%;background:#DBEAFE;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#1565C0;flex-shrink:0}
+.testi-n{font-size:12px;font-weight:700;color:#1a1a1a}
+.testi-s{font-size:10px;color:#888}
+
+/* ARTICLES */
+.art-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.art-card{background:#fff;border:1px solid #E8EEF8;border-radius:12px;padding:16px;display:flex;gap:14px;cursor:pointer;transition:border-color .15s}
+.art-card:hover{border-color:#1976D2}
+.art-thumb{width:72px;height:72px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px}
+.at-1{background:#FEF3C7}.at-2{background:#DBEAFE}
+.art-tag{font-size:10px;font-weight:700;color:#1976D2;background:#DBEAFE;padding:2px 7px;border-radius:99px;display:inline-block;margin-bottom:5px}
+.art-title{font-size:13px;font-weight:700;color:#1a1a1a;line-height:1.45;margin-bottom:5px}
+.art-meta{font-size:11px;color:#aaa}
+
+/* FINAL */
+.final{background:#1a1a1a;padding:52px 40px;text-align:center}
+.ft{font-size:26px;font-weight:900;color:#fff;margin-bottom:6px}
+.fs{font-size:14px;color:#aaa;margin-bottom:24px;line-height:1.6}
+.fb{display:flex;gap:10px;justify-content:center;margin-bottom:12px}
+.btn-f1{font-size:14px;font-weight:700;color:#fff;padding:13px 28px;border-radius:10px;border:none;background:#1976D2;cursor:pointer;font-family:inherit}
+.btn-f2{font-size:14px;color:#fff;padding:12px 24px;border-radius:10px;border:1.5px solid #555;background:transparent;cursor:pointer;font-family:inherit}
+.fn{font-size:11px;color:#555}
+.footer{background:#111;padding:28px 40px;display:flex;justify-content:space-between;align-items:center}
+.fl{font-size:14px;font-weight:900;color:#fff}
+.fc{display:flex;gap:16px}
+.fci{font-size:11px;color:#555;cursor:pointer}
+.fr{font-size:11px;color:#555}
+.div{height:1px;background:#EAECF0;margin:0 40px}
+.sec-more{display:block;text-align:center;margin-top:20px;font-size:13px;color:#1976D2;cursor:pointer}
+
+
+.sec{padding:56px 40px}
+.sec-bg{background:#F8FAFE}
+.sec-hd{text-align:center;margin-bottom:40px}
+.sec-ey{font-size:11px;font-weight:700;color:#1976D2;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.sec-ti{font-size:24px;font-weight:900;color:#1a1a1a;margin-bottom:6px}
+.sec-su{font-size:13px;color:#777;line-height:1.6}
+
+/* ── 四步驟學習循環 ── */
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.step{background:#fff;border:1px solid #EAECF0;padding:28px 20px;text-align:center;position:relative;cursor:pointer;transition:all .15s}
+.step:not(:last-child)::after{content:'›';position:absolute;right:-14px;top:50%;transform:translateY(-50%);font-size:20px;color:#1976D2;z-index:2;width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #DBEAFE;line-height:28px}
+.step:first-child{border-radius:14px 0 0 14px}
+.step:last-child{border-radius:0 14px 14px 0}
+.step:hover{background:#F0F7FF;z-index:1}
+.step.active{background:#1976D2;border-color:#1976D2}
+.step-num{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.step.active .step-num{color:rgba(255,255,255,.7)}
+.step:not(.active) .step-num{color:#1976D2}
+.step-icon-wrap{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px}
+.step.active .step-icon-wrap{background:rgba(255,255,255,.2)}
+.si-1{background:#DBEAFE}
+.si-2{background:#DCFCE7}
+.si-3{background:#FEF3C7}
+.si-4{background:#EDE9FE}
+.step-title{font-size:15px;font-weight:900;margin-bottom:6px}
+.step.active .step-title{color:#fff}
+.step:not(.active) .step-title{color:#1a1a1a}
+.step-desc{font-size:12px;line-height:1.6}
+.step.active .step-desc{color:rgba(255,255,255,.85)}
+.step:not(.active) .step-desc{color:#666}
+.step-link{font-size:11px;font-weight:700;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:4px}
+.step.active .step-link{color:#FFD600}
+.step:not(.active) .step-link{color:#1976D2}
+
+/* 步驟說明面板 */
+.step-panel{background:#fff;border:1px solid #EAECF0;border-radius:0 0 14px 14px;border-top:none;padding:24px 32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.sp-text{}
+.sp-label{font-size:10px;font-weight:700;color:#1976D2;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.sp-title{font-size:18px;font-weight:900;color:#1a1a1a;margin-bottom:8px}
+.sp-desc{font-size:13px;color:#555;line-height:1.7;margin-bottom:14px}
+.sp-feats{display:flex;flex-direction:column;gap:6px}
+.sp-feat{display:flex;align-items:center;gap:7px;font-size:12px;color:#444}
+.sp-dot{width:6px;height:6px;border-radius:50%;background:#1976D2;flex-shrink:0}
+.sp-ui{background:#F0F7FF;border-radius:12px;padding:16px}
+.sp-ui-title{font-size:11px;font-weight:700;color:#1976D2;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em}
+.sp-ui-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #DBEAFE;font-size:12px}
+.sp-ui-row:last-child{border-bottom:none}
+.sp-ui-label{color:#555}
+.sp-ui-val{font-weight:700;color:#1976D2}
+.sp-ui-bar-wrap{flex:1;margin:0 12px;height:5px;background:#DBEAFE;border-radius:99px;overflow:hidden}
+.sp-ui-bar{height:5px;background:#1976D2;border-radius:99px}
+.sp-ui-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px}
+.sp-ui-badge.ok{background:#DCFCE7;color:#166534}
+.sp-ui-badge.warn{background:#FEF3C7;color:#92400E}
+
+/* ── 學習報告示意 ── */
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.report-left{}
+.rl-label{font-size:11px;font-weight:700;color:#1976D2;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.rl-title{font-size:22px;font-weight:900;color:#1a1a1a;line-height:1.3;margin-bottom:10px}
+.rl-desc{font-size:13px;color:#555;line-height:1.7;margin-bottom:20px}
+.rl-feats{display:flex;flex-direction:column;gap:10px}
+.rl-feat{display:flex;align-items:flex-start;gap:10px}
+.rl-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.rli-b{background:#DBEAFE}
+.rli-g{background:#DCFCE7}
+.rli-a{background:#FEF3C7}
+.rli-p{background:#EDE9FE}
+.rl-feat-text{}
+.rl-feat-title{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:2px}
+.rl-feat-desc{font-size:12px;color:#666;line-height:1.5}
+
+/* 報告 UI 示意 */
+.report-ui{background:#fff;border:1px solid #EAECF0;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.rui-header{background:#1976D2;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.rui-header-title{font-size:14px;font-weight:700;color:#fff}
+.rui-header-date{font-size:11px;color:rgba(255,255,255,.7)}
+.rui-stats{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #EAECF0}
+.rui-stat{padding:14px 16px;text-align:center;border-right:1px solid #EAECF0}
+.rui-stat:last-child{border-right:none}
+.rui-stat-n{font-size:22px;font-weight:900;color:#1976D2}
+.rui-stat-l{font-size:10px;color:#888;margin-top:2px}
+.rui-section{padding:14px 20px}
+.rui-section-title{font-size:11px;font-weight:700;color:#888;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+.rui-subject-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rui-subj-name{font-size:12px;color:#333;min-width:56px}
+.rui-bar-bg{flex:1;height:8px;background:#F0F0F0;border-radius:99px;overflow:hidden}
+.rui-bar{height:8px;border-radius:99px}
+.bar-b{background:#1976D2}
+.bar-g{background:#4CAF50}
+.bar-a{background:#F4A261}
+.bar-r{background:#E63946}
+.rui-pct{font-size:11px;font-weight:700;color:#333;min-width:32px;text-align:right}
+.rui-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:99px;min-width:36px;text-align:center}
+.rb-up{background:#DCFCE7;color:#166534}
+.rb-dn{background:#FEE2E2;color:#991B1B}
+.rb-ok{background:#DBEAFE;color:#1E40AF}
+.rui-divider{height:1px;background:#EAECF0;margin:0 20px}
+.rui-streak{padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.rui-streak-label{font-size:12px;color:#555}
+.rui-streak-val{font-size:14px;font-weight:900;color:#F57F17;display:flex;align-items:center;gap:4px}
+.rui-footer{background:#F8FAFE;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;font-size:11px}
+.rui-footer-l{color:#888}
+.rui-footer-r{color:#1976D2;font-weight:700;cursor:pointer}
+
+
+/* ── 品牌 CTA 區塊（Hahow 風格） ── */
+.brand-cta{background:#1976D2;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;min-height:380px;overflow:hidden;position:relative}
+
+.bc-left{display:flex;flex-direction:column;justify-content:center;padding:56px 0;position:relative;z-index:2}
+.bc-eyebrow{font-size:11px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.bc-title{font-size:36px;font-weight:900;color:#fff;line-height:1.2;margin-bottom:32px}
+.bc-title em{color:#FFD600;font-style:normal}
+
+.bc-cards{display:flex;flex-direction:column;gap:12px}
+.bc-card{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .15s;backdrop-filter:blur(4px)}
+.bc-card:hover{background:rgba(255,255,255,.25)}
+.bc-card-left{}
+.bc-card-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.bc-card-title::after{content:'›';font-size:18px;color:rgba(255,255,255,.7)}
+.bc-card-sub{font-size:12px;color:rgba(255,255,255,.75)}
+.bc-card-thumb{width:72px;height:52px;border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px}
+.bc-card-thumb.t1{background:linear-gradient(135deg,#1565C0,#42A5F5)}
+.bc-card-thumb.t2{background:linear-gradient(135deg,#FF6B35,#F4A261)}
+.bc-card-thumb.t3{background:linear-gradient(135deg,#7B61FF,#CE93D8)}
+
+/* 右側圖片區 */
+.bc-right{display:flex;align-items:flex-end;justify-content:center;position:relative}
+.bc-img-frame{width:340px;height:380px;position:relative;display:flex;align-items:flex-end;justify-content:center}
+.bc-arch{width:280px;height:340px;border-radius:140px 140px 0 0;background:rgba(255,255,255,.15);position:absolute;bottom:0;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+.bc-person{font-size:120px;line-height:1;text-align:center;padding-bottom:8px;filter:drop-shadow(0 -8px 20px rgba(0,0,0,.15))}
+.bc-deco-1{position:absolute;bottom:60px;right:20px;width:48px;height:48px;border-radius:50%;background:#FFD600;opacity:.6}
+.bc-deco-2{position:absolute;top:80px;right:60px;width:24px;height:24px;border-radius:50%;background:#fff;opacity:.3}
+.bc-deco-3{position:absolute;bottom:120px;left:20px;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.2);transform:rotate(20deg)}
+
+/* ── 企業推廣 sticky bar（Hahow for Business 風格） ── */
+.biz-bar{background:#0D47A1;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.biz-left{display:flex;align-items:center;gap:12px}
+.biz-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.biz-text{}
+.biz-brand{font-size:13px;font-weight:700;color:#FFD600}
+.biz-desc{font-size:12px;color:rgba(255,255,255,.8);margin-top:1px}
+.btn-biz{font-size:13px;font-weight:700;color:#0D47A1;background:#fff;border:none;border-radius:8px;padding:10px 22px;cursor:pointer;font-family:inherit;white-space:nowrap}
+
+/* ── FOOTER ── */
+.footer{background:#1a2332;padding:48px 40px 32px}
+.footer-top{display:grid;grid-template-columns:200px 1fr 1fr 1fr 1fr;gap:32px;margin-bottom:40px}
+
+.footer-brand{}
+.footer-logo{font-size:18px;font-weight:900;color:#fff;display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.footer-tagline{font-size:12px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:16px}
+.footer-socials{display:flex;gap:8px}
+.social-btn{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:background .15s}
+.social-btn:hover{background:rgba(255,255,255,.15)}
+
+.footer-col{}
+.footer-col-title{font-size:12px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.footer-links{display:flex;flex-direction:column;gap:8px}
+.footer-link{font-size:12px;color:rgba(255,255,255,.65);cursor:pointer;transition:color .15s}
+.footer-link:hover{color:#fff}
+
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:11px;color:rgba(255,255,255,.35)}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{font-size:11px;color:rgba(255,255,255,.35);cursor:pointer;text-decoration:none}
+.footer-legal a:hover{color:rgba(255,255,255,.65)}
+.footer-app{display:flex;gap:8px}
+.app-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:6px 12px;cursor:pointer;transition:background .15s}
+.app-btn:hover{background:rgba(255,255,255,.15)}
+.app-btn-icon{font-size:16px}
+.app-btn-text{}
+.app-btn-label{font-size:9px;color:rgba(255,255,255,.5)}
+.app-btn-store{font-size:12px;font-weight:700;color:#fff}
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+
+  /* NAV */
+  .nav{padding:0 16px;height:52px}
+  .nav-links{display:none}
+  .btn-ct{display:none}
+  .btn-ln{padding:6px 12px;font-size:12px}
+  .btn-rg{padding:7px 14px;font-size:12px}
+
+  /* HERO */
+  .hero{grid-template-columns:1fr;padding:32px 16px 0;gap:24px}
+  .hero-demo{display:none}
+  .h-title{font-size:26px}
+  .h-sub{font-size:15px}
+  .h-desc{font-size:13px;max-width:100%}
+  .h-cta{flex-direction:column;gap:8px}
+  .btn-h1,.btn-h2{width:100%;text-align:center;padding:13px}
+  .h-trust{gap:10px}
+  .tp{font-size:11px}
+
+  /* SLIDER */
+  .slide{padding:20px 16px;grid-template-columns:1fr}
+  .sl-right{display:none}
+  .sl-title{font-size:17px}
+  .sl-sub{font-size:12px}
+  .sl-items{gap:8px}
+  .sarr{display:none}
+
+  /* STATS */
+  .stats{padding:16px;gap:0;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .st-n{font-size:18px}
+  .st-l{font-size:10px}
+
+  /* SECTIONS */
+  .sec{padding:36px 16px}
+  .sec-ti{font-size:20px}
+  .div{margin:0 16px}
+
+  /* SUBJECT */
+  .subj-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .sj{padding:14px 8px}
+  .sj-icon{font-size:22px}
+  .sj-name{font-size:12px}
+  .sj-tag{font-size:9px}
+
+  /* TOOL INTRO */
+  .tool-intro{grid-template-columns:1fr;gap:24px;margin-bottom:40px}
+  .tool-intro.rev{direction:ltr}
+  .ti-title{font-size:18px}
+  .ti-desc{font-size:13px}
+  .ti-ui{margin-top:0}
+
+  /* STEPS */
+  .steps-grid{grid-template-columns:1fr;gap:8px}
+  .step{border-radius:12px !important;padding:20px 16px}
+  .step:not(:last-child)::after{display:none}
+  .step-panel{grid-template-columns:1fr;padding:16px}
+  .sp-ui{display:none}
+
+  /* SHOP */
+  .shop-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .shop-thumb{height:64px;font-size:24px}
+
+  /* VIDEO */
+  .video-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .vc-thumb{height:100px}
+  .vc-overlay{font-size:11px}
+
+  /* CALENDAR */
+  .cal-layout{grid-template-columns:1fr}
+  .cal-layout>div:last-child{display:none}
+  .day{min-height:52px}
+  .day-num{font-size:10px}
+  .ev{font-size:8px;padding:1px 3px}
+
+  /* PARENT */
+  .par-grid{grid-template-columns:1fr;gap:24px}
+  .par-ti{font-size:20px}
+  .par-cards{display:none}
+
+  /* REPORT */
+  .report-grid{grid-template-columns:1fr}
+  .report-ui{margin-top:0}
+  .rui-stat-n{font-size:18px}
+
+  /* TESTI */
+  .testi-grid{grid-template-columns:1fr;gap:10px}
+
+  /* ARTICLES */
+  .art-grid{grid-template-columns:1fr;gap:10px}
+  .art-thumb{width:56px;height:56px;font-size:22px}
+
+  /* BRAND CTA */
+  .brand-cta{grid-template-columns:1fr;padding:32px 16px;min-height:auto}
+  .bc-right{display:none}
+  .bc-title{font-size:26px;margin-bottom:20px}
+  .bc-left{padding:0}
+  .bc-card{padding:12px 14px}
+  .bc-card-thumb{width:48px;height:36px;font-size:20px}
+
+  /* BIZ BAR */
+  .biz-bar{padding:12px 16px;flex-direction:column;align-items:flex-start;gap:8px}
+  .btn-biz{width:100%;text-align:center}
+
+  /* FOOTER */
+  .footer{padding:32px 16px 24px}
+  .footer-top{grid-template-columns:1fr;gap:24px}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:12px}
+  .footer-app{width:100%}
+  .app-btn{flex:1;justify-content:center}
+
+  /* FINAL */
+  .final{padding:40px 16px}
+  .ft{font-size:22px}
+  .fb{flex-direction:column;gap:8px}
+  .btn-f1,.btn-f2{width:100%;text-align:center}
+
+  /* FOOTER simple */
+  .footer .fc{flex-wrap:wrap;gap:10px}
+}
+</style>
+
+<!-- NAV -->
+<div class="nav">
+  <div style="display:flex;align-items:center;gap:36px">
+    <div class="nav-logo">🐦 LTrust</div>
+    <div class="nav-links">
+      <span class="nl active">首頁</span><span class="nl">學習儀表</span><span class="nl">任務</span><span class="nl">服務</span><span class="nl">個人</span><span class="nl">學習快訊</span>
+    </div>
+  </div>
+  <div class="nav-r">
+    <button class="btn-ln">登入</button>
+    <button class="btn-ct">聯絡我們</button>
+    <button class="btn-rg">免費開始學習</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="h-ey">專為高中生設計的 AI 學習平台</div>
+    <div class="h-title">所有難題，<br>我們一起用 <em>LTrust</em> 解決</div>
+    <div class="h-sub">即時解題・作文批閱・專屬題庫</div>
+    <div class="h-desc">觀念整清、精準解題，用最適合你的節奏，一步一步從高一學到學測上榜。</div>
+    <div class="h-cta">
+      <button class="btn-h1">免費開始學習</button>
+      <button class="btn-h2">看看有什麼工具</button>
+    </div>
+    <div class="h-trust">
+      <div class="tp"><div class="tck"><svg viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>免費試用，不綁定</div>
+      <div class="tp"><div class="tck"><svg viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>對應 108 課綱</div>
+      <div class="tp"><div class="tck"><svg viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>30 天退款保障</div>
+    </div>
+  </div>
+  <div class="hero-demo">
+    <div class="demo-label">試看看 S.E.N.S.E.I 怎麼解題</div>
+    <div class="subj-badge-row">
+      <span class="sbadge on">數學</span><span class="sbadge">英文</span><span class="sbadge">物理</span><span class="sbadge">化學</span><span class="sbadge">國文</span>
+    </div>
+    <div class="demo-card">
+      <div class="dc-q"><div class="dc-ql">學生發問</div>排列組合：從 A、B、C、D、E 五人中選 3 人排成一列，共有幾種排法？</div>
+      <div class="dc-a">
+        <div class="dc-al"><span style="font-size:12px">🤖</span> S.E.N.S.E.I 解析</div>
+        <div class="dc-at">這題是「有順序的選取」→ 用排列 P</div>
+        <div class="dc-steps">
+          <div class="dc-step"><span class="sn">1</span>從 5 人選 3 人，且順序有差 → P(5,3)</div>
+          <div class="dc-step"><span class="sn">2</span>P(5,3) = 5 × 4 × 3 = <strong>60 種</strong></div>
+          <div class="dc-step"><span class="sn">3</span>口訣：有順序用 P，沒順序用 C</div>
+        </div>
+      </div>
+      <div class="dc-input-row">
+        <div class="dc-input">繼續問問題，或換一科試試看...</div>
+        <button class="dc-send">送出</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDER -->
+<div class="slider-wrap">
+  <button class="sarr sarr-p" onclick="moveSlide(-1)">‹</button>
+  <button class="sarr sarr-n" onclick="moveSlide(1)">›</button>
+  <div class="slider-track" id="sliderTrack">
+    <div class="slide slide-1">
+      <div>
+        <div class="sl-badge"><span class="sl-dot"></span>限時活動・名額有限</div>
+        <div class="sl-title">🏝️ 登島大募集！<br>完成任務免費拿 CoCo 奶茶三兄弟</div>
+        <div class="sl-sub">新會員限定！完成指定任務，即可抽 Switch 2 ＋ 3,500 學學金。</div>
+        <div class="sl-items">
+          <div class="sl-item"><div class="sl-chk"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>完成學習人格測驗</div>
+          <div class="sl-item"><div class="sl-chk"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>參見 Qbot 王（刷 5 題）</div>
+          <div class="sl-item"><div class="sl-chk"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>限前 1,000 名・2026-03-02 截止</div>
+        </div>
+      </div>
+      <div class="sl-right">
+        <div class="sl-prize"><div class="sl-prize-icon">🎮</div><div class="sl-prize-t">抽 Switch 2</div><div class="sl-prize-s">＋ $3,500 學學金</div></div>
+        <button class="btn-sl" style="background:#fff;color:#FF6B35">立即免費參加 →</button>
+        <div class="sl-note">免費註冊即可參加</div>
+      </div>
+    </div>
+    <div class="slide slide-2">
+      <div>
+        <div class="sl-badge">🎯 完成任務即可獲得</div>
+        <div class="sl-title">凡完成「成就任務」的學習人格測驗<br>免費送 Qbot 體驗 7 天</div>
+        <div class="sl-sub">只需完成學習人格測驗 → 即得 Qbot 5,000 超免費試用！</div>
+        <div class="sl-items">
+          <div class="sl-item"><div class="sl-chk"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>完成測驗 → 立即獲得</div>
+          <div class="sl-item"><div class="sl-chk"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>學測、分科全科 AI 題庫 7 天免費</div>
+          <div class="sl-item"><div class="sl-chk"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>不需信用卡，不自動扣款</div>
+        </div>
+      </div>
+      <div class="sl-right">
+        <div class="sl-prize"><div class="sl-prize-icon">🤖</div><div class="sl-prize-t">Qbot 7 天體驗</div><div class="sl-prize-s">完成測驗即獲得</div></div>
+        <button class="btn-sl" style="background:#fff;color:#1976D2">立即完成測驗 →</button>
+        <div class="sl-note">新會員限定，完全免費</div>
+      </div>
+    </div>
+    <div class="slide slide-3">
+      <div>
+        <div class="sl-badge">✍️ 限時免費領取</div>
+        <div class="sl-title">英文批閱免費 5 題包<br>限時開放，先搶先贏</div>
+        <div class="sl-sub">不需要付費，領了就能用。對應學測評分標準，每篇都有詳細批閱建議。</div>
+        <div class="sl-items">
+          <div class="sl-item"><div class="sl-chk"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>免費領取，無需付費</div>
+          <div class="sl-item"><div class="sl-chk"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>對應學測作文評分標準</div>
+          <div class="sl-item"><div class="sl-chk"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>先試再決定要不要買</div>
+        </div>
+      </div>
+      <div class="sl-right">
+        <div class="sl-prize"><div class="sl-prize-icon">✍️</div><div class="sl-prize-t">WriteAhead 5 題包</div><div class="sl-prize-s">限時免費領取</div></div>
+        <button class="btn-sl" style="background:#fff;color:#4CAF50">免費領取 →</button>
+        <div class="sl-note">名額有限，送完為止</div>
+      </div>
+    </div>
+  </div>
+  <div class="slider-nav">
+    <div class="sdot active" id="sdot-0" onclick="goSlide(0)"></div>
+    <div class="sdot" id="sdot-1" onclick="goSlide(1)"></div>
+    <div class="sdot" id="sdot-2" onclick="goSlide(2)"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="st"><div class="st-n">8 萬+</div><div class="st-l">註冊學生</div></div>
+  <div class="st"><div class="st-n">200+</div><div class="st-l">學習課程與題庫</div></div>
+  <div class="st"><div class="st-n">108</div><div class="st-l">課綱完整對應</div></div>
+  <div class="st"><div class="st-n">20 年</div><div class="st-l">龍騰教育出版經驗</div></div>
+</div>
+
+<!-- SUBJECT -->
+<div class="sec">
+  <div class="sec-hd">
+    <div class="sec-ey">選你的科目</div>
+    <div class="sec-ti">從最需要補強的地方開始</div>
+    <div class="sec-su">直接選科目，找到對應的 AI 工具和題庫</div>
+  </div>
+  <div class="subj-grid">
+    <div class="sj"><div class="sj-icon">📐</div><div class="sj-name">數學</div><div class="sj-tag">學測・數甲<br>AI 解題 ＋ 題庫</div></div>
+    <div class="sj"><div class="sj-icon">🔤</div><div class="sj-name">英文</div><div class="sj-tag">作文・閱讀<br>AI 批閱 ＋ 練習</div></div>
+    <div class="sj"><div class="sj-icon">📖</div><div class="sj-name">國文</div><div class="sj-tag">作文・選擇題<br>AI 批閱 ＋ 古文</div></div>
+    <div class="sj"><div class="sj-icon">⚗️</div><div class="sj-name">自然科</div><div class="sj-tag">物理・化學・生物<br>AI 解題 ＋ 題庫</div></div>
+    <div class="sj"><div class="sj-icon">🌏</div><div class="sj-name">社會科</div><div class="sj-tag">歷史・地理・公民<br>重點整理 ＋ 題庫</div></div>
+    <div class="sj"><div class="sj-icon">🎨</div><div class="sj-name">術科</div><div class="sj-tag">設計・美術<br>作品集導向學習</div></div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+
+<!-- 四步驟學習循環 -->
+<div class="sec sec-bg">
+  <div class="sec-hd">
+    <div class="sec-ey">高效學習秘訣</div>
+    <div class="sec-ti">在於四步驟「完整學習循環」</div>
+    <div class="sec-su">從學習到補強，每一步都為升學鋪路</div>
+  </div>
+
+  <div class="steps-grid">
+    <div class="step active">
+      <div class="step-num">01. 學習</div>
+      <div class="step-icon-wrap"><span>📚</span></div>
+      <div class="step-title">選科目開始</div>
+      <div class="step-desc">S.E.N.S.E.I 即時解題，Qbot 題庫練習，從你最弱的地方開始補強</div>
+      <div class="step-link">了解如何開始 ›</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02. 測驗</div>
+      <div class="step-icon-wrap si-2"><span>📝</span></div>
+      <div class="step-title">定期刷題測驗</div>
+      <div class="step-desc">進行模擬考題，了解自己目前的程度與弱點分布</div>
+      <div class="step-link">了解 Qbot 如何測驗 ›</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03. 診斷</div>
+      <div class="step-icon-wrap si-3"><span>🔍</span></div>
+      <div class="step-title">AI 分析弱點</div>
+      <div class="step-desc">系統自動整理錯題，找出你最需要加強的知識點</div>
+      <div class="step-link">了解弱點診斷機制 ›</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04. 補強</div>
+      <div class="step-icon-wrap si-4"><span>⚡</span></div>
+      <div class="step-title">針對補弱</div>
+      <div class="step-desc">根據診斷結果重新練習，鞏固弱點，建立正確觀念</div>
+      <div class="step-link">了解補強機制 ›</div>
+    </div>
+  </div>
+
+  <div class="step-panel">
+    <div class="sp-text">
+      <div class="sp-label">步驟 01 — 學習</div>
+      <div class="sp-title">從你最需要的科目開始</div>
+      <div class="sp-desc">選科目 → 輸入題目 → 獲得即時解析。S.E.N.S.E.I 陪你一題一題搞懂，不是只給答案，是帶你理解整個解題邏輯。</div>
+      <div class="sp-feats">
+        <div class="sp-feat"><span class="sp-dot"></span>打字、截圖、手寫照片都可以問</div>
+        <div class="sp-feat"><span class="sp-dot"></span>每科免費試用 1 次，滿意再購買</div>
+        <div class="sp-feat"><span class="sp-dot"></span>學測、分科、模擬考全科支援</div>
+      </div>
+    </div>
+    <div class="sp-ui">
+      <div class="sp-ui-title">S.E.N.S.E.I 使用記錄</div>
+      <div class="sp-ui-row"><span class="sp-ui-label">數學 — 排列組合</span><span class="sp-ui-badge ok">已解決</span></div>
+      <div class="sp-ui-row"><span class="sp-ui-label">英文 — 假設語氣</span><span class="sp-ui-badge ok">已解決</span></div>
+      <div class="sp-ui-row"><span class="sp-ui-label">物理 — 靜電學</span><span class="sp-ui-badge warn">複習中</span></div>
+      <div class="sp-ui-row"><span class="sp-ui-label">化學 — 氧化還原</span><span class="sp-ui-badge ok">已解決</span></div>
+      <div class="sp-ui-row"><span class="sp-ui-label">本週問題數</span><span class="sp-ui-val">18 題</span></div>
+    </div>
+  </div>
+</div>
+
+<div style="height:1px;background:#EAECF0;margin:0 40px"></div>
+
+<!-- NOTION TOOL -->
+<div class="sec sec-bg">
+  <div class="sec-hd">
+    <div class="sec-ey">核心工具</div>
+    <div class="sec-ti">三個 AI 工具，打通學習的每個環節</div>
+    <div class="sec-su">每個工具都有明確用途，不買對的不花冤枉錢</div>
+  </div>
+
+  <div class="tool-intro">
+    <div>
+      <div class="ti-brand">S.E.N.S.E.I</div>
+      <div class="ti-title">上古文，下知地理<br><em>解題不求人</em></div>
+      <div class="ti-desc">打字、截圖、手寫拍照都能回答。從解題邏輯到辨識題型，一步步帶你搞懂，不只給答案。</div>
+      <div class="ti-feats">
+        <div class="ti-feat"><div class="ti-fd"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>學測、分科、模擬考全科 10 科支援</div>
+        <div class="ti-feat"><div class="ti-fd"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>從題目邏輯到解題步驟完整解析</div>
+        <div class="ti-feat"><div class="ti-fd"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>堪稱高中生的 ChatGPT</div>
+      </div>
+      <div class="ti-cta"><button class="btn-ti">免費試用 →</button><span class="ti-trial">每科免費試 1 次</span></div>
+    </div>
+    <div class="ti-ui">
+      <div class="ui-bar"><div class="ui-dot" style="background:#FF5F56"></div><div class="ui-dot" style="background:#FFBD2E"></div><div class="ui-dot" style="background:#27C93F"></div><div class="ui-bar-title">S.E.N.S.E.I — 數學</div></div>
+      <div class="ui-body">
+        <div class="ui-cq"><div class="ui-cql">學生</div>排列組合 P 和 C 怎麼判斷用哪個？</div>
+        <div class="ui-ca"><div class="ui-cal"><span>🤖</span>S.E.N.S.E.I</div><div style="font-size:12px;color:#333;margin-bottom:5px">有順序就用 P，沒順序就用 C！</div><div class="ui-st"><span class="ui-sn">1</span>「選 3 人排成一列」→ 順序有差 → P</div><div class="ui-st"><span class="ui-sn">2</span>「選 3 人組成一組」→ 順序無差 → C</div><div class="ui-st"><span class="ui-sn">3</span>P(5,3) = 5×4×3 = 60 種</div></div>
+        <div style="background:#F5F7FB;border-radius:7px;padding:7px 10px;font-size:11px;color:#888;display:flex;justify-content:space-between"><span>輸入下一題...</span><span style="color:#1976D2;font-weight:700">送出</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-intro rev">
+    <div>
+      <div class="ti-brand">WriteAhead</div>
+      <div class="ti-title">評分優化，一次到位<br><em>寫作不再迷航</em></div>
+      <div class="ti-desc">參考大考中心評閱準則，快速精準、真實回饋。從語感到架構全方位深入解析，零經驗也能快速上手寫高分作文。</div>
+      <div class="ti-feats">
+        <div class="ti-feat"><div class="ti-fd" style="background:#4CAF50"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>對應學測 5 大評分項目逐一分析</div>
+        <div class="ti-feat"><div class="ti-fd" style="background:#4CAF50"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>主題聚焦、論點明確、結構完整</div>
+        <div class="ti-feat"><div class="ti-fd" style="background:#4CAF50"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>英文 ＆ 國文作文皆支援</div>
+      </div>
+      <div class="ti-cta"><button class="btn-ti" style="background:#4CAF50">免費領取 5 題包 →</button><span class="ti-trial">限時免費</span></div>
+    </div>
+    <div class="ti-ui">
+      <div class="ui-bar"><div class="ui-dot" style="background:#FF5F56"></div><div class="ui-dot" style="background:#FFBD2E"></div><div class="ui-dot" style="background:#27C93F"></div><div class="ui-bar-title">WriteAhead — 英文作文批閱</div></div>
+      <div class="ui-body">
+        <div class="ui-essay">"Nowadays, social media has become an important part of our lives. However, many people argue that it has more disadvantages than advantages..."</div>
+        <div class="ui-srow"><div class="ui-sc"><div class="ui-sc-n">23</div><div class="ui-sc-l">總分 /25</div></div><div class="ui-sc"><div class="ui-sc-n">A</div><div class="ui-sc-l">主題聚焦</div></div><div class="ui-sc"><div class="ui-sc-n">B+</div><div class="ui-sc-l">論點明確</div></div><div class="ui-sc"><div class="ui-sc-n">A-</div><div class="ui-sc-l">結構完整</div></div></div>
+        <div class="ui-fb">💡 開頭論點清晰，但第二段論據較弱。建議加入具體數據或案例支撐主張，說服力會更強。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-intro">
+    <div>
+      <div class="ti-brand">Qbot</div>
+      <div class="ti-title">無限刷題，Combo 連擊<br><em>練功不卡關</em></div>
+      <div class="ti-desc">自動規劃練功題庫，解題就像打副本，一步一步破關進步。學測、分科仿真命題，培養考試經驗與作答手感。</div>
+      <div class="ti-feats">
+        <div class="ti-feat"><div class="ti-fd" style="background:#F4A261"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>學測、分科仿真題庫，全科目涵蓋</div>
+        <div class="ti-feat"><div class="ti-fd" style="background:#F4A261"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>AI 自動整理錯題，考前一鍵複習</div>
+        <div class="ti-feat"><div class="ti-fd" style="background:#F4A261"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>每日 Combo 任務，維持學習節奏</div>
+      </div>
+      <div class="ti-cta"><button class="btn-ti" style="background:#F4A261">立即購買 30 天方案 →</button><span class="ti-trial">NT$419 / 30 天（原價 599）</span></div>
+    </div>
+    <div class="ti-ui">
+      <div class="ui-bar"><div class="ui-dot" style="background:#FF5F56"></div><div class="ui-dot" style="background:#FFBD2E"></div><div class="ui-dot" style="background:#27C93F"></div><div class="ui-bar-title">Qbot — 學測數學</div></div>
+      <div class="ui-body">
+        <div class="ui-qrow"><span class="ui-qnum">第 8 題 / 25 題</span><span class="ui-combo">🔥 Combo ×3</span></div>
+        <div class="ui-question">若 log₂8 = a，log₂3 = b，則 log₂(√24) = ？</div>
+        <div class="ui-opts"><div class="ui-opt">(A) (a+b)/2</div><div class="ui-opt ok">✓ (B) (3a+b+1)/2 — 正確！</div><div class="ui-opt err">✗ (C) (a+2b)/2</div><div class="ui-opt">(D) (2a+b)/2</div></div>
+        <div class="ui-prog"><span style="font-size:11px;color:#1976D2;font-weight:700">72%</span><div class="ui-pb-bg"><div class="ui-pb" style="width:72%"></div></div><span style="font-size:11px;color:#888">18/25 完成</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- 學習報告示意 -->
+<div class="sec">
+  <div class="report-grid">
+    <div class="report-left">
+      <div class="rl-label">SMART 學習系統</div>
+      <div class="rl-title">家長掌握學習進度<br>孩子自主練習有方向</div>
+      <div class="rl-desc">每週學習報告自動寄送到家長信箱，讓您不需要追問孩子，就能清楚知道他學了什麼、哪裡還需要加強。</div>
+      <div class="rl-feats">
+        <div class="rl-feat">
+          <div class="rl-icon rli-b">📊</div>
+          <div class="rl-feat-text">
+            <div class="rl-feat-title">完成題數與正確率</div>
+            <div class="rl-feat-desc">每科完成幾題、答對率多少，一目了然</div>
+          </div>
+        </div>
+        <div class="rl-feat">
+          <div class="rl-icon rli-g">🎯</div>
+          <div class="rl-feat-text">
+            <div class="rl-feat-title">弱點知識點分析</div>
+            <div class="rl-feat-desc">AI 自動標記需要加強的章節，不用自己猜</div>
+          </div>
+        </div>
+        <div class="rl-feat">
+          <div class="rl-icon rli-a">🔥</div>
+          <div class="rl-feat-text">
+            <div class="rl-feat-title">連續學習天數追蹤</div>
+            <div class="rl-feat-desc">看孩子有沒有保持學習習慣，不是只看考試成績</div>
+          </div>
+        </div>
+        <div class="rl-feat">
+          <div class="rl-icon rli-p">📈</div>
+          <div class="rl-feat-text">
+            <div class="rl-feat-title">進步趨勢比較</div>
+            <div class="rl-feat-desc">跟上週比較，清楚看到哪個科目在進步</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 報告 UI 示意 -->
+    <div class="report-ui">
+      <div class="rui-header">
+        <div class="rui-header-title">📋 本週學習報告</div>
+        <div class="rui-header-date">2026/04/14 – 04/20</div>
+      </div>
+      <div class="rui-stats">
+        <div class="rui-stat"><div class="rui-stat-n">47</div><div class="rui-stat-l">完成題數</div></div>
+        <div class="rui-stat"><div class="rui-stat-n">78%</div><div class="rui-stat-l">平均正確率</div></div>
+        <div class="rui-stat"><div class="rui-stat-n">6</div><div class="rui-stat-l">學習天數</div></div>
+      </div>
+      <div class="rui-section">
+        <div class="rui-section-title">各科目正確率</div>
+        <div class="rui-subject-row">
+          <span class="rui-subj-name">數學</span>
+          <div class="rui-bar-bg"><div class="rui-bar bar-b" style="width:82%"></div></div>
+          <span class="rui-pct">82%</span>
+          <span class="rui-badge rb-up">↑ +8%</span>
+        </div>
+        <div class="rui-subject-row">
+          <span class="rui-subj-name">英文</span>
+          <div class="rui-bar-bg"><div class="rui-bar bar-g" style="width:75%"></div></div>
+          <span class="rui-pct">75%</span>
+          <span class="rui-badge rb-up">↑ +3%</span>
+        </div>
+        <div class="rui-subject-row">
+          <span class="rui-subj-name">物理</span>
+          <div class="rui-bar-bg"><div class="rui-bar bar-a" style="width:61%"></div></div>
+          <span class="rui-pct">61%</span>
+          <span class="rui-badge rb-dn">↓ -2%</span>
+        </div>
+        <div class="rui-subject-row">
+          <span class="rui-subj-name">化學</span>
+          <div class="rui-bar-bg"><div class="rui-bar bar-r" style="width:54%"></div></div>
+          <span class="rui-pct">54%</span>
+          <span class="rui-badge rb-ok">需加強</span>
+        </div>
+      </div>
+      <div class="rui-divider"></div>
+      <div class="rui-streak">
+        <span class="rui-streak-label">本週連續學習</span>
+        <span class="rui-streak-val">🔥 6 天</span>
+      </div>
+      <div class="rui-divider"></div>
+      <div class="rui-footer">
+        <span class="rui-footer-l">每週自動寄送到家長信箱</span>
+        <span class="rui-footer-r">查看完整報告 ›</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP -->
+<div class="sec">
+  <div class="sec-hd">
+    <div class="sec-ey">熱門商品</div>
+    <div class="sec-ti">最多學生購買的題包</div>
+    <div class="sec-su">買對的、不買多的。選你最需要的科目直接開始練習</div>
+  </div>
+  <div class="shop-grid">
+    <div class="shop-card"><div class="shop-thumb st-a">📊</div><div class="shop-body"><div class="shop-brand">Qbot</div><div class="shop-name">Qbot 練題 30 天方案</div><div class="shop-subj">學測・分科 全科無限刷</div><div class="shop-bot"><div><span class="shop-orig">NT$599</span><span class="shop-price">NT$419</span></div><button class="shop-btn">購買</button></div></div></div>
+    <div class="shop-card"><div class="shop-thumb st-b">🤖</div><div class="shop-body"><div class="shop-brand">S.E.N.S.E.I</div><div class="shop-name">英數物 10 題包</div><div class="shop-subj">英文・數學・物理 各 10 題</div><div class="shop-bot"><div><span class="shop-orig">NT$450</span><span class="shop-price">NT$299</span></div><button class="shop-btn">購買</button></div></div></div>
+    <div class="shop-card"><div class="shop-thumb st-g">✍️</div><div class="shop-body"><div class="shop-brand">WriteAhead</div><div class="shop-name">英文批閱免費 5 題包</div><div class="shop-subj">英文作文・限時免費</div><div class="shop-bot"><div><span class="shop-price" style="color:#4CAF50">免費領取</span></div><button class="shop-btn" style="background:#4CAF50">領取</button></div></div></div>
+    <div class="shop-card"><div class="shop-thumb st-p">📚</div><div class="shop-body"><div class="shop-brand">龍騰書城</div><div class="shop-name">學測戰力爆發・新閱鍵系列</div><div class="shop-subj">數學・英文・生物・歷史</div><div class="shop-bot"><div><span class="shop-price">NT$250 起</span></div><button class="shop-btn" style="background:#7B61FF">前往</button></div></div></div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- 高中生都在看 -->
+<div class="sec">
+  <div class="sec-hd">
+    <div class="sec-ey">龍騰高中聲</div>
+    <div class="sec-ti">高中生都在看</div>
+    <div class="sec-su">備考方法、讀書 Vlog、學測攻略——高中生都在追的頻道，1.2 萬粉絲真實分享</div>
+  </div>
+  <div class="video-grid">
+    <div class="vc">
+      <div class="vc-thumb vt-1">
+        <div class="vc-overlay">如何高效讀書？</div>
+        <div class="vc-play">▶</div>
+        <div class="vc-label">龍騰高中聲</div>
+      </div>
+      <div class="vc-body">
+        <div class="vc-tag">讀書方法</div>
+        <div class="vc-title">POV：高中讀書 — 如何高效讀書？</div>
+        <div class="vc-meta">龍騰高中聲 · 1.2 萬粉絲</div>
+      </div>
+    </div>
+    <div class="vc">
+      <div class="vc-thumb vt-2">
+        <div class="vc-overlay">女高中生 Vlog<br>超強 AI 學習工具 ⭐</div>
+        <div class="vc-play">▶</div>
+        <div class="vc-label">龍騰高中聲</div>
+      </div>
+      <div class="vc-body">
+        <div class="vc-tag">學習工具</div>
+        <div class="vc-title">女高中生 Vlog — 超強 AI 學習工具分享</div>
+        <div class="vc-meta">龍騰高中聲 · 1.2 萬粉絲</div>
+      </div>
+    </div>
+    <div class="vc">
+      <div class="vc-thumb vt-3">
+        <div class="vc-overlay">考前 10 分鐘成功<br>圖像記憶術</div>
+        <div class="vc-play">▶</div>
+        <div class="vc-label">龍騰高中聲</div>
+      </div>
+      <div class="vc-body">
+        <div class="vc-tag">考試技巧</div>
+        <div class="vc-title">考前 10 分鐘成功 — 圖像記憶術</div>
+        <div class="vc-meta">龍騰高中聲 · 1.2 萬粉絲</div>
+      </div>
+    </div>
+    <div class="vc">
+      <div class="vc-thumb vt-4">
+        <div class="vc-overlay">高中教室內<br>必有的五種學生</div>
+        <div class="vc-play">▶</div>
+        <div class="vc-label">龍騰高中聲</div>
+      </div>
+      <div class="vc-body">
+        <div class="vc-tag">高中生活</div>
+        <div class="vc-title">高中教室內必有的五種學生，你是哪一種？</div>
+        <div class="vc-meta">龍騰高中聲 · 1.2 萬粉絲</div>
+      </div>
+    </div>
+  </div>
+  <a class="ig-link">📱 前往 @ltedu_student 查看更多 →</a>
+</div>
+
+<div class="div"></div>
+
+<!-- CALENDAR -->
+<div class="sec sec-bg">
+  <div class="sec-hd">
+    <div class="sec-ey">考試行事曆</div>
+    <div class="sec-ti">掌握每個重要考試日期</div>
+    <div class="sec-su">學測、分科、英檢、統測——所有高中生需要的考試日程，一目了然</div>
+  </div>
+  <div class="cal-layout">
+    <div>
+      <div class="cal-wrap">
+        <div class="cal-nav">
+          <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+          <div class="cal-ml" id="cal-ml">2026 年 4 月</div>
+          <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="cal-week-hd"><div class="wh sun">日</div><div class="wh">一</div><div class="wh">二</div><div class="wh">三</div><div class="wh">四</div><div class="wh">五</div><div class="wh sat">六</div></div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-legend"><div class="lg"><div class="lg-dot" style="background:#FEE2E2"></div>考試日</div><div class="lg"><div class="lg-dot" style="background:#DBEAFE"></div>報名期間</div><div class="lg"><div class="lg-dot" style="background:#DCFCE7"></div>成績公布</div></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#1976D2;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;display:flex;justify-content:space-between"><span>即將到來</span><span style="font-weight:400;cursor:pointer">查看全部 ›</span></div>
+      <div id="upcoming-list"></div>
+    </div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- PARENT -->
+<div class="sec par-bg">
+  <div class="par-grid">
+    <div>
+      <div class="par-ey">給家長的說明</div>
+      <div class="par-ti">讓孩子安心學習<br>讓您放心投資</div>
+      <div class="par-su">我們知道家長最在意的不只是功能好不好，而是這筆錢花得值不值得、孩子有沒有真的在學。</div>
+      <div class="par-items">
+        <div class="par-item"><div class="par-chk"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="pi-t">完整對應 108 課綱</div><div class="pi-d">所有題庫與課程內容皆依據最新課綱設計，與學校進度同步。</div></div></div>
+        <div class="par-item"><div class="par-chk"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="pi-t">購買後 30 天，不滿意全額退款</div><div class="pi-d">我們對產品有信心。不滿意，一律退費，不問原因。</div></div></div>
+        <div class="par-item"><div class="par-chk"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="pi-t">每週學習報告自動寄送</div><div class="pi-d">孩子學了什麼、完成幾題，每週報告讓您一目了然。</div></div></div>
+        <div class="par-item"><div class="par-chk"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="pi-t">龍騰文化旗下，20 年教育出版經驗</div><div class="pi-d">龍騰是台灣高中教科書出版商，同樣嚴謹標準做數位教育。</div></div></div>
+      </div>
+    </div>
+    <div class="par-cards">
+      <div class="par-card"><div style="font-size:22px;flex-shrink:0">📊</div><div><div class="pct">每週學習報告</div><div class="pcd">完成幾題・批閱幾篇・連續學習幾天<br>週報自動寄到家長信箱</div></div></div>
+      <div class="par-card"><div style="font-size:22px;flex-shrink:0">🔒</div><div><div class="pct">安全無廣告環境</div><div class="pcd">平台內無任何廣告，孩子專心學習不被打擾</div></div></div>
+      <div class="par-card"><div style="font-size:22px;flex-shrink:0">💳</div><div><div class="pct">彈性方案，不強迫年繳</div><div class="pcd">月繳、季繳、年繳都有，隨時可以停止</div></div></div>
+      <div class="par-card"><div style="font-size:22px;flex-shrink:0">📞</div><div><div class="pct">真人客服，週一至週六</div><div class="pcd">LINE 或電話聯絡，不是 AI 客服</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- TESTI -->
+<div class="sec">
+  <div class="sec-hd">
+    <div class="sec-ey">學生見證</div>
+    <div class="sec-ti">他們用 LTrust，真的考上了</div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi"><div class="testi-stars">★★★★★</div><div class="testi-q">數學一直是我的弱點，用 S.E.N.S.E.I 練了兩個月，學測數學從 8 級分進步到 12 級分。最重要的是它會解釋為什麼，不只是給答案。</div><div class="testi-m"><div class="testi-av">涵</div><div><div class="testi-n">高三生・新北市</div><div class="testi-s">數學 8 → 12 級分</div></div></div></div>
+    <div class="testi"><div class="testi-stars">★★★★★</div><div class="testi-q">英文作文一直寫不好，老師沒時間一直改。用 WriteAhead 之後每篇都有詳細建議，學測作文拿到 23/25，比預期高很多。</div><div class="testi-m"><div class="testi-av">宇</div><div><div class="testi-n">高三生・台中市</div><div class="testi-s">英文作文 23/25 分</div></div></div></div>
+    <div class="testi"><div class="testi-stars">★★★★★</div><div class="testi-q">我媽媽一開始很懷疑，後來看到每週報告才放心。她說比補習班便宜，又可以看到我真的有在學，所以就讓我繼續用了。</div><div class="testi-m"><div class="testi-av">芸</div><div><div class="testi-n">高二生・高雄市</div><div class="testi-s">家長也認可</div></div></div></div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- ARTICLES -->
+<div class="sec sec-bg">
+  <div class="sec-hd">
+    <div class="sec-ey">學習快訊</div>
+    <div class="sec-ti">備考必看，不定期更新</div>
+    <div class="sec-su">考試資訊、讀書方法、LTrust 最新活動</div>
+  </div>
+  <div class="art-grid">
+    <div class="art-card"><div class="art-thumb at-1">📰</div><div><div class="art-tag">活動分享</div><div class="art-title">LTrust 開學《登島計畫》：新會員大募集！限量 CoCo 奶茶三兄弟免費請你喝</div><div class="art-meta">2026-03-02</div></div></div>
+    <div class="art-card"><div class="art-thumb at-2">📖</div><div><div class="art-tag">統測報導</div><div class="art-title">統測剩 4 天：現在不是拼奇蹟的時候，是把自己穩下來的時候</div><div class="art-meta">2026-04-20</div></div></div>
+  </div>
+  <a class="sec-more">查看更多學習快訊 →</a>
+</div>
+
+
+<!-- 品牌 CTA 區塊 -->
+<div class="brand-cta">
+  <div class="bc-left">
+    <div class="bc-eyebrow">BECOME THE ONE YOU LIKE</div>
+    <div class="bc-title">成為<em>學測上榜</em><br>的那個人</div>
+    <div class="bc-cards">
+      <div class="bc-card">
+        <div class="bc-card-left">
+          <div class="bc-card-title">下載手機版</div>
+          <div class="bc-card-sub">隨時隨地學習不間斷，通勤也能刷題</div>
+        </div>
+        <div class="bc-card-thumb t1">📱</div>
+      </div>
+      <div class="bc-card">
+        <div class="bc-card-left">
+          <div class="bc-card-title">免費開始學習</div>
+          <div class="bc-card-sub">不需信用卡，7 天免費試用所有工具</div>
+        </div>
+        <div class="bc-card-thumb t2">🚀</div>
+      </div>
+      <div class="bc-card">
+        <div class="bc-card-left">
+          <div class="bc-card-title">龍騰書城・實體教材</div>
+          <div class="bc-card-sub">新閱鍵、月考王、學測講義全系列</div>
+        </div>
+        <div class="bc-card-thumb t3">📚</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bc-right">
+    <div class="bc-img-frame">
+      <div class="bc-arch">
+        <div class="bc-person">👩‍💻</div>
+      </div>
+      <div class="bc-deco-1"></div>
+      <div class="bc-deco-2"></div>
+      <div class="bc-deco-3"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 龍騰企業推廣 bar（Hahow for Business 風格） -->
+<div class="biz-bar">
+  <div class="biz-left">
+    <div class="biz-icon">🏫</div>
+    <div class="biz-text">
+      <div class="biz-brand">龍騰文化 × LTrust 學校方案</div>
+      <div class="biz-desc">提供學校客製化的 AI 學習工具整合方案，讓老師與學生都能受益。</div>
+    </div>
+  </div>
+  <button class="btn-biz">了解學校方案 →</button>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-top">
+
+    <div class="footer-brand">
+      <div class="footer-logo">🐦 LTrust</div>
+      <div class="footer-tagline">龍騰文化旗下<br>專為高中生設計的<br>AI 互動學習平台</div>
+      <div class="footer-socials">
+        <div class="social-btn">📘</div>
+        <div class="social-btn">📸</div>
+        <div class="social-btn">▶️</div>
+        <div class="social-btn">💬</div>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col-title">服務</div>
+      <div class="footer-links">
+        <span class="footer-link">S.E.N.S.E.I — AI 解題</span>
+        <span class="footer-link">Qbot — AI 題庫</span>
+        <span class="footer-link">WriteAhead — 作文批閱</span>
+        <span class="footer-link">龍騰高中聲</span>
+        <span class="footer-link">龍騰書城</span>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col-title">學習資源</div>
+      <div class="footer-links">
+        <span class="footer-link">考試行事曆</span>
+        <span class="footer-link">學習快訊</span>
+        <span class="footer-link">數位資源</span>
+        <span class="footer-link">學習人格測驗</span>
+        <span class="footer-link">學習儀表</span>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col-title">幫助</div>
+      <div class="footer-links">
+        <span class="footer-link">常見問題</span>
+        <span class="footer-link">聯絡客服</span>
+        <span class="footer-link">消費者合約</span>
+        <span class="footer-link">隱私權政策</span>
+        <span class="footer-link">退款政策</span>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col-title">關於</div>
+      <div class="footer-links">
+        <span class="footer-link">關於 LTrust</span>
+        <span class="footer-link">龍騰文化官網</span>
+        <span class="footer-link">學校合作方案</span>
+        <span class="footer-link">加入我們</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Longteng Education Co., Ltd. All rights reserved.</div>
+    <div class="footer-app">
+      <div class="app-btn">
+        <div class="app-btn-icon">🍎</div>
+        <div class="app-btn-text">
+          <div class="app-btn-label">下載於</div>
+          <div class="app-btn-store">App Store</div>
+        </div>
+      </div>
+      <div class="app-btn">
+        <div class="app-btn-icon">🤖</div>
+        <div class="app-btn-text">
+          <div class="app-btn-label">下載於</div>
+          <div class="app-btn-store">Google Play</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <a>消費者合約</a>
+      <a>隱私權政策</a>
+      <a>Cookie 設定</a>
+    </div>
+  </div>
+</div>
+
+<script>
+let cur=0;
+function goSlide(n){
+  cur=n;
+  document.getElementById('sliderTrack').style.transform=`translateX(-${cur*100}%)`;
+  [0,1,2].forEach(i=>document.getElementById('sdot-'+i).classList.toggle('active',i===cur));
+}
+function moveSlide(d){goSlide((cur+d+3)%3);}
+setInterval(()=>moveSlide(1),5000);
+
+const EXAMS=[
+  {name:'四技二專統一入學測驗',short:'統測',regStart:'2025-12-1',regEnd:'2025-12-17',examStart:'2026-4-25',examEnd:'2026-4-26',result:'2026-5-14',color:'urgent',badge:'考試中'},
+  {name:'全民英檢 — 中級初試',short:'英檢中級',examStart:'2026-4-12',examEnd:'2026-4-12',result:'2026-5-8',color:'done',badge:'等待放榜'},
+  {name:'多益聽力與閱讀測驗',short:'多益',examStart:'2026-4-19',examEnd:'2026-4-19',result:'2026-5-11',color:'done',badge:'等待放榜'},
+  {name:'全民英檢 — 中高級初試',short:'英檢中高級',regStart:'2026-3-6',regEnd:'2026-3-31',examStart:'2026-5-31',examEnd:'2026-5-31',result:'2026-6-26',color:'soon',badge:'即將到來'},
+  {name:'國中教育會考',short:'會考',examStart:'2026-5-16',examEnd:'2026-5-17',result:'2026-6-5',color:'soon',badge:'即將到來'},
+  {name:'分科測驗',short:'分科',regStart:'2026-5-6',regEnd:'2026-5-19',examStart:'2026-7-11',examEnd:'2026-7-12',result:'2026-7-28',color:'normal',badge:'尚未開放報名'},
+];
+function pd(s){if(!s)return null;const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
+function fd(s){if(!s)return'—';const d=pd(s);return`${d.getFullYear()-1911}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;}
+let cy=2026,cm=3;
+function renderCal(){
+  const today=new Date(2026,3,21);
+  document.getElementById('cal-ml').textContent=`${cy} 年 ${cm+1} 月`;
+  const fd1=new Date(cy,cm,1).getDay(),dim=new Date(cy,cm+1,0).getDate(),dip=new Date(cy,cm,0).getDate();
+  const ev={};
+  function ar(ss,es,ex,type){
+    if(!ss)return;const s=pd(ss),e=pd(es||ss);const c=new Date(s);
+    while(c<=e){if(c.getFullYear()===cy&&c.getMonth()===cm){const k=c.getDate();if(!ev[k])ev[k]=[];if(+c===+s||c.getDate()===1)ev[k].push({label:ex.short,type});else ev[k].push({label:'',type,cont:true});}c.setDate(c.getDate()+1);}
+  }
+  function ao(ds,ex,type){if(!ds)return;const d=pd(ds);if(d.getFullYear()===cy&&d.getMonth()===cm){const k=d.getDate();if(!ev[k])ev[k]=[];ev[k].push({label:ex.short,type});}}
+  EXAMS.forEach(ex=>{ar(ex.regStart,ex.regEnd,ex,'reg');ar(ex.examStart,ex.examEnd,ex,'exam');ao(ex.result,ex,'result');});
+  let h='';
+  for(let i=fd1-1;i>=0;i--)h+=`<div class="day other-month"><span class="day-num">${dip-i}</span></div>`;
+  for(let d=1;d<=dim;d++){
+    const date=new Date(cy,cm,d);const isT=+date===+today;const isSun=date.getDay()===0;const isSat=date.getDay()===6;
+    let cls='day'+(isT?' today':'')+(isSun?' sun':'')+(isSat?' sat':'');
+    let eh='';
+    if(ev[d]){ev[d].filter(e=>!e.cont).slice(0,2).forEach(e=>{const tc=e.type==='exam'?'ev-exam':e.type==='reg'?'ev-reg':'ev-result';eh+=`<div class="ev ${tc}">${e.label}</div>`;});const ex=ev[d].filter(e=>!e.cont).length-2;if(ex>0)eh+=`<div style="font-size:8px;color:#aaa">+${ex}</div>`;}
+    h+=`<div class="${cls}"><span class="day-num">${d}</span>${eh}</div>`;
+  }
+  const tot=fd1+dim;const rem=tot%7===0?0:7-(tot%7);
+  for(let d=1;d<=rem;d++)h+=`<div class="day other-month"><span class="day-num">${d}</span></div>`;
+  document.getElementById('cal-grid').innerHTML=h;
+  renderUpcoming();
+}
+function renderUpcoming(){
+  const today=new Date(2026,3,21);
+  const ul=document.getElementById('upcoming-list');
+  const up=EXAMS.filter(ex=>pd(ex.examEnd||ex.examStart)>=today).sort((a,b)=>pd(a.examStart)-pd(b.examStart)).slice(0,4);
+  const cc={urgent:'#E63946',soon:'#F4A261',normal:'#1976D2',done:'#aaa'};
+  const bc={urgent:'b-urgent',soon:'b-soon',normal:'b-normal',done:'b-done'};
+  ul.innerHTML=up.map(ex=>{
+    const ed=pd(ex.examStart);const diff=Math.ceil((ed-today)/(1000*60*60*24));
+    let cdv=diff>0?`<div class="ei-cd" style="color:${cc[ex.color]}">距離考試還有 ${diff} 天</div>`:diff===0?`<div class="ei-cd" style="color:#E63946">今天考試！</div>`:'';
+    let reg=ex.regStart?`<div class="ei-row"><span class="ei-rl">報名</span>${fd(ex.regStart)} ～ ${fd(ex.regEnd)}</div>`:'';
+    return`<div class="exam-item ${ex.color}"><div class="ei-top"><div class="ei-name">${ex.name}</div><div class="ei-badge ${bc[ex.color]}">${ex.badge}</div></div><div>${reg}<div class="ei-row"><span class="ei-rl">考試</span>${fd(ex.examStart)}${ex.examEnd!==ex.examStart?' ～ '+fd(ex.examEnd):''}</div><div class="ei-row"><span class="ei-rl">放榜</span>${fd(ex.result)}</div></div>${cdv}</div>`;
+  }).join('');
+}
+function changeMonth(dir){cm+=dir;if(cm>11){cm=0;cy++;}if(cm<0){cm=11;cy--;}renderCal();}
+renderCal();
+</script>
+
+<!-- BOTTOM TAB BAR (mobile only) -->
+<style>
+.tab-bar{display:none}
+@media(max-width:768px){
+  body{padding-bottom:60px}
+  .tab-bar{
+    display:flex;position:fixed;bottom:0;left:0;right:0;
+    height:60px;background:#fff;
+    border-top:0.5px solid #EAECF0;
+    z-index:200;
+    align-items:center;justify-content:space-around;
+    padding-bottom:env(safe-area-inset-bottom)
+  }
+  .tab-item{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:3px;flex:1;cursor:pointer;padding:6px 0;
+    color:#aaa;font-size:10px;font-weight:500;
+    transition:color .15s
+  }
+  .tab-item.active{color:#1976D2}
+  .tab-item svg{width:22px;height:22px}
+}
+</style>
+
+<div class="tab-bar">
+  <div class="tab-item active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/>
+    </svg>
+    首頁
+  </div>
+  <div class="tab-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+    </svg>
+    學習儀表
+  </div>
+  <div class="tab-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="M8 14h2M14 14h2M8 18h2M14 18h2"/>
+    </svg>
+    任務
+  </div>
+  <div class="tab-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M9 7h6M9 11h6M9 15h4"/>
+    </svg>
+    服務
+  </div>
+  <div class="tab-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+    </svg>
+    個人
+  </div>
+</div>
+
+</body></html>

@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WriteAhead — AI 英文作文批閱</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #38a1db;
+  --blue-deep: #007BB5;
+  --yellow: #fac03d;
+  --red: #c92a2e;
+  --tan: #C39E6C;
+  --terracotta: #cb6738;
+  --orange: #E8792B;
+  --orange-deep: #C4611D;
+  --cream: #FFF8F0;
+  --white: #ffffff;
+  --dark: #2a2a2a;
+  --gray: #6b7280;
+  --light-gray: #f3f4f6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--dark);
+  background: var(--cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255, 248, 240, 0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.06); }
+nav .container {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 22px; font-weight: 900;
+  text-decoration: none; color: var(--dark);
+}
+.nav-logo .w { color: var(--orange); }
+.nav-logo .a {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: var(--orange);
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+  margin: 0 1px;
+  transform: translateY(-1px);
+}
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--dark); }
+.nav-cta {
+  padding: 10px 28px;
+  background: var(--orange);
+  color: var(--white);
+  border: none; border-radius: 100px;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s;
+  text-decoration: none;
+}
+.nav-cta:hover { background: var(--orange-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,121,43,0.3); }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding-top: 64px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -180px;
+  width: 680px; height: 680px;
+  background: radial-gradient(circle, rgba(232,121,43,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(56,161,219,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+.hero-text { position: relative; z-index: 2; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px;
+  background: rgba(232,121,43,0.1);
+  border-radius: 100px;
+  font-size: 13px; font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease-out;
+}
+.hero-badge::before { content: '✍️'; font-size: 14px; }
+.hero-text h1 {
+  font-size: clamp(36px, 5vw, 54px);
+  font-weight: 900; line-height: 1.3;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+.hero-text h1 .highlight {
+  background: linear-gradient(135deg, var(--orange), var(--orange-deep));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-text h1 .accent { color: var(--blue); -webkit-text-fill-color: var(--blue); }
+.hero-text > p {
+  font-size: 18px; line-height: 1.8; color: var(--gray);
+  margin-bottom: 36px; max-width: 480px;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+.hero-actions {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 36px;
+  background: var(--orange);
+  color: var(--white);
+  border: none; border-radius: 100px;
+  font-size: 17px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s;
+  text-decoration: none; font-family: inherit;
+}
+.btn-primary:hover { background: var(--orange-deep); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,121,43,0.35); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 36px;
+  background: transparent;
+  color: var(--dark);
+  border: 2px solid rgba(42,42,42,0.15);
+  border-radius: 100px;
+  font-size: 17px; font-weight: 500;
+  cursor: pointer; transition: all 0.3s;
+  text-decoration: none; font-family: inherit;
+}
+.btn-secondary:hover { border-color: var(--orange); color: var(--orange); }
+
+/* Hero Visual — Mock Editor */
+.hero-visual {
+  position: relative; z-index: 2;
+  animation: fadeInRight 0.8s ease-out 0.2s both;
+}
+.editor-mock {
+  background: var(--white);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04);
+}
+.editor-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 24px;
+  background: var(--orange);
+  color: white;
+}
+.editor-bar-dots { display: flex; gap: 6px; }
+.editor-bar-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+.editor-bar-title { font-weight: 700; font-size: 14px; margin-left: 8px; }
+.editor-bar-timer { margin-left: auto; font-size: 12px; font-weight: 600; opacity: 0.8; }
+.editor-body { display: grid; grid-template-columns: 200px 1fr; min-height: 320px; }
+.editor-sidebar {
+  padding: 20px 16px;
+  background: var(--cream);
+  border-right: 1px solid rgba(0,0,0,0.04);
+}
+.editor-sidebar-label {
+  font-size: 11px; font-weight: 700;
+  color: var(--orange);
+  padding: 6px 12px;
+  background: rgba(232,121,43,0.1);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: block;
+}
+.editor-sidebar-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.editor-sidebar p { font-size: 11px; line-height: 1.6; color: var(--gray); }
+.editor-sidebar .word-hint {
+  margin-top: 12px;
+  font-size: 11px;
+  padding: 6px 10px;
+  background: var(--white);
+  border-radius: 6px;
+  color: var(--orange);
+  font-weight: 600;
+}
+.editor-content { padding: 20px 24px; }
+.editor-content p {
+  font-size: 13px; line-height: 2;
+  color: var(--dark);
+  font-family: Georgia, 'Times New Roman', serif;
+}
+.editor-content p + p { margin-top: 12px; }
+.editor-content .highlight-word {
+  background: rgba(232,121,43,0.12);
+  border-bottom: 2px solid var(--orange);
+  padding: 0 2px;
+}
+.editor-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 24px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  background: var(--light-gray);
+}
+.editor-footer-count { font-size: 12px; color: var(--gray); }
+.editor-footer-count strong { color: var(--orange); }
+.editor-footer-btn {
+  font-size: 13px; font-weight: 700;
+  padding: 8px 24px;
+  background: var(--blue-deep);
+  color: white;
+  border-radius: 100px;
+  border: none;
+}
+
+/* Float decorations */
+.float-el {
+  position: absolute;
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+.float-el-1 { width: 14px; height: 14px; background: var(--yellow); top: -16px; right: 50px; }
+.float-el-2 { width: 10px; height: 10px; background: var(--orange); top: 80px; right: -14px; animation-delay: 2s; }
+.float-el-3 { width: 18px; height: 18px; background: var(--blue); opacity: 0.25; bottom: 20px; left: -10px; animation-delay: 4s; }
+
+/* ===== STATS ===== */
+.stats-bar {
+  padding: 48px 0;
+  background: var(--white);
+  border-top: 1px solid rgba(0,0,0,0.04);
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
+.stat-num { font-size: clamp(28px, 3.5vw, 42px); font-weight: 900; color: var(--orange); margin-bottom: 4px; }
+.stat-num .blue { color: var(--blue); }
+.stat-label { font-size: 14px; color: var(--gray); font-weight: 500; }
+
+/* ===== SECTION COMMON ===== */
+section { padding: 100px 0; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 700;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.section-title { font-size: clamp(28px, 3.5vw, 40px); font-weight: 900; line-height: 1.35; margin-bottom: 16px; }
+.section-desc { font-size: 17px; line-height: 1.8; color: var(--gray); max-width: 600px; }
+
+/* ===== HOW IT WORKS ===== */
+.how-section { background: var(--white); }
+.how-header { text-align: center; margin-bottom: 72px; }
+.how-header .section-desc { margin: 0 auto; }
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  position: relative;
+}
+.how-steps::before {
+  content: '';
+  position: absolute;
+  top: 44px; left: 12%; right: 12%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--orange), var(--yellow), var(--blue), var(--orange-deep));
+  opacity: 0.15;
+  border-radius: 2px;
+}
+.how-step { text-align: center; position: relative; z-index: 2; }
+.how-num {
+  width: 72px; height: 72px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 900;
+  color: var(--white);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.how-step:nth-child(1) .how-num { background: var(--orange); }
+.how-step:nth-child(2) .how-num { background: var(--yellow); }
+.how-step:nth-child(3) .how-num { background: var(--blue); }
+.how-step:nth-child(4) .how-num { background: var(--orange-deep); }
+.how-step h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.how-step p { font-size: 14px; line-height: 1.7; color: var(--gray); max-width: 220px; margin: 0 auto; }
+
+/* ===== AI REVIEW SECTION ===== */
+.review-section { }
+.review-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+.review-text { max-width: 480px; }
+.review-text .section-title { margin-bottom: 20px; }
+
+/* Radar chart mock */
+.radar-mock {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+  text-align: center;
+}
+.radar-mock-title {
+  font-size: 14px; font-weight: 700; color: var(--orange);
+  margin-bottom: 8px;
+}
+.radar-mock-score {
+  font-size: 16px; font-weight: 700; margin-bottom: 24px;
+}
+.radar-mock-score span { color: var(--orange); font-size: 24px; }
+.radar-svg { max-width: 280px; margin: 0 auto 24px; }
+.radar-dims {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.radar-dim {
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--cream);
+  border-radius: 12px;
+}
+.radar-dim-score { font-size: 24px; font-weight: 900; }
+.radar-dim-score.c1 { color: var(--orange); }
+.radar-dim-score.c2 { color: var(--blue); }
+.radar-dim-score.c3 { color: var(--yellow); }
+.radar-dim-score.c4 { color: var(--terracotta); }
+.radar-dim-label { font-size: 11px; color: var(--gray); margin-top: 2px; }
+.radar-dim-max { font-size: 11px; color: #ccc; }
+
+/* ===== FEATURES 3-COL ===== */
+.features-section { background: var(--white); }
+.features-header { text-align: center; margin-bottom: 64px; }
+.features-header .section-desc { margin: 0 auto; }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.feature-card {
+  background: var(--cream);
+  border-radius: 20px;
+  padding: 36px 28px;
+  transition: all 0.35s;
+  position: relative; overflow: hidden;
+}
+.feature-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--orange);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+.feature-card:hover::after { opacity: 1; }
+.feature-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  margin-bottom: 18px;
+  background: rgba(232,121,43,0.08);
+}
+.feature-card:nth-child(2) .feature-icon { background: rgba(56,161,219,0.08); }
+.feature-card:nth-child(3) .feature-icon { background: rgba(250,192,61,0.12); }
+.feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.feature-card p { font-size: 14px; line-height: 1.7; color: var(--gray); }
+
+/* Mini correction examples */
+.mini-corrections { margin-top: 20px; }
+.mini-corr {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px;
+  background: var(--white);
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.mini-corr-tag {
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: white;
+  flex-shrink: 0;
+}
+.mini-corr-tag.grammar { background: var(--orange); }
+.mini-corr-tag.prep { background: var(--blue); }
+.mini-corr-tag.other { background: var(--tan); }
+.mini-corr del { color: var(--red); text-decoration: line-through; font-size: 12px; }
+.mini-corr .arrow { color: var(--gray); font-size: 12px; }
+.mini-corr ins { color: #27c93f; text-decoration: none; font-weight: 600; font-size: 12px; }
+
+/* Vocab suggestions mock */
+.mini-vocab { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 6px; }
+.mini-vocab-item {
+  padding: 6px 12px;
+  background: var(--white);
+  border-radius: 100px;
+  font-size: 12px;
+  display: flex; align-items: center; gap: 6px;
+}
+.mini-vocab-item .orig { font-weight: 700; color: var(--dark); }
+.mini-vocab-item .alt {
+  padding: 2px 8px;
+  background: rgba(56,161,219,0.1);
+  color: var(--blue);
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* ===== ANALYSIS SECTION ===== */
+.analysis-section { }
+.analysis-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+.analysis-text { max-width: 480px; }
+.analysis-text .section-title { margin-bottom: 20px; }
+.analysis-features { list-style: none; padding: 0; margin-top: 28px; }
+.analysis-features li {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 0;
+}
+.analysis-features li + li { border-top: 1px solid rgba(0,0,0,0.05); }
+.af-icon {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  background: rgba(232,121,43,0.08);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.analysis-features li strong { display: block; font-size: 15px; margin-bottom: 2px; }
+.analysis-features li span { font-size: 13px; color: var(--gray); line-height: 1.5; }
+
+/* Analysis mock dashboard */
+.analysis-visual {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+}
+.av-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+.av-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.av-stat {
+  text-align: center;
+  padding: 14px 6px;
+  background: var(--cream);
+  border-radius: 12px;
+}
+.av-stat-icon { font-size: 18px; margin-bottom: 4px; }
+.av-stat-num { font-size: 22px; font-weight: 900; color: var(--dark); }
+.av-stat-label { font-size: 10px; color: var(--gray); }
+
+/* ===== COMPARE ===== */
+.compare-section { background: var(--white); }
+.compare-header { text-align: center; margin-bottom: 56px; }
+.compare-header .section-desc { margin: 0 auto; }
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 50px 1fr 50px 1fr;
+  gap: 0;
+  align-items: stretch;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.compare-card {
+  background: var(--cream);
+  border-radius: 20px;
+  padding: 32px 24px;
+}
+.compare-card h3 { font-size: 18px; font-weight: 900; margin-bottom: 4px; }
+.compare-card .subtitle { font-size: 12px; color: var(--gray); margin-bottom: 16px; }
+.compare-card ul { list-style: none; padding: 0; }
+.compare-card ul li {
+  padding: 8px 0;
+  font-size: 13px;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.compare-card ul li + li { border-top: 1px solid rgba(0,0,0,0.04); }
+.compare-card ul li::before {
+  content: '✓'; font-size: 10px; font-weight: 900;
+  width: 18px; height: 18px; flex-shrink: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+}
+.compare-card.wa { border: 2px solid var(--orange); }
+.compare-card.wa h3 { color: var(--orange); }
+.compare-card.wa ul li::before { background: var(--orange); }
+.compare-card.sensei h3 { color: var(--blue); }
+.compare-card.sensei ul li::before { background: var(--blue); }
+.compare-card.qbot h3 { color: var(--terracotta); }
+.compare-card.qbot ul li::before { background: var(--terracotta); }
+.compare-vs {
+  display: flex; align-items: center; justify-content: center;
+}
+.compare-vs span {
+  background: var(--yellow);
+  color: var(--dark);
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 900;
+  box-shadow: 0 4px 12px rgba(250,192,61,0.3);
+}
+
+/* ===== CTA ===== */
+.cta-section {
+  padding: 100px 0;
+  text-align: center;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  color: var(--white);
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 50%, rgba(250,192,61,0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+.cta-content { position: relative; z-index: 2; }
+.cta-section h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 900; margin-bottom: 16px; }
+.cta-section p {
+  font-size: 18px; opacity: 0.85;
+  margin-bottom: 40px;
+  max-width: 520px;
+  margin-left: auto; margin-right: auto;
+  line-height: 1.7;
+}
+.btn-white {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 18px 44px;
+  background: var(--white);
+  color: var(--orange-deep);
+  border: none; border-radius: 100px;
+  font-size: 18px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s;
+  text-decoration: none; font-family: inherit;
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+.cta-note { font-size: 13px; opacity: 0.6; margin-top: 16px; }
+
+/* ===== FOOTER ===== */
+footer {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 13px; color: var(--gray);
+  background: var(--cream);
+  border-top: 1px solid rgba(0,0,0,0.04);
+}
+footer a { color: var(--orange); text-decoration: none; }
+footer .footer-brand { font-weight: 700; font-size: 15px; color: var(--dark); margin-bottom: 8px; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .hero .container { grid-template-columns: 1fr; gap: 48px; }
+  .hero-visual { max-width: 600px; }
+  .review-layout, .analysis-layout { grid-template-columns: 1fr; gap: 48px; }
+  .compare-grid { grid-template-columns: 1fr; gap: 16px; }
+  .compare-vs { transform: rotate(90deg); padding: 8px 0; }
+  .editor-body { grid-template-columns: 1fr; }
+  .editor-sidebar { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.04); }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .how-steps { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  .how-steps::before { display: none; }
+  .features-grid { grid-template-columns: 1fr; }
+  .radar-dims { grid-template-columns: repeat(2, 1fr); }
+  .av-stats { grid-template-columns: repeat(2, 1fr); }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <span class="w">Write</span><span class="a">A</span>head
+    </a>
+    <div class="nav-links">
+      <a href="#how">使用方式</a>
+      <a href="#review">AI 批閱</a>
+      <a href="#features">回饋功能</a>
+      <a href="#analysis">學習分析</a>
+    </div>
+    <a href="#cta" class="nav-cta">免費體驗 →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-text">
+      <div class="hero-badge">LTrust 學習平台</div>
+      <h1>
+        寫完就批，<br>
+        <span class="highlight">AI 秒回英文作文</span><span class="accent">。</span>
+      </h1>
+      <p>WriteAhead 用 AI 即時批閱你的英文作文，從文法、用詞、組織到內容四大維度精準評分，還附上逐句修改建議——像有一位 24 小時待命的英文老師。</p>
+      <div class="hero-actions">
+        <a href="#cta" class="btn-primary">開始寫作 →</a>
+        <a href="#how" class="btn-secondary">了解如何運作</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="editor-mock">
+        <div class="float-el float-el-1"></div>
+        <div class="float-el float-el-2"></div>
+        <div class="float-el float-el-3"></div>
+        <div class="editor-bar">
+          <div class="editor-bar-dots">
+            <div class="editor-bar-dot"></div>
+            <div class="editor-bar-dot"></div>
+            <div class="editor-bar-dot"></div>
+          </div>
+          <div class="editor-bar-title">✍️ 別再滑了，年輕就該動起來！</div>
+          <div class="editor-bar-timer">⏱ 00:52</div>
+        </div>
+        <div class="editor-body">
+          <div class="editor-sidebar">
+            <span class="editor-sidebar-label">✏️ 作文題目</span>
+            <div class="editor-sidebar-title">別再滑了，年輕就該動起來！</div>
+            <p>身為高中生，你發現你和同學大部分的時間都是坐著。寫一封信提出你對這項活動的想法，並邀請同學們一起參與。</p>
+            <div class="word-hint">建議 150–200 字</div>
+          </div>
+          <div class="editor-content">
+            <p>Dear <span class="highlight-word">Classmates</span>,</p>
+            <p>Look around our classroom during recess. What do you see? Almost all of us are either buried in heavy textbooks or <span class="highlight-word">glued</span> to our smartphone screens.</p>
+            <p>I would like to invite you all to join a new initiative I'm starting: the "Recess Recharge" fitness circle...</p>
+          </div>
+        </div>
+        <div class="editor-footer">
+          <div class="editor-footer-count">已輸入 <strong>263</strong> 字 / 建議 150–200 字 · <strong>132%</strong></div>
+          <button class="editor-footer-btn">批閱 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="reveal">
+        <div class="stat-num">4 維度</div>
+        <div class="stat-label">文法 · 字量 · 組織 · 內容</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-num"><span class="blue">AI</span> 批閱</div>
+        <div class="stat-label">分析文法 → 產生建議 → 評分</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-num">3 類回饋</div>
+        <div class="stat-label">改錯 · 用詞 · 整體評語</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-num">60 秒</div>
+        <div class="stat-label">寫完即批，即時回饋</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="container">
+    <div class="how-header reveal">
+      <div class="section-label">✦ 使用流程</div>
+      <h2 class="section-title">四步驟，完成一次完整的作文練習</h2>
+      <p class="section-desc">從選題到拿到批閱結果，全程線上完成。</p>
+    </div>
+    <div class="how-steps">
+      <div class="how-step reveal">
+        <div class="how-num">1</div>
+        <h3>選擇題目</h3>
+        <p>從推薦題目或龍騰自命題中選擇，也可以瀏覽不同主題的作文練習。</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-num">2</div>
+        <h3>線上寫作</h3>
+        <p>在編輯器中直接寫作，系統自動計時、計算字數，即時儲存不怕遺失。</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-num">3</div>
+        <h3>AI 批閱</h3>
+        <p>點擊批閱後，AI 自動分析文法、產生建議、整理結果，約 60 秒完成。</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-num">4</div>
+        <h3>查看回饋</h3>
+        <p>四維度雷達圖評分 + 文法改錯 + 用詞建議 + 整體評語，全面提升寫作力。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI REVIEW / RADAR -->
+<section class="review-section" id="review">
+  <div class="container">
+    <div class="review-layout">
+      <div class="review-text reveal">
+        <div class="section-label">✦ AI 評分系統</div>
+        <h2 class="section-title">四大維度，<br>精準定位你的寫作實力</h2>
+        <p class="section-desc">WriteAhead 不只給分數，而是從文法正確性、字彙豐富度、文章組織力、內容完整性四個面向分別評量，讓你清楚知道哪裡強、哪裡還能更好。</p>
+        <p class="section-desc" style="margin-top:16px;">每個維度 5 分制，加總 20 分滿分。雷達圖一目了然，一眼看出自己的寫作輪廓。</p>
+      </div>
+      <div class="radar-mock reveal">
+        <div class="radar-mock-title">📊 評分成果</div>
+        <div class="radar-mock-score">表現優秀！共四項評分 <span>20</span> / 20 分</div>
+        <svg class="radar-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+          <!-- Grid -->
+          <polygon points="150,30 270,150 150,270 30,150" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+          <polygon points="150,60 240,150 150,240 60,150" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+          <polygon points="150,90 210,150 150,210 90,150" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+          <polygon points="150,120 180,150 150,180 120,150" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+          <!-- Axes -->
+          <line x1="150" y1="30" x2="150" y2="270" stroke="#e5e7eb" stroke-width="1"/>
+          <line x1="30" y1="150" x2="270" y2="150" stroke="#e5e7eb" stroke-width="1"/>
+          <!-- Data (5/5 all) -->
+          <polygon points="150,30 270,150 150,270 30,150" fill="rgba(232,121,43,0.12)" stroke="var(--orange)" stroke-width="2.5"/>
+          <!-- Dots -->
+          <circle cx="150" cy="30" r="5" fill="var(--orange)"/>
+          <circle cx="270" cy="150" r="5" fill="var(--blue)"/>
+          <circle cx="150" cy="270" r="5" fill="var(--terracotta)"/>
+          <circle cx="30" cy="150" r="5" fill="var(--yellow)"/>
+          <!-- Labels -->
+          <text x="150" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#2a2a2a">文法</text>
+          <text x="284" y="154" text-anchor="start" font-size="12" font-weight="700" fill="#2a2a2a">組織</text>
+          <text x="150" y="296" text-anchor="middle" font-size="12" font-weight="700" fill="#2a2a2a">內容</text>
+          <text x="16" y="154" text-anchor="end" font-size="12" font-weight="700" fill="#2a2a2a">字量</text>
+        </svg>
+        <div class="radar-dims">
+          <div class="radar-dim">
+            <div class="radar-dim-score c1">5</div>
+            <div class="radar-dim-max">/ 5</div>
+            <div class="radar-dim-label">文法</div>
+          </div>
+          <div class="radar-dim">
+            <div class="radar-dim-score c2">5</div>
+            <div class="radar-dim-max">/ 5</div>
+            <div class="radar-dim-label">組織</div>
+          </div>
+          <div class="radar-dim">
+            <div class="radar-dim-score c3">5</div>
+            <div class="radar-dim-max">/ 5</div>
+            <div class="radar-dim-label">字量</div>
+          </div>
+          <div class="radar-dim">
+            <div class="radar-dim-score c4">5</div>
+            <div class="radar-dim-max">/ 5</div>
+            <div class="radar-dim-label">內容</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES: 3 FEEDBACK TYPES -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="features-header reveal">
+      <div class="section-label">✦ 三大回饋</div>
+      <h2 class="section-title">不只給分數，更教你怎麼改</h2>
+      <p class="section-desc">每次批閱都包含三種回饋面向，讓你從錯誤中學習，越寫越好。</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔴</div>
+        <h3>文法改錯</h3>
+        <p>逐句標記文法錯誤，標註錯誤類型（其他、介係詞等），顯示修正前後對照。</p>
+        <div class="mini-corrections">
+          <div class="mini-corr">
+            <span class="mini-corr-tag other">其他</span>
+            <span><del>Classmates</del></span>
+            <span class="arrow">→</span>
+            <ins>classmates</ins>
+          </div>
+          <div class="mini-corr">
+            <span class="mini-corr-tag prep">介係詞</span>
+            <span><del>for</del></span>
+            <span class="arrow">→</span>
+            <ins>on</ins>
+          </div>
+          <div class="mini-corr">
+            <span class="mini-corr-tag prep">介係詞</span>
+            <span><del>at</del></span>
+            <span class="arrow">→</span>
+            <ins>in</ins>
+          </div>
+        </div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📝</div>
+        <h3>用詞建議</h3>
+        <p>針對文中每個動詞與關鍵用詞，推薦更豐富的同義替換，擴充你的寫作詞彙庫。</p>
+        <div class="mini-vocab">
+          <div class="mini-vocab-item"><span class="orig">bury</span><span class="alt">buried</span><span class="alt">packed</span></div>
+          <div class="mini-vocab-item"><span class="orig">glue</span><span class="alt">glued</span><span class="alt">stuck</span></div>
+          <div class="mini-vocab-item"><span class="orig">spend</span><span class="alt">have</span><span class="alt">live</span></div>
+          <div class="mini-vocab-item"><span class="orig">feel</span><span class="alt">feeling</span><span class="alt">getting</span></div>
+        </div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">💬</div>
+        <h3>整體評語</h3>
+        <p>綜合評估你的文章表現，給出整體性建議，包括結構安排、論點發展、語氣一致性等面向的提升方向。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANALYSIS -->
+<section class="analysis-section" id="analysis">
+  <div class="container">
+    <div class="analysis-layout">
+      <div class="analysis-visual reveal">
+        <div class="av-title">📊 我的分析</div>
+        <div class="av-stats">
+          <div class="av-stat">
+            <div class="av-stat-icon">📄</div>
+            <div class="av-stat-num">12</div>
+            <div class="av-stat-label">已批改題數</div>
+          </div>
+          <div class="av-stat">
+            <div class="av-stat-icon">⏱</div>
+            <div class="av-stat-num">8:32</div>
+            <div class="av-stat-label">做題平均時間</div>
+          </div>
+          <div class="av-stat">
+            <div class="av-stat-icon">📝</div>
+            <div class="av-stat-num">187</div>
+            <div class="av-stat-label">平均字數</div>
+          </div>
+          <div class="av-stat">
+            <div class="av-stat-icon">🏆</div>
+            <div class="av-stat-num">17/20</div>
+            <div class="av-stat-label">平均得分</div>
+          </div>
+        </div>
+        <div style="font-size:13px; font-weight:600; margin-bottom:16px; color:var(--gray);">各項能力雷達</div>
+        <svg viewBox="0 0 300 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:0 auto;">
+          <polygon points="150,20 260,120 150,220 40,120" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+          <polygon points="150,45 235,120 150,195 65,120" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+          <polygon points="150,70 210,120 150,170 90,120" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+          <line x1="150" y1="20" x2="150" y2="220" stroke="#e5e7eb" stroke-width="1"/>
+          <line x1="40" y1="120" x2="260" y2="120" stroke="#e5e7eb" stroke-width="1"/>
+          <polygon points="150,28 252,120 150,195 55,120" fill="rgba(232,121,43,0.1)" stroke="var(--orange)" stroke-width="2"/>
+          <circle cx="150" cy="28" r="4" fill="var(--orange)"/>
+          <circle cx="252" cy="120" r="4" fill="var(--blue)"/>
+          <circle cx="150" cy="195" r="4" fill="var(--terracotta)"/>
+          <circle cx="55" cy="120" r="4" fill="var(--yellow)"/>
+          <text x="150" y="12" text-anchor="middle" font-size="11" font-weight="600" fill="#6b7280">文法 4.8</text>
+          <text x="270" y="124" text-anchor="start" font-size="11" font-weight="600" fill="#6b7280">組織 4.5</text>
+          <text x="150" y="236" text-anchor="middle" font-size="11" font-weight="600" fill="#6b7280">內容 3.8</text>
+          <text x="28" y="124" text-anchor="end" font-size="11" font-weight="600" fill="#6b7280">字量 4.2</text>
+        </svg>
+      </div>
+      <div class="analysis-text reveal">
+        <div class="section-label">✦ 學習分析</div>
+        <h2 class="section-title">追蹤寫作成長，<br>用數據看見進步</h2>
+        <p class="section-desc">每次批閱的結果都會被記錄下來，匯整成你的個人寫作能力分析報告。</p>
+        <ul class="analysis-features">
+          <li>
+            <div class="af-icon">📄</div>
+            <div><strong>批改題數追蹤</strong><span>累積練習量，養成寫作習慣</span></div>
+          </li>
+          <li>
+            <div class="af-icon">⏱</div>
+            <div><strong>做題平均時間</strong><span>觀察寫作速度是否提升</span></div>
+          </li>
+          <li>
+            <div class="af-icon">📊</div>
+            <div><strong>四維度能力雷達圖</strong><span>長期追蹤文法、字量、組織、內容的變化</span></div>
+          </li>
+          <li>
+            <div class="af-icon">🎯</div>
+            <div><strong>篩選與對比</strong><span>按時間、題型、課綱、得分範圍篩選歷史表現</span></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section class="compare-section">
+  <div class="container">
+    <div class="compare-header reveal">
+      <div class="section-label">✦ LTrust 學習三寶</div>
+      <h2 class="section-title">三款 AI 工具，覆蓋完整學習場景</h2>
+      <p class="section-desc">WriteAhead 專攻英文寫作，搭配 S.E.N.S.E.I 和 Qbot，閱讀、選擇題、作文一站到位。</p>
+    </div>
+    <div class="compare-grid reveal">
+      <div class="compare-card wa">
+        <h3>WriteAhead</h3>
+        <div class="subtitle">AI 英文作文批閱</div>
+        <ul>
+          <li>線上英文作文練習</li>
+          <li>AI 即時批閱（約 60 秒）</li>
+          <li>四維度雷達圖評分</li>
+          <li>文法改錯 + 用詞建議</li>
+          <li>寫作能力分析追蹤</li>
+        </ul>
+      </div>
+      <div class="compare-vs"><span>+</span></div>
+      <div class="compare-card sensei">
+        <h3>S.E.N.S.E.I</h3>
+        <div class="subtitle">AI 解題導師</div>
+        <ul>
+          <li>自由輸入任何題目</li>
+          <li>AI 拆解推理過程</li>
+          <li>結構化解答與延伸知識</li>
+          <li>十大科目全覆蓋</li>
+          <li>問答紀錄分類管理</li>
+        </ul>
+      </div>
+      <div class="compare-vs"><span>+</span></div>
+      <div class="compare-card qbot">
+        <h3>Qbot</h3>
+        <div class="subtitle">AI 出題教練</div>
+        <ul>
+          <li>龍騰版教科書題庫</li>
+          <li>自選範圍與題型測驗</li>
+          <li>計時作答模擬考試</li>
+          <li>錯題自動收錄</li>
+          <li>學習儀表板追蹤</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-content">
+    <h2>準備好了嗎？<br>讓 AI 幫你批改英文作文</h2>
+    <p>免費試用批閱次數，體驗 WriteAhead 的四維度評分與逐句修改建議。</p>
+    <a href="https://wah.ltrust.tw" class="btn-white" target="_blank">開始免費寫作 →</a>
+    <div class="cta-note">LTrust 帳號即可使用 · 含免費批閱次數</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">WriteAhead by <a href="https://ltrust.tw" target="_blank">LTrust</a></div>
+    <div>© 2025 龍騰文化 Longteng. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

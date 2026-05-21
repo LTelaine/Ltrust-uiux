@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.E.N.S.E.I — 你的 AI 學習導師</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #38a1db;
+  --blue-deep: #007BB5;
+  --yellow: #fac03d;
+  --red: #c92a2e;
+  --tan: #C39E6C;
+  --terracotta: #cb6738;
+  --cream: #FFF8F0;
+  --white: #ffffff;
+  --dark: #2a2a2a;
+  --gray: #6b7280;
+  --light-gray: #f3f4f6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--dark);
+  background: var(--cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== UTILITY ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255, 248, 240, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(56, 161, 219, 0.1);
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.06); }
+nav .container {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  font-size: 22px; font-weight: 900; letter-spacing: 3px;
+  color: var(--blue);
+}
+.nav-logo span { color: var(--yellow); }
+.nav-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 28px;
+  background: var(--blue);
+  color: var(--white);
+  border: none; border-radius: 100px;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.nav-cta:hover { background: var(--blue-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56,161,219,0.3); }
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--dark); }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding-top: 64px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(56,161,219,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(250,192,61,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.hero-text { position: relative; z-index: 2; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px;
+  background: rgba(56,161,219,0.1);
+  border-radius: 100px;
+  font-size: 13px; font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease-out;
+}
+.hero-badge::before {
+  content: '✦';
+  font-size: 10px;
+}
+.hero-text h1 {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+.hero-text h1 .highlight {
+  background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-text h1 .accent {
+  color: var(--yellow);
+  -webkit-text-fill-color: var(--yellow);
+}
+.hero-text p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--gray);
+  margin-bottom: 36px;
+  max-width: 480px;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+.hero-actions {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 36px;
+  background: var(--blue);
+  color: var(--white);
+  border: none; border-radius: 100px;
+  font-size: 17px; font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  font-family: inherit;
+}
+.btn-primary:hover { background: var(--blue-deep); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(56,161,219,0.35); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 36px;
+  background: transparent;
+  color: var(--dark);
+  border: 2px solid rgba(42,42,42,0.15);
+  border-radius: 100px;
+  font-size: 17px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  font-family: inherit;
+}
+.btn-secondary:hover { border-color: var(--blue); color: var(--blue); }
+
+/* Hero visual */
+.hero-visual {
+  position: relative; z-index: 2;
+  animation: fadeInRight 0.8s ease-out 0.2s both;
+}
+.hero-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  position: relative;
+}
+.hero-card-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 28px;
+}
+.hero-card-icon {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 22px; font-weight: 900;
+}
+.hero-card-title { font-weight: 700; font-size: 18px; }
+.hero-card-tag {
+  margin-left: auto;
+  padding: 4px 12px;
+  background: rgba(250,192,61,0.15);
+  color: var(--terracotta);
+  border-radius: 100px;
+  font-size: 12px; font-weight: 700;
+}
+.hero-q {
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 20px 24px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--dark);
+  margin-bottom: 20px;
+  border-left: 4px solid var(--yellow);
+}
+.hero-answer {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--gray);
+}
+.hero-answer strong {
+  display: block;
+  color: var(--blue);
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.hero-answer-steps {
+  list-style: none; padding: 0;
+}
+.hero-answer-steps li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 6px;
+}
+.hero-answer-steps li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 9px;
+  width: 8px; height: 8px;
+  background: var(--yellow);
+  border-radius: 50%;
+}
+
+/* Floating decorations */
+.float-dot {
+  position: absolute;
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+.float-dot-1 {
+  width: 12px; height: 12px;
+  background: var(--yellow);
+  top: -20px; right: 40px;
+  animation-delay: 0s;
+}
+.float-dot-2 {
+  width: 8px; height: 8px;
+  background: var(--red);
+  top: 60px; right: -10px;
+  animation-delay: 1.5s;
+}
+.float-dot-3 {
+  width: 16px; height: 16px;
+  background: var(--blue);
+  opacity: 0.3;
+  bottom: -10px; left: 30px;
+  animation-delay: 3s;
+}
+
+/* ===== STATS BAR ===== */
+.stats-bar {
+  padding: 48px 0;
+  background: var(--white);
+  border-top: 1px solid rgba(0,0,0,0.04);
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  text-align: center;
+}
+.stat-num {
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 900;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+.stat-num .yellow { color: var(--yellow); }
+.stat-label { font-size: 14px; color: var(--gray); font-weight: 500; }
+
+/* ===== SECTION COMMON ===== */
+section { padding: 100px 0; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 700;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 900;
+  line-height: 1.35;
+  margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--gray);
+  max-width: 600px;
+}
+
+/* ===== SENSEI MEANING ===== */
+.sensei-section { background: var(--white); }
+.sensei-header { text-align: center; margin-bottom: 64px; }
+.sensei-header .section-desc { margin: 0 auto; }
+.sensei-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.sensei-card {
+  background: var(--cream);
+  border-radius: 20px;
+  padding: 36px 28px;
+  transition: all 0.35s;
+  position: relative;
+  overflow: hidden;
+}
+.sensei-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--blue);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.sensei-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+.sensei-card:hover::before { opacity: 1; }
+.sensei-letter {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 900;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.sensei-card:nth-child(1) .sensei-letter { background: var(--blue); }
+.sensei-card:nth-child(2) .sensei-letter { background: var(--yellow); }
+.sensei-card:nth-child(3) .sensei-letter { background: var(--red); }
+.sensei-card:nth-child(4) .sensei-letter { background: var(--terracotta); }
+.sensei-card:nth-child(5) .sensei-letter { background: var(--blue-deep); }
+.sensei-card:nth-child(6) .sensei-letter { background: var(--tan); }
+.sensei-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.sensei-card .en { font-size: 13px; color: var(--blue); font-weight: 700; margin-bottom: 10px; }
+.sensei-card p { font-size: 14px; line-height: 1.7; color: var(--gray); }
+
+/* ===== SUBJECTS ===== */
+.subjects-section { text-align: center; }
+.subjects-header { margin-bottom: 56px; }
+.subjects-header .section-desc { margin: 0 auto; }
+.subjects-wrap {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 16px;
+  max-width: 800px; margin: 0 auto 48px;
+}
+.subject-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 28px;
+  background: var(--white);
+  border-radius: 100px;
+  font-size: 16px; font-weight: 700;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: all 0.3s;
+  cursor: default;
+}
+.subject-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(56,161,219,0.15);
+}
+.subject-pill .dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+
+/* ===== HOW IT WORKS ===== */
+.how-section { background: var(--white); }
+.how-header { text-align: center; margin-bottom: 72px; }
+.how-header .section-desc { margin: 0 auto; }
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  position: relative;
+}
+.how-steps::before {
+  content: '';
+  position: absolute;
+  top: 48px; left: 20%; right: 20%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--yellow), var(--red));
+  opacity: 0.2;
+}
+.how-step { text-align: center; position: relative; z-index: 2; }
+.how-num {
+  width: 80px; height: 80px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 900;
+  color: var(--white);
+}
+.how-step:nth-child(1) .how-num { background: linear-gradient(135deg, var(--blue), var(--blue-deep)); }
+.how-step:nth-child(2) .how-num { background: linear-gradient(135deg, var(--yellow), var(--terracotta)); }
+.how-step:nth-child(3) .how-num { background: linear-gradient(135deg, var(--red), #e04545); }
+.how-step h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+.how-step p { font-size: 15px; line-height: 1.7; color: var(--gray); max-width: 280px; margin: 0 auto; }
+
+/* ===== DEMO SECTION ===== */
+.demo-section {
+  background: linear-gradient(180deg, var(--cream) 0%, var(--white) 100%);
+}
+.demo-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.demo-text { max-width: 480px; }
+.demo-text .section-title { margin-bottom: 24px; }
+.demo-features { list-style: none; padding: 0; margin-top: 32px; }
+.demo-features li {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 0;
+}
+.demo-features li + li { border-top: 1px solid rgba(0,0,0,0.05); }
+.demo-check {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: rgba(56,161,219,0.1);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--blue); font-size: 14px; font-weight: 900;
+}
+.demo-features li strong { display: block; font-size: 15px; margin-bottom: 2px; }
+.demo-features li span { font-size: 13px; color: var(--gray); line-height: 1.5; }
+
+.demo-visual {
+  background: var(--white);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.07);
+}
+.demo-browser-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 20px;
+  background: var(--light-gray);
+}
+.demo-browser-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #ddd;
+}
+.demo-browser-dot:nth-child(1) { background: #ff5f56; }
+.demo-browser-dot:nth-child(2) { background: #ffbd2e; }
+.demo-browser-dot:nth-child(3) { background: #27c93f; }
+.demo-browser-url {
+  margin-left: 12px;
+  font-size: 12px;
+  color: var(--gray);
+  background: var(--white);
+  padding: 6px 16px;
+  border-radius: 8px;
+  flex: 1;
+}
+.demo-content { padding: 32px; }
+.demo-q-label {
+  font-size: 12px; font-weight: 700; color: var(--blue);
+  margin-bottom: 8px;
+}
+.demo-question {
+  font-size: 15px; line-height: 1.7;
+  padding: 16px 20px;
+  background: var(--cream);
+  border-radius: 12px;
+  border-left: 4px solid var(--yellow);
+  margin-bottom: 24px;
+}
+.demo-ai-label {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; color: var(--blue);
+  margin-bottom: 12px;
+}
+.demo-ai-label::before {
+  content: '✦';
+  font-size: 10px;
+  color: var(--yellow);
+}
+.demo-answer-block { font-size: 13px; line-height: 1.8; color: var(--gray); }
+.demo-answer-block .step-title {
+  font-weight: 700; color: var(--dark); font-size: 14px;
+  margin: 12px 0 6px;
+}
+.demo-answer-block .final-answer {
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: rgba(56,161,219,0.06);
+  border-radius: 12px;
+  border: 1px solid rgba(56,161,219,0.15);
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: 500;
+}
+
+/* ===== TESTIMONIALS ===== */
+.testimonials-section { background: var(--white); overflow: hidden; }
+.testimonials-header { text-align: center; margin-bottom: 56px; }
+.testimonials-header .section-desc { margin: 0 auto; }
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.testimonial-card {
+  background: var(--cream);
+  border-radius: 20px;
+  padding: 32px;
+  transition: transform 0.3s;
+}
+.testimonial-card:hover { transform: translateY(-4px); }
+.testimonial-stars { color: var(--yellow); font-size: 16px; margin-bottom: 16px; letter-spacing: 2px; }
+.testimonial-card blockquote {
+  font-size: 15px; line-height: 1.8;
+  color: var(--dark);
+  margin-bottom: 20px;
+  font-style: normal;
+}
+.testimonial-author { display: flex; align-items: center; gap: 12px; }
+.testimonial-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 900; color: var(--white);
+}
+.testimonial-card:nth-child(1) .testimonial-avatar { background: var(--blue); }
+.testimonial-card:nth-child(2) .testimonial-avatar { background: var(--yellow); }
+.testimonial-card:nth-child(3) .testimonial-avatar { background: var(--terracotta); }
+.testimonial-name { font-size: 14px; font-weight: 700; }
+.testimonial-role { font-size: 12px; color: var(--gray); }
+
+/* ===== CTA ===== */
+.cta-section {
+  padding: 100px 0;
+  text-align: center;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 50%, rgba(250,192,61,0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+.cta-content { position: relative; z-index: 2; }
+.cta-section h2 {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+.cta-section p {
+  font-size: 18px;
+  opacity: 0.85;
+  margin-bottom: 40px;
+  max-width: 500px;
+  margin-left: auto; margin-right: auto;
+  line-height: 1.7;
+}
+.btn-white {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 18px 44px;
+  background: var(--white);
+  color: var(--blue-deep);
+  border: none; border-radius: 100px;
+  font-size: 18px; font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  font-family: inherit;
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+.cta-note { font-size: 13px; opacity: 0.6; margin-top: 16px; }
+
+/* ===== FOOTER ===== */
+footer {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--gray);
+  background: var(--cream);
+  border-top: 1px solid rgba(0,0,0,0.04);
+}
+footer a { color: var(--blue); text-decoration: none; }
+footer .footer-brand { font-weight: 700; font-size: 15px; color: var(--dark); margin-bottom: 8px; }
+
+/* ===== COMPARE ===== */
+.compare-section { background: var(--white); }
+.compare-header { text-align: center; margin-bottom: 56px; }
+.compare-header .section-desc { margin: 0 auto; }
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 50px 1fr 50px 1fr;
+  gap: 0;
+  align-items: stretch;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.compare-card {
+  background: var(--cream);
+  border-radius: 20px;
+  padding: 32px 24px;
+}
+.compare-card h3 { font-size: 18px; font-weight: 900; margin-bottom: 4px; }
+.compare-card .subtitle { font-size: 12px; color: var(--gray); margin-bottom: 16px; }
+.compare-card ul { list-style: none; padding: 0; }
+.compare-card ul li {
+  padding: 8px 0; font-size: 13px;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.compare-card ul li + li { border-top: 1px solid rgba(0,0,0,0.04); }
+.compare-card ul li::before {
+  content: '✓'; font-size: 10px; font-weight: 900;
+  width: 18px; height: 18px; flex-shrink: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+}
+.compare-card.sensei { border: 2px solid var(--blue); }
+.compare-card.sensei h3 { color: var(--blue); }
+.compare-card.sensei ul li::before { background: var(--blue); }
+.compare-card.qbot h3 { color: var(--terracotta); }
+.compare-card.qbot ul li::before { background: var(--terracotta); }
+.compare-card.wa h3 { color: var(--terracotta); background: none; -webkit-text-fill-color: #E8792B; }
+.compare-card.wa ul li::before { background: #E8792B; }
+.compare-vs {
+  display: flex; align-items: center; justify-content: center;
+}
+.compare-vs span {
+  background: var(--yellow); color: var(--dark);
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 900;
+  box-shadow: 0 4px 12px rgba(250,192,61,0.3);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .hero .container { grid-template-columns: 1fr; gap: 48px; }
+  .hero-visual { max-width: 560px; }
+  .demo-layout { grid-template-columns: 1fr; gap: 48px; }
+  .sensei-grid { grid-template-columns: repeat(2, 1fr); }
+  .compare-grid { grid-template-columns: 1fr; gap: 16px; }
+  .compare-vs { transform: rotate(90deg); padding: 8px 0; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .how-steps { grid-template-columns: 1fr; gap: 40px; }
+  .how-steps::before { display: none; }
+  .testimonials-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+  .sensei-grid { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="container">
+    <div class="nav-logo"><span>S.</span>E.N.S.E.I</div>
+    <div class="nav-links">
+      <a href="#sensei-meaning">品牌理念</a>
+      <a href="#how">使用方式</a>
+      <a href="#demo">解題示範</a>
+      <a href="#compare">產品比較</a>
+    </div>
+    <a href="#cta" class="nav-cta">免費試用 →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-text">
+      <div class="hero-badge">LTrust 學習平台</div>
+      <h1>
+        你的專屬<br>
+        <span class="highlight">AI 學習導師</span><span class="accent">。</span>
+      </h1>
+      <p>不只給答案，更教你思考。S.E.N.S.E.I 用 AI 拆解每一道題目，帶你走過推理過程，真正搞懂、不再死背。</p>
+      <div class="hero-actions">
+        <a href="#cta" class="btn-primary">立即免費體驗 →</a>
+        <a href="#how" class="btn-secondary">了解如何運作</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="float-dot float-dot-1"></div>
+        <div class="float-dot float-dot-2"></div>
+        <div class="float-dot float-dot-3"></div>
+        <div class="hero-card-header">
+          <div class="hero-card-icon">國</div>
+          <div class="hero-card-title">國文</div>
+          <div class="hero-card-tag">AI 解題中</div>
+        </div>
+        <div class="hero-q">《桃花源記》中的「不足為外人道也」一句，表達了作者怎樣的思想？</div>
+        <div class="hero-answer">
+          <strong>S.E.N.S.E.I 解答</strong>
+          <ul class="hero-answer-steps">
+            <li>桃源中人的婉轉叮嚀，意在隱藏秘境</li>
+            <li>表達不願受外界打擾之意</li>
+            <li>反映作者對理想社會的守護嚮往</li>
+            <li>批判現實亂象，透露逃避的願望</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="reveal">
+        <div class="stat-num">10</div>
+        <div class="stat-label">涵蓋科目</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-num"><span class="yellow">AI</span> 驅動</div>
+        <div class="stat-label">智慧解題引擎</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-num">3 步驟</div>
+        <div class="stat-label">選科 → 提問 → 理解</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-num">24<span class="yellow">/7</span></div>
+        <div class="stat-label">隨時隨地學習</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SENSEI MEANING -->
+<section class="sensei-section" id="sensei-meaning">
+  <div class="container">
+    <div class="sensei-header reveal">
+      <div class="section-label">✦ 品牌理念</div>
+      <h2 class="section-title">S.E.N.S.E.I 不只是名字，<br>更是六大學習承諾</h2>
+      <p class="section-desc">每個字母都代表我們對學習者的用心，打造兼具智慧、共感與啟發力的 AI 導師。</p>
+    </div>
+    <div class="sensei-grid">
+      <div class="sensei-card reveal">
+        <div class="sensei-letter">S</div>
+        <h3>智慧導引</h3>
+        <div class="en">Smart</div>
+        <p>以先進演算法提供精準解題建議，不是直接給答案，而是引導你找到答案。</p>
+      </div>
+      <div class="sensei-card reveal">
+        <div class="sensei-letter">E</div>
+        <h3>共感互動</h3>
+        <div class="en">Empathetic</div>
+        <p>讀懂你的學習狀態，用適合你理解程度的語言，給予貼心的解題回饋。</p>
+      </div>
+      <div class="sensei-card reveal">
+        <div class="sensei-letter">N</div>
+        <h3>成長陪伴</h3>
+        <div class="en">Nurturing</div>
+        <p>循序漸進培育學習能力，鼓勵你持續精進，每一次練習都是進步的機會。</p>
+      </div>
+      <div class="sensei-card reveal">
+        <div class="sensei-letter">S</div>
+        <h3>及時支援</h3>
+        <div class="en">Supportive</div>
+        <p>卡關的時候不用等——即時解惑，幫你突破學習瓶頸，繼續前進。</p>
+      </div>
+      <div class="sensei-card reveal">
+        <div class="sensei-letter">E</div>
+        <h3>賦能學習</h3>
+        <div class="en">Empowering</div>
+        <p>讓你主導學習節奏，自主選擇想練習的題目和科目，學習由你掌控。</p>
+      </div>
+      <div class="sensei-card reveal">
+        <div class="sensei-letter">I</div>
+        <h3>深度洞察</h3>
+        <div class="en">Insightful</div>
+        <p>透視每一道題的核心概念，提供延伸知識與關聯題目，讓理解更深更廣。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBJECTS -->
+<section class="subjects-section">
+  <div class="container">
+    <div class="subjects-header reveal">
+      <div class="section-label">✦ 學科涵蓋</div>
+      <h2 class="section-title">十大科目，一個導師全搞定</h2>
+      <p class="section-desc">不管是理科的數學、物理、化學，還是文科的國文、歷史、地理——S.E.N.S.E.I 都能陪你練習。</p>
+    </div>
+    <div class="subjects-wrap reveal">
+      <div class="subject-pill"><span class="dot" style="background:var(--blue)"></span>國文</div>
+      <div class="subject-pill"><span class="dot" style="background:#4CAF50"></span>英文</div>
+      <div class="subject-pill"><span class="dot" style="background:var(--terracotta)"></span>數學</div>
+      <div class="subject-pill"><span class="dot" style="background:var(--red)"></span>化學</div>
+      <div class="subject-pill"><span class="dot" style="background:#E91E63"></span>物理</div>
+      <div class="subject-pill"><span class="dot" style="background:#8BC34A"></span>生物</div>
+      <div class="subject-pill"><span class="dot" style="background:var(--yellow)"></span>地科</div>
+      <div class="subject-pill"><span class="dot" style="background:#9C27B0"></span>歷史</div>
+      <div class="subject-pill"><span class="dot" style="background:var(--blue-deep)"></span>地理</div>
+      <div class="subject-pill"><span class="dot" style="background:var(--tan)"></span>公民</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="container">
+    <div class="how-header reveal">
+      <div class="section-label">✦ 使用方式</div>
+      <h2 class="section-title">三步驟，開始你的 AI 學習之旅</h2>
+      <p class="section-desc">不需要安裝任何軟體，打開瀏覽器就能用。</p>
+    </div>
+    <div class="how-steps">
+      <div class="how-step reveal">
+        <div class="how-num">1</div>
+        <h3>選擇科目</h3>
+        <p>從十大科目中選擇你想練習的領域，每科都有專屬的 AI 解題模型。</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-num">2</div>
+        <h3>輸入題目</h3>
+        <p>手動輸入或直接上傳題目照片，S.E.N.S.E.I 會自動辨識你的問題。</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-num">3</div>
+        <h3>取得解答</h3>
+        <p>AI 導師拆解推理過程，給出正確答案，還附上延伸知識幫你觸類旁通。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="demo-section" id="demo">
+  <div class="container">
+    <div class="demo-layout">
+      <div class="demo-text reveal">
+        <div class="section-label">✦ 解題示範</div>
+        <h2 class="section-title">不只給答案，<br>更教你推理過程</h2>
+        <p class="section-desc">S.E.N.S.E.I 的解答包含完整的思路拆解，讓你真正理解「為什麼」，而不只是知道答案是什麼。</p>
+        <ul class="demo-features">
+          <li>
+            <div class="demo-check">✓</div>
+            <div>
+              <strong>已知前提整理</strong>
+              <span>自動歸納題目中的關鍵線索</span>
+            </div>
+          </li>
+          <li>
+            <div class="demo-check">✓</div>
+            <div>
+              <strong>推理過程展示</strong>
+              <span>一步步帶你走過解題邏輯</span>
+            </div>
+          </li>
+          <li>
+            <div class="demo-check">✓</div>
+            <div>
+              <strong>正確答案標示</strong>
+              <span>清楚標記最終解答</span>
+            </div>
+          </li>
+          <li>
+            <div class="demo-check">✓</div>
+            <div>
+              <strong>延伸知識補充</strong>
+              <span>舉一反三，推薦相關題目練習</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="demo-visual reveal">
+        <div class="demo-browser-bar">
+          <div class="demo-browser-dot"></div>
+          <div class="demo-browser-dot"></div>
+          <div class="demo-browser-dot"></div>
+          <div class="demo-browser-url">sensei.ltrust.tw</div>
+        </div>
+        <div class="demo-content">
+          <div class="demo-q-label">學生提問</div>
+          <div class="demo-question">
+            Gorillas have often been portrayed as a fearful animal, but in truth these shy apes _____ fight over sex, food, or territory.
+          </div>
+          <div class="demo-ai-label">S.E.N.S.E.I 解答</div>
+          <div class="demo-answer-block">
+            <div class="step-title">📋 已知前提</div>
+            原句以 "but in truth" 進行語意轉折，暗示空格處應填入「很少」之意的詞彙...
+            <div class="step-title">🔍 推理過程</div>
+            透過上下文語境分析，「shy apes」與「fearful」形成對比，空格應為否定語氣副詞...
+            <div class="final-answer">
+              ✦ 正確答案：<strong>rarely</strong>——表達大猩猩實際上很少為了食物或領地而爭鬥。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="container">
+    <div class="testimonials-header reveal">
+      <div class="section-label">✦ 使用心得</div>
+      <h2 class="section-title">聽聽他們怎麼說</h2>
+      <p class="section-desc">來自全台學生和家長的真實回饋。</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">★★★★★</div>
+        <blockquote>「以前數學卡關只能等老師改天解答，現在用 S.E.N.S.E.I 馬上就能看到完整推理過程，真的有差！」</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">陳</div>
+          <div>
+            <div class="testimonial-name">陳同學</div>
+            <div class="testimonial-role">高二學生</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">★★★★★</div>
+        <blockquote>「孩子自己會主動用它來練習英文題目，因為它不只給答案，還會解釋為什麼，讓家長很放心。」</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">林</div>
+          <div>
+            <div class="testimonial-name">林媽媽</div>
+            <div class="testimonial-role">國三學生家長</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">★★★★★</div>
+        <blockquote>「國文古文超怕的，結果 S.E.N.S.E.I 解釋完推理邏輯之後，突然就懂了，延伸題目也很有用。」</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">王</div>
+          <div>
+            <div class="testimonial-name">王同學</div>
+            <div class="testimonial-role">高一學生</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE: LTrust 學習三寶 -->
+<section class="compare-section" id="compare">
+  <div class="container">
+    <div class="compare-header reveal">
+      <div class="section-label">✦ LTrust 學習三寶</div>
+      <h2 class="section-title">三款 AI 工具，覆蓋完整學習場景</h2>
+      <p class="section-desc">S.E.N.S.E.I 專攻解題思路，搭配 Qbot 和 WriteAhead，選擇題、理解題、英文作文一站到位。</p>
+    </div>
+    <div class="compare-grid reveal">
+      <div class="compare-card sensei">
+        <h3>S.E.N.S.E.I</h3>
+        <div class="subtitle">AI 解題導師</div>
+        <ul>
+          <li>自由輸入或上傳任何題目</li>
+          <li>AI 拆解推理過程，教你「為什麼」</li>
+          <li>結構化解答：前提→推理→答案</li>
+          <li>延伸知識補充，觸類旁通</li>
+          <li>問答紀錄分類管理</li>
+          <li>十大科目全覆蓋</li>
+        </ul>
+      </div>
+      <div class="compare-vs"><span>+</span></div>
+      <div class="compare-card qbot">
+        <h3>Qbot</h3>
+        <div class="subtitle">AI 出題教練</div>
+        <ul>
+          <li>龍騰版教科書題庫</li>
+          <li>自選範圍、題型、題數測驗</li>
+          <li>計時作答模擬考試情境</li>
+          <li>錯題自動收錄，重做弱項</li>
+          <li>學習儀表板追蹤</li>
+          <li>AI 智慧推薦練習內容</li>
+        </ul>
+      </div>
+      <div class="compare-vs"><span>+</span></div>
+      <div class="compare-card wa">
+        <h3>WriteAhead</h3>
+        <div class="subtitle">AI 英文作文批閱</div>
+        <ul>
+          <li>線上英文作文練習</li>
+          <li>AI 即時批閱（約 60 秒）</li>
+          <li>四維度雷達圖評分</li>
+          <li>文法改錯 + 用詞建議</li>
+          <li>寫作能力分析追蹤</li>
+          <li>龍騰自命題 + 推薦題目</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-content">
+    <h2>準備好了嗎？<br>免費體驗你的 AI 導師</h2>
+    <p>每個科目都有免費試用次數，現在就體驗 S.E.N.S.E.I 的智慧解題。</p>
+    <a href="https://sensei.ltrust.tw" class="btn-white" target="_blank">開始免費試用 →</a>
+    <div class="cta-note">不需綁定信用卡 · 立即使用</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">S.E.N.S.E.I by <a href="https://ltrust.tw" target="_blank">LTrust</a></div>
+    <div>© 2025 龍騰文化 Longteng. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

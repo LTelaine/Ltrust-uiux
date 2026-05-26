@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LTrust 通行證 — 學習服務超值組合</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #38a1db;
+  --blue-deep: #007BB5;
+  --yellow: #fac03d;
+  --red: #c92a2e;
+  --tan: #C39E6C;
+  --terracotta: #cb6738;
+  --orange: #E8792B;
+  --cream: #FFF8F0;
+  --white: #ffffff;
+  --dark: #2a2a2a;
+  --gray: #6b7280;
+  --gray-light: #9ca3af;
+  --border: #e5e7eb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--dark);
+  background: var(--cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,248,240,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.06); }
+nav .container {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 20px; font-weight: 900;
+  text-decoration: none; color: var(--dark);
+}
+.nav-logo .icon {
+  width: 32px; height: 32px;
+  background: var(--terracotta);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 14px; font-weight: 900;
+}
+.nav-logo .l { color: var(--yellow); }
+.nav-logo .pass {
+  font-size: 12px; font-weight: 700;
+  color: var(--terracotta);
+  background: rgba(203,103,56,0.1);
+  padding: 2px 10px;
+  border-radius: 100px;
+  margin-left: 6px;
+}
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--dark); }
+.nav-cta {
+  padding: 10px 28px;
+  background: var(--terracotta);
+  color: var(--white);
+  border: none; border-radius: 100px;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s;
+  text-decoration: none;
+}
+.nav-cta:hover { background: #b8572e; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(203,103,56,0.3); }
+
+/* ===== HERO ===== */
+.hero {
+  padding: 140px 0 80px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 900px;
+  background: radial-gradient(circle, rgba(203,103,56,0.06) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px;
+  background: var(--white);
+  border: 1.5px solid rgba(203,103,56,0.15);
+  border-radius: 100px;
+  font-size: 14px; font-weight: 700;
+  color: var(--terracotta);
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease-out;
+}
+.hero h1 {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900; line-height: 1.3;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--terracotta), var(--orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero > p {
+  font-size: 18px; line-height: 1.8; color: var(--gray);
+  max-width: 600px; margin: 0 auto 40px;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+.hero-tools {
+  display: flex; justify-content: center; gap: 24px;
+  margin-bottom: 48px;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+.hero-tool {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px;
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: all 0.3s;
+}
+.hero-tool:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+.hero-tool-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: white; font-weight: 900;
+}
+.hero-tool:nth-child(1) .hero-tool-icon { background: var(--blue); }
+.hero-tool:nth-child(2) .hero-tool-icon { background: var(--terracotta); }
+.hero-tool:nth-child(3) .hero-tool-icon { background: var(--orange); }
+.hero-tool-info { text-align: left; }
+.hero-tool-name { font-size: 14px; font-weight: 700; }
+.hero-tool-desc { font-size: 11px; color: var(--gray); }
+.hero-scroll {
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+.hero-scroll a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 600;
+  color: var(--terracotta);
+  text-decoration: none;
+}
+.hero-scroll a span { animation: bounce 2s infinite; display: inline-block; }
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+/* ===== WHY PASS ===== */
+.why-section { padding: 80px 0; background: var(--white); }
+.why-header { text-align: center; margin-bottom: 56px; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 700;
+  color: var(--terracotta);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 900; line-height: 1.35;
+  margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 17px; line-height: 1.8;
+  color: var(--gray); max-width: 600px;
+  margin: 0 auto;
+}
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.why-card {
+  background: var(--cream);
+  border-radius: 20px;
+  padding: 36px 28px;
+  text-align: center;
+  transition: all 0.35s;
+}
+.why-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+.why-card-icon {
+  width: 64px; height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+}
+.why-card:nth-child(1) .why-card-icon { background: rgba(56,161,219,0.1); }
+.why-card:nth-child(2) .why-card-icon { background: rgba(250,192,61,0.12); }
+.why-card:nth-child(3) .why-card-icon { background: rgba(203,103,56,0.1); }
+.why-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.why-card p { font-size: 14px; line-height: 1.7; color: var(--gray); }
+
+/* ===== WHAT'S INCLUDED ===== */
+.included-section { padding: 100px 0; }
+.included-header { text-align: center; margin-bottom: 64px; }
+.included-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.included-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 36px 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+  transition: all 0.35s;
+  position: relative; overflow: hidden;
+}
+.included-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+}
+.included-card:nth-child(1)::before { background: var(--blue); }
+.included-card:nth-child(2)::before { background: var(--terracotta); }
+.included-card:nth-child(3)::before { background: var(--orange); }
+.included-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.07); }
+.included-card-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px;
+}
+.included-card-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: white; font-weight: 900;
+}
+.included-card:nth-child(1) .included-card-icon { background: var(--blue); }
+.included-card:nth-child(2) .included-card-icon { background: var(--terracotta); }
+.included-card:nth-child(3) .included-card-icon { background: var(--orange); }
+.included-card-name { font-size: 18px; font-weight: 900; }
+.included-card-sub { font-size: 12px; color: var(--gray); }
+.included-card ul {
+  list-style: none; padding: 0;
+}
+.included-card ul li {
+  padding: 10px 0;
+  font-size: 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+  color: var(--dark);
+}
+.included-card ul li + li { border-top: 1px solid rgba(0,0,0,0.04); }
+.included-card ul li::before {
+  content: '✓'; font-size: 11px; font-weight: 900;
+  width: 20px; height: 20px; flex-shrink: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+}
+.included-card:nth-child(1) ul li::before { background: var(--blue); }
+.included-card:nth-child(2) ul li::before { background: var(--terracotta); }
+.included-card:nth-child(3) ul li::before { background: var(--orange); }
+
+/* ===== PRICING ===== */
+.pricing-section { padding: 100px 0; background: var(--white); }
+.pricing-header { text-align: center; margin-bottom: 64px; }
+
+/* Toggle */
+.pricing-toggle {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+.pricing-toggle-label { font-size: 15px; font-weight: 600; color: var(--gray); }
+.pricing-toggle-label.active { color: var(--dark); }
+.toggle-switch {
+  width: 52px; height: 28px;
+  background: var(--border);
+  border-radius: 100px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.toggle-switch.active { background: var(--terracotta); }
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 22px; height: 22px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+.toggle-switch.active::after { transform: translateX(24px); }
+.save-badge {
+  font-size: 12px; font-weight: 700;
+  color: var(--white);
+  background: var(--red);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+/* Pricing cards */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.pricing-card {
+  background: var(--cream);
+  border-radius: 24px;
+  padding: 40px 32px;
+  position: relative;
+  transition: all 0.35s;
+}
+.pricing-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
+.pricing-card.featured {
+  background: var(--white);
+  border: 2.5px solid var(--terracotta);
+  box-shadow: 0 8px 32px rgba(203,103,56,0.12);
+  transform: scale(1.03);
+}
+.pricing-card.featured:hover { transform: scale(1.03) translateY(-4px); }
+.pricing-popular {
+  position: absolute;
+  top: -14px; left: 50%; transform: translateX(-50%);
+  padding: 6px 20px;
+  background: var(--terracotta);
+  color: white;
+  border-radius: 100px;
+  font-size: 12px; font-weight: 700;
+  white-space: nowrap;
+}
+.pricing-name { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+.pricing-desc { font-size: 13px; color: var(--gray); margin-bottom: 20px; line-height: 1.5; }
+.pricing-price {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.pricing-amount {
+  font-size: 44px; font-weight: 900;
+  color: var(--dark);
+  line-height: 1;
+}
+.pricing-amount .currency { font-size: 20px; font-weight: 700; }
+.pricing-amount .period { font-size: 14px; font-weight: 500; color: var(--gray); }
+.pricing-original {
+  font-size: 14px; color: var(--gray-light);
+  text-decoration: line-through;
+  margin-top: 4px;
+}
+.pricing-features { list-style: none; padding: 0; margin-bottom: 28px; }
+.pricing-features li {
+  padding: 8px 0;
+  font-size: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.pricing-features li + li { border-top: 1px solid rgba(0,0,0,0.04); }
+.pf-check {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.pf-check.blue { background: var(--blue); }
+.pf-check.terra { background: var(--terracotta); }
+.pf-check.orange { background: var(--orange); }
+.pf-check.gray { background: var(--border); color: var(--gray-light); }
+.pf-text.disabled { color: var(--gray-light); }
+
+.pricing-btn {
+  display: block; width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px; font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+  text-decoration: none;
+}
+.pricing-btn.outline {
+  background: transparent;
+  border: 2px solid var(--terracotta);
+  color: var(--terracotta);
+}
+.pricing-btn.outline:hover { background: rgba(203,103,56,0.06); }
+.pricing-btn.solid {
+  background: var(--terracotta);
+  border: 2px solid var(--terracotta);
+  color: white;
+}
+.pricing-btn.solid:hover { background: #b8572e; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(203,103,56,0.3); }
+
+/* ===== FAQ ===== */
+.faq-section { padding: 100px 0; }
+.faq-header { text-align: center; margin-bottom: 56px; }
+.faq-list { max-width: 720px; margin: 0 auto; }
+.faq-item {
+  background: var(--white);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.faq-q {
+  padding: 20px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+  font-size: 16px; font-weight: 700;
+  transition: color 0.2s;
+  user-select: none;
+}
+.faq-q:hover { color: var(--terracotta); }
+.faq-q .arrow {
+  font-size: 20px; color: var(--gray-light);
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+.faq-item.open .faq-q .arrow { transform: rotate(180deg); color: var(--terracotta); }
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 24px;
+}
+.faq-item.open .faq-a {
+  max-height: 200px;
+  padding: 0 24px 20px;
+}
+.faq-a p { font-size: 14px; line-height: 1.8; color: var(--gray); }
+
+/* ===== CTA ===== */
+.cta-section {
+  padding: 100px 0;
+  text-align: center;
+  background: linear-gradient(135deg, var(--terracotta) 0%, #b8572e 100%);
+  color: var(--white);
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -30%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(250,192,61,0.12) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.cta-content { position: relative; z-index: 2; }
+.cta-section h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 900; margin-bottom: 16px; }
+.cta-section p {
+  font-size: 18px; opacity: 0.85;
+  margin-bottom: 40px; max-width: 520px;
+  margin-left: auto; margin-right: auto; line-height: 1.7;
+}
+.btn-white {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 18px 44px;
+  background: var(--white);
+  color: var(--terracotta);
+  border: none; border-radius: 100px;
+  font-size: 18px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s;
+  text-decoration: none; font-family: inherit;
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+.cta-note { font-size: 13px; opacity: 0.6; margin-top: 16px; }
+
+/* ===== FOOTER ===== */
+footer {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 13px; color: var(--gray);
+  background: var(--cream);
+  border-top: 1px solid rgba(0,0,0,0.04);
+}
+footer a { color: var(--terracotta); text-decoration: none; }
+footer .footer-brand { font-weight: 700; font-size: 15px; color: var(--dark); margin-bottom: 8px; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .pricing-card.featured { transform: scale(1); }
+  .pricing-card.featured:hover { transform: translateY(-4px); }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hero-tools { flex-direction: column; align-items: center; gap: 12px; }
+  .why-grid, .included-grid, .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+  .pricing-card.featured { order: -1; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <div class="icon">通</div>
+      <span><span class="l">L</span>Trust</span>
+      <span class="pass">通行證</span>
+    </a>
+    <div class="nav-links">
+      <a href="#included">包含服務</a>
+      <a href="#pricing">方案價格</a>
+      <a href="#faq">常見問題</a>
+    </div>
+    <a href="#pricing" class="nav-cta">查看方案 →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🎫 LTrust 學習服務</div>
+  <h1>一張通行證<br><span class="highlight">解鎖全部 AI 學習工具</span></h1>
+  <p>不用單買、不用煩惱搭配——LTrust 通行證把 S.E.N.S.E.I、Qbot、WriteAhead 三大工具打包成超值組合，讓學習不中斷。</p>
+
+  <div class="hero-tools">
+    <div class="hero-tool">
+      <div class="hero-tool-icon">S</div>
+      <div class="hero-tool-info">
+        <div class="hero-tool-name">S.E.N.S.E.I</div>
+        <div class="hero-tool-desc">AI 解題教練</div>
+      </div>
+    </div>
+    <div class="hero-tool">
+      <div class="hero-tool-icon">Q</div>
+      <div class="hero-tool-info">
+        <div class="hero-tool-name">Qbot</div>
+        <div class="hero-tool-desc">刷題組卷</div>
+      </div>
+    </div>
+    <div class="hero-tool">
+      <div class="hero-tool-icon">W</div>
+      <div class="hero-tool-info">
+        <div class="hero-tool-name">WriteAhead</div>
+        <div class="hero-tool-desc">英文作文批閱</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <a href="#why"><span>↓</span> 了解通行證優勢</a>
+  </div>
+</section>
+
+<!-- WHY PASS -->
+<section class="why-section" id="why">
+  <div class="container">
+    <div class="why-header reveal">
+      <div class="section-label">✦ 為什麼選通行證</div>
+      <h2 class="section-title">比單買省更多，學更完整</h2>
+      <p class="section-desc">通行證不只是折扣，更是一套完整的學習策略。</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-card-icon">💰</div>
+        <h3>組合更划算</h3>
+        <p>通行證比單獨購買三項服務省下最高 40%，把預算花在刀口上。</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-card-icon">🔄</div>
+        <h3>學習不斷線</h3>
+        <p>解題卡關用 S.E.N.S.E.I、練題刷卷用 Qbot、練作文用 WriteAhead——完整學習迴圈。</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-card-icon">📈</div>
+        <h3>進步看得見</h3>
+        <p>三個工具的數據匯整在 LTrust 平台，一站追蹤所有科目的學習進度與成長。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section class="included-section" id="included">
+  <div class="container">
+    <div class="included-header reveal">
+      <div class="section-label">✦ 通行證包含</div>
+      <h2 class="section-title">三大 AI 工具，一張通行證全解鎖</h2>
+      <p class="section-desc">每個工具各司其職，搭配使用效果加倍。</p>
+    </div>
+    <div class="included-grid">
+      <div class="included-card reveal">
+        <div class="included-card-header">
+          <div class="included-card-icon">S</div>
+          <div>
+            <div class="included-card-name">S.E.N.S.E.I</div>
+            <div class="included-card-sub">AI 解題教練</div>
+          </div>
+        </div>
+        <ul>
+          <li>十大科目 AI 解題</li>
+          <li>輸入或上傳題目即時解答</li>
+          <li>完整推理過程拆解</li>
+          <li>延伸知識與關聯題目</li>
+          <li>問答紀錄分類管理</li>
+        </ul>
+      </div>
+      <div class="included-card reveal">
+        <div class="included-card-header">
+          <div class="included-card-icon">Q</div>
+          <div>
+            <div class="included-card-name">Qbot</div>
+            <div class="included-card-sub">刷題組卷</div>
+          </div>
+        </div>
+        <ul>
+          <li>龍騰版教科書題庫</li>
+          <li>自選範圍、題型、題數</li>
+          <li>計時作答模擬考試</li>
+          <li>錯題自動收錄與重做</li>
+          <li>學習儀表板數據追蹤</li>
+        </ul>
+      </div>
+      <div class="included-card reveal">
+        <div class="included-card-header">
+          <div class="included-card-icon">W</div>
+          <div>
+            <div class="included-card-name">WriteAhead</div>
+            <div class="included-card-sub">英文作文批閱</div>
+          </div>
+        </div>
+        <ul>
+          <li>線上英文寫作練習</li>
+          <li>AI 即時批閱（約 60 秒）</li>
+          <li>四維度雷達圖評分</li>
+          <li>文法改錯 + 用詞建議</li>
+          <li>寫作能力長期追蹤</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <div class="pricing-header reveal">
+      <div class="section-label">✦ 方案價格</div>
+      <h2 class="section-title">選擇最適合你的通行證</h2>
+      <p class="section-desc">不確定的話，先從體驗方案開始，隨時可以升級。</p>
+      <div class="pricing-toggle">
+        <span class="pricing-toggle-label active" id="monthlyLabel">月付</span>
+        <div class="toggle-switch" id="toggleSwitch" onclick="togglePricing()"></div>
+        <span class="pricing-toggle-label" id="yearlyLabel">年付</span>
+        <span class="save-badge">省 20%</span>
+      </div>
+    </div>
+    <div class="pricing-grid">
+
+      <!-- Plan 1: 體驗 -->
+      <div class="pricing-card reveal">
+        <div class="pricing-name">體驗方案</div>
+        <div class="pricing-desc">初次認識 AI 學習工具，先試試水溫</div>
+        <div class="pricing-price">
+          <div class="pricing-amount">
+            <span class="currency">NT$</span> <span class="price-val" data-monthly="99" data-yearly="79">99</span>
+            <span class="period"> /月</span>
+          </div>
+        </div>
+        <ul class="pricing-features">
+          <li><span class="pf-check blue">✓</span> S.E.N.S.E.I 每月 10 次解題</li>
+          <li><span class="pf-check terra">✓</span> Qbot 每月 3 次自選測驗</li>
+          <li><span class="pf-check orange">✓</span> WriteAhead 每月 2 篇批閱</li>
+          <li><span class="pf-check gray">—</span> <span class="pf-text disabled">無錯題重做加速</span></li>
+          <li><span class="pf-check gray">—</span> <span class="pf-text disabled">無學習報告匯出</span></li>
+        </ul>
+        <a href="#" class="pricing-btn outline">開始體驗 →</a>
+      </div>
+
+      <!-- Plan 2: 精進 (Featured) -->
+      <div class="pricing-card featured reveal">
+        <div class="pricing-popular">🔥 最多人選擇</div>
+        <div class="pricing-name">精進方案</div>
+        <div class="pricing-desc">認真備考的你，需要更完整的學習支援</div>
+        <div class="pricing-price">
+          <div class="pricing-amount">
+            <span class="currency">NT$</span> <span class="price-val" data-monthly="299" data-yearly="239">299</span>
+            <span class="period"> /月</span>
+          </div>
+          <div class="pricing-original price-orig" data-monthly="單買合計 NT$450/月" data-yearly="單買合計 NT$360/月">單買合計 NT$450/月</div>
+        </div>
+        <ul class="pricing-features">
+          <li><span class="pf-check blue">✓</span> S.E.N.S.E.I 每月 50 次解題</li>
+          <li><span class="pf-check terra">✓</span> Qbot 每月 15 次自選測驗</li>
+          <li><span class="pf-check orange">✓</span> WriteAhead 每月 8 篇批閱</li>
+          <li><span class="pf-check terra">✓</span> 錯題重做加速功能</li>
+          <li><span class="pf-check gray">—</span> <span class="pf-text disabled">無學習報告匯出</span></li>
+        </ul>
+        <a href="#" class="pricing-btn solid">立即訂閱 →</a>
+      </div>
+
+      <!-- Plan 3: 全科 -->
+      <div class="pricing-card reveal">
+        <div class="pricing-name">全科通行</div>
+        <div class="pricing-desc">衝刺學測指考，不限次數全力以赴</div>
+        <div class="pricing-price">
+          <div class="pricing-amount">
+            <span class="currency">NT$</span> <span class="price-val" data-monthly="499" data-yearly="399">499</span>
+            <span class="period"> /月</span>
+          </div>
+          <div class="pricing-original price-orig" data-monthly="單買合計 NT$800/月" data-yearly="單買合計 NT$640/月">單買合計 NT$800/月</div>
+        </div>
+        <ul class="pricing-features">
+          <li><span class="pf-check blue">✓</span> S.E.N.S.E.I <strong>不限次數</strong>解題</li>
+          <li><span class="pf-check terra">✓</span> Qbot <strong>不限次數</strong>自選測驗</li>
+          <li><span class="pf-check orange">✓</span> WriteAhead 每月 20 篇批閱</li>
+          <li><span class="pf-check terra">✓</span> 錯題重做加速功能</li>
+          <li><span class="pf-check orange">✓</span> 學習報告 PDF 匯出</li>
+        </ul>
+        <a href="#" class="pricing-btn outline">選擇全科 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-header reveal">
+      <div class="section-label">✦ 常見問題</div>
+      <h2 class="section-title">還有疑問？</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          通行證和單買有什麼不同？
+          <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a"><p>通行證把 S.E.N.S.E.I、Qbot、WriteAhead 三個服務打包成組合價，比分別購買省下最多 40%。除了價格優勢，通行證用戶還能享有錯題重做加速、學習報告匯出等專屬功能（依方案等級而定）。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          可以中途升級或降級方案嗎？
+          <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a"><p>可以。你可以在帳號設定中隨時調整方案等級，升級立即生效，降級則從下一個計費週期開始。已付費的期間不受影響。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          通行證的使用次數是每月重置嗎？
+          <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a"><p>是的，所有方案的使用次數每月 1 號自動重置。未使用完的次數不會累計到下個月，建議充分利用每月額度。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          有免費試用嗎？
+          <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a"><p>新註冊會員可以免費試用所有工具的基本功能（S.E.N.S.E.I 各科 1 次、Qbot 推薦測驗、WriteAhead 批閱體驗包），體驗過後再決定是否訂閱通行證。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          支援哪些付款方式？
+          <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a"><p>目前支援信用卡（Visa/Mastercard/JCB）、LINE Pay、以及 LTrust 點數折抵。年付方案可選擇一次付清或分期。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-content">
+    <h2>一張通行證，三個 AI 教練<br>學習從此不一樣</h2>
+    <p>現在訂閱通行證，立即解鎖 S.E.N.S.E.I、Qbot、WriteAhead 的完整學習體驗。</p>
+    <a href="#pricing" class="btn-white">查看方案 →</a>
+    <div class="cta-note">可隨時取消 · 支援多種付款方式</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">LTrust 通行證 by <a href="https://ltrust.tw" target="_blank">龍騰文化</a></div>
+    <div>© 2025 龍騰文化 Longteng Education Co., Ltd. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => observer.observe(el));
+
+// Pricing toggle
+let isYearly = false;
+function togglePricing() {
+  isYearly = !isYearly;
+  document.getElementById('toggleSwitch').classList.toggle('active', isYearly);
+  document.getElementById('monthlyLabel').classList.toggle('active', !isYearly);
+  document.getElementById('yearlyLabel').classList.toggle('active', isYearly);
+
+  document.querySelectorAll('.price-val').forEach(el => {
+    el.textContent = isYearly ? el.dataset.yearly : el.dataset.monthly;
+  });
+  document.querySelectorAll('.price-orig').forEach(el => {
+    el.textContent = isYearly ? el.dataset.yearly : el.dataset.monthly;
+  });
+}
+
+// FAQ toggle
+function toggleFaq(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>

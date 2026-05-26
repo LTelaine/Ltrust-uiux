@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LTrust 通行證 — 60天無限禮包</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #38a1db;
+  --blue-deep: #007BB5;
+  --yellow: #fac03d;
+  --red: #c92a2e;
+  --tan: #C39E6C;
+  --terracotta: #cb6738;
+  --orange: #E8792B;
+  --cream: #FFF8F0;
+  --white: #ffffff;
+  --dark: #2a2a2a;
+  --gray: #6b7280;
+  --gray-light: #9ca3af;
+  --border: #e5e7eb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--dark);
+  background: var(--cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,248,240,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.06); }
+nav .container {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 20px; font-weight: 900;
+  text-decoration: none; color: var(--dark);
+}
+.nav-logo .icon {
+  width: 32px; height: 32px;
+  background: var(--terracotta);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 13px; font-weight: 900;
+}
+.nav-logo .l { color: var(--yellow); }
+.nav-logo .pass {
+  font-size: 12px; font-weight: 700;
+  color: var(--terracotta);
+  background: rgba(203,103,56,0.1);
+  padding: 2px 10px;
+  border-radius: 100px;
+  margin-left: 6px;
+}
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--dark); }
+.nav-cta {
+  padding: 10px 28px;
+  background: var(--terracotta);
+  color: var(--white);
+  border: none; border-radius: 100px;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s;
+  text-decoration: none;
+}
+.nav-cta:hover { background: #b8572e; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(203,103,56,0.3); }
+
+/* ===== HERO ===== */
+.hero {
+  padding: 140px 0 80px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 900px;
+  background: radial-gradient(circle, rgba(203,103,56,0.06) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px;
+  background: var(--white);
+  border: 1.5px solid rgba(203,103,56,0.15);
+  border-radius: 100px;
+  font-size: 14px; font-weight: 700;
+  color: var(--terracotta);
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease-out;
+}
+.hero-limited {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  background: var(--red);
+  color: white;
+  border-radius: 100px;
+  font-size: 12px; font-weight: 700;
+  margin-left: 8px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.hero h1 {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900; line-height: 1.3;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--terracotta), var(--orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero > p {
+  font-size: 18px; line-height: 1.8; color: var(--gray);
+  max-width: 620px; margin: 0 auto 40px;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+.hero-tools {
+  display: flex; justify-content: center; gap: 24px;
+  margin-bottom: 48px;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+.hero-tool {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 24px;
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: all 0.3s;
+}
+.hero-tool:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+.hero-tool-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: white; font-weight: 900;
+}
+.hero-tool:nth-child(1) .hero-tool-icon { background: var(--blue); }
+.hero-tool:nth-child(2) .hero-tool-icon { background: var(--terracotta); }
+.hero-tool-info { text-align: left; }
+.hero-tool-name { font-size: 15px; font-weight: 700; }
+.hero-tool-desc { font-size: 12px; color: var(--gray); }
+.hero-tool-unlimited {
+  font-size: 11px; font-weight: 700;
+  color: var(--terracotta);
+  background: rgba(203,103,56,0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-top: 2px;
+  display: inline-block;
+}
+.hero-scroll {
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+.hero-scroll a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 600;
+  color: var(--terracotta);
+  text-decoration: none;
+}
+.hero-scroll a span { animation: bounce 2s infinite; display: inline-block; }
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+/* ===== PRICING HERO CARD ===== */
+.price-hero {
+  padding: 0 0 80px;
+  animation: fadeInUp 0.6s ease-out 0.35s both;
+}
+.price-card-main {
+  max-width: 680px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: 28px;
+  padding: 48px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.06);
+  border: 2.5px solid var(--terracotta);
+  position: relative;
+  overflow: hidden;
+}
+.price-card-main::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--blue), var(--terracotta));
+}
+.price-card-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.price-card-name {
+  font-size: 28px; font-weight: 900;
+}
+.price-card-badge {
+  padding: 6px 16px;
+  background: var(--terracotta);
+  color: white;
+  border-radius: 100px;
+  font-size: 13px; font-weight: 700;
+}
+.price-card-desc {
+  font-size: 15px; line-height: 1.8;
+  color: var(--gray);
+  margin-bottom: 28px;
+}
+.price-card-includes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.price-include-item {
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--cream);
+  text-align: center;
+  transition: all 0.3s;
+}
+.price-include-item:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.05); }
+.price-include-icon {
+  width: 48px; height: 48px;
+  margin: 0 auto 10px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: white; font-weight: 900;
+}
+.price-include-item:nth-child(1) .price-include-icon { background: var(--blue); }
+.price-include-item:nth-child(2) .price-include-icon { background: var(--terracotta); }
+.price-include-title {
+  font-size: 15px; font-weight: 700;
+  color: var(--terracotta);
+  margin-bottom: 6px;
+}
+.price-include-desc {
+  font-size: 12px; line-height: 1.6;
+  color: var(--gray);
+}
+.price-include-tag {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 10px;
+  background: rgba(203,103,56,0.08);
+  color: var(--terracotta);
+  border-radius: 100px;
+  font-size: 11px; font-weight: 700;
+}
+
+.price-card-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 28px;
+  border-top: 1.5px solid var(--border);
+}
+.price-amount-area {}
+.price-label { font-size: 13px; color: var(--gray); margin-bottom: 4px; }
+.price-amount {
+  display: flex; align-items: baseline; gap: 4px;
+}
+.price-points {
+  font-size: 40px; font-weight: 900;
+  color: var(--terracotta);
+  line-height: 1;
+}
+.price-unit { font-size: 16px; font-weight: 600; color: var(--gray); }
+.price-period {
+  font-size: 13px; color: var(--gray-light);
+  margin-top: 4px;
+}
+.price-buy-btn {
+  padding: 18px 48px;
+  background: var(--terracotta);
+  color: white;
+  border: none; border-radius: 14px;
+  font-size: 18px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s;
+  font-family: inherit;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.price-buy-btn:hover {
+  background: #b8572e;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(203,103,56,0.35);
+}
+
+/* ===== SECTION COMMON ===== */
+section { padding: 100px 0; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 700;
+  color: var(--terracotta);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.section-title { font-size: clamp(28px, 3.5vw, 40px); font-weight: 900; line-height: 1.35; margin-bottom: 16px; }
+.section-desc { font-size: 17px; line-height: 1.8; color: var(--gray); max-width: 600px; margin: 0 auto; }
+
+/* ===== WHY PASS ===== */
+.why-section { padding: 80px 0; background: var(--white); }
+.why-header { text-align: center; margin-bottom: 56px; }
+.why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.why-card {
+  background: var(--cream);
+  border-radius: 20px;
+  padding: 36px 28px;
+  text-align: center;
+  transition: all 0.35s;
+}
+.why-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+.why-card-icon {
+  width: 64px; height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+}
+.why-card:nth-child(1) .why-card-icon { background: rgba(56,161,219,0.1); }
+.why-card:nth-child(2) .why-card-icon { background: rgba(250,192,61,0.12); }
+.why-card:nth-child(3) .why-card-icon { background: rgba(203,103,56,0.1); }
+.why-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.why-card p { font-size: 14px; line-height: 1.7; color: var(--gray); }
+
+/* ===== USE CASES ===== */
+.usecase-section { padding: 100px 0; }
+.usecase-header { text-align: center; margin-bottom: 64px; }
+.usecase-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.usecase-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+  transition: all 0.35s;
+}
+.usecase-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.07); }
+.usecase-emoji { font-size: 36px; margin-bottom: 16px; }
+.usecase-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.usecase-card p { font-size: 14px; line-height: 1.7; color: var(--gray); margin-bottom: 16px; }
+.usecase-tools { display: flex; gap: 8px; }
+.usecase-tool-tag {
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 11px; font-weight: 700;
+  color: white;
+}
+.usecase-tool-tag.sensei { background: var(--blue); }
+.usecase-tool-tag.qbot { background: var(--terracotta); }
+
+/* ===== INCLUDED DETAIL ===== */
+.included-section { padding: 100px 0; background: var(--white); }
+.included-header { text-align: center; margin-bottom: 64px; }
+.included-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 800px; margin: 0 auto; }
+.included-card {
+  background: var(--cream);
+  border-radius: 24px;
+  padding: 36px 32px;
+  position: relative; overflow: hidden;
+  transition: all 0.35s;
+}
+.included-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+}
+.included-card:nth-child(1)::before { background: var(--blue); }
+.included-card:nth-child(2)::before { background: var(--terracotta); }
+.included-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+.included-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.included-card-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: white; font-weight: 900;
+}
+.included-card:nth-child(1) .included-card-icon { background: var(--blue); }
+.included-card:nth-child(2) .included-card-icon { background: var(--terracotta); }
+.included-card-name { font-size: 18px; font-weight: 900; }
+.included-card-sub { font-size: 12px; color: var(--gray); }
+.included-card ul { list-style: none; padding: 0; }
+.included-card ul li {
+  padding: 10px 0; font-size: 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.included-card ul li + li { border-top: 1px solid rgba(0,0,0,0.04); }
+.included-card ul li::before {
+  content: '✓'; font-size: 11px; font-weight: 900;
+  width: 20px; height: 20px; flex-shrink: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+}
+.included-card:nth-child(1) ul li::before { background: var(--blue); }
+.included-card:nth-child(2) ul li::before { background: var(--terracotta); }
+
+/* ===== FAQ ===== */
+.faq-section { padding: 100px 0; }
+.faq-header { text-align: center; margin-bottom: 56px; }
+.faq-list { max-width: 720px; margin: 0 auto; }
+.faq-item {
+  background: var(--white);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.faq-q {
+  padding: 20px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+  font-size: 16px; font-weight: 700;
+  transition: color 0.2s;
+  user-select: none;
+}
+.faq-q:hover { color: var(--terracotta); }
+.faq-q .arrow {
+  font-size: 20px; color: var(--gray-light);
+  transition: transform 0.3s; flex-shrink: 0;
+}
+.faq-item.open .faq-q .arrow { transform: rotate(180deg); color: var(--terracotta); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 24px;
+}
+.faq-item.open .faq-a { max-height: 200px; padding: 0 24px 20px; }
+.faq-a p { font-size: 14px; line-height: 1.8; color: var(--gray); }
+
+/* ===== CTA ===== */
+.cta-section {
+  padding: 100px 0;
+  text-align: center;
+  background: linear-gradient(135deg, var(--terracotta) 0%, #b8572e 100%);
+  color: var(--white);
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -30%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(250,192,61,0.12) 0%, transparent 60%);
+  border-radius: 50%; pointer-events: none;
+}
+.cta-content { position: relative; z-index: 2; }
+.cta-section h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 900; margin-bottom: 16px; }
+.cta-section p {
+  font-size: 18px; opacity: 0.85;
+  margin-bottom: 40px; max-width: 520px;
+  margin-left: auto; margin-right: auto; line-height: 1.7;
+}
+.btn-white {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 18px 44px;
+  background: var(--white);
+  color: var(--terracotta);
+  border: none; border-radius: 100px;
+  font-size: 18px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s;
+  text-decoration: none; font-family: inherit;
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+.cta-note { font-size: 13px; opacity: 0.6; margin-top: 16px; }
+
+/* ===== FOOTER ===== */
+footer {
+  padding: 40px 0; text-align: center;
+  font-size: 13px; color: var(--gray);
+  background: var(--cream);
+  border-top: 1px solid rgba(0,0,0,0.04);
+}
+footer a { color: var(--terracotta); text-decoration: none; }
+footer .footer-brand { font-weight: 700; font-size: 15px; color: var(--dark); margin-bottom: 8px; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hero-tools { flex-direction: column; align-items: center; gap: 12px; }
+  .why-grid, .usecase-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+  .included-grid { grid-template-columns: 1fr; }
+  .price-card-main { padding: 32px 24px; }
+  .price-card-top { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .price-card-includes { grid-template-columns: 1fr; }
+  .price-card-bottom { flex-direction: column; gap: 20px; text-align: center; }
+  .price-amount-area { text-align: center; }
+  .price-buy-btn { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <div class="icon">通</div>
+      <span><span class="l">L</span>Trust</span>
+      <span class="pass">通行證</span>
+    </a>
+    <div class="nav-links">
+      <a href="#why">為什麼選通行證</a>
+      <a href="#included">包含服務</a>
+      <a href="#faq">常見問題</a>
+    </div>
+    <a href="#buy" class="nav-cta">立即購買 →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🎫 LTrust 學習服務 <span class="hero-limited">🔥 限時販售</span></div>
+  <h1>60 天無限禮包<br><span class="highlight">解題 + 刷題，不限次數</span></h1>
+  <p>購買後 60 天內，可無限使用 S.E.N.S.E.I 解題教練與 Qbot 刷題服務，不限科目、不限次數。無論是段考前衝刺、平時複習，還是想加強弱科，這組禮包都能陪你用「刷題＋解題」的方式，把學習節奏穩穩拉起來。</p>
+
+  <div class="hero-tools">
+    <div class="hero-tool">
+      <div class="hero-tool-icon">S</div>
+      <div class="hero-tool-info">
+        <div class="hero-tool-name">S.E.N.S.E.I</div>
+        <div class="hero-tool-desc">AI 解題教練</div>
+        <div class="hero-tool-unlimited">60天無限使用</div>
+      </div>
+    </div>
+    <div class="hero-tool">
+      <div class="hero-tool-icon">Q</div>
+      <div class="hero-tool-info">
+        <div class="hero-tool-name">Qbot</div>
+        <div class="hero-tool-desc">刷題組卷</div>
+        <div class="hero-tool-unlimited">60天無限使用</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <a href="#buy"><span>↓</span> 查看禮包內容與價格</a>
+  </div>
+</section>
+
+<!-- PRICING CARD -->
+<div class="price-hero" id="buy">
+  <div class="container">
+    <div class="price-card-main">
+      <div class="price-card-top">
+        <div class="price-card-name">60天無限禮包</div>
+        <div class="price-card-badge">限時販售中</div>
+      </div>
+      <p class="price-card-desc">購買後 60 天內，可無限使用 S.E.N.S.E.I 解題教練與 Qbot 刷題服務，不限科目、不限次數。陪你從考前複習、卡關解題到大量刷題練習，一次準備到位。</p>
+
+      <div class="price-card-includes">
+        <div class="price-include-item">
+          <div class="price-include-icon">S</div>
+          <div class="price-include-title">60天 S.E.N.S.E.I<br>無限禮包</div>
+          <div class="price-include-desc">提供詳盡解析與文法講解，幫助掌握句型概念與題型邏輯。</div>
+          <div class="price-include-tag">不限科目 · 不限次數</div>
+        </div>
+        <div class="price-include-item">
+          <div class="price-include-icon">Q</div>
+          <div class="price-include-title">60天 Qbot<br>無限禮包</div>
+          <div class="price-include-desc">高中全科刷題工具，隨時練習、強化練題手感。</div>
+          <div class="price-include-tag">不限科目 · 不限次數</div>
+        </div>
+      </div>
+
+      <div class="price-card-bottom">
+        <div class="price-amount-area">
+          <div class="price-label">售價</div>
+          <div class="price-amount">
+            <span class="price-points">179,900</span>
+            <span class="price-unit">點</span>
+          </div>
+          <div class="price-period">販售檔期：2026/04/29 ~ 2026/05/31</div>
+        </div>
+        <a href="#" class="price-buy-btn">前往購買 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY PASS -->
+<section class="why-section" id="why">
+  <div class="container">
+    <div class="why-header reveal">
+      <div class="section-label">✦ 為什麼選無限禮包</div>
+      <h2 class="section-title">比單次購買省更多，學更完整</h2>
+      <p class="section-desc">60 天不限次數，怎麼用都划算。</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-card-icon">♾️</div>
+        <h3>無限次數</h3>
+        <p>60 天內想用多少就用多少，不用在意剩餘次數，放心大量練習。</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-card-icon">🔄</div>
+        <h3>刷題 + 解題雙軌</h3>
+        <p>Qbot 負責出題刷卷，卡關了切到 S.E.N.S.E.I 看推理過程——完整學習迴圈。</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-card-icon">🎯</div>
+        <h3>段考衝刺最適合</h3>
+        <p>60 天剛好覆蓋一個段考週期，從平時複習到考前衝刺一氣呵成。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="usecase-section">
+  <div class="container">
+    <div class="usecase-header reveal">
+      <div class="section-label">✦ 適用場景</div>
+      <h2 class="section-title">什麼時候最需要這組禮包？</h2>
+      <p class="section-desc">不管你是什麼學習節奏，60 天無限使用都能派上用場。</p>
+    </div>
+    <div class="usecase-grid">
+      <div class="usecase-card reveal">
+        <div class="usecase-emoji">📝</div>
+        <h3>段考前 2 週衝刺</h3>
+        <p>用 Qbot 按課次範圍大量刷題，遇到不會的馬上切到 S.E.N.S.E.I 看解析，不浪費任何複習時間。</p>
+        <div class="usecase-tools">
+          <span class="usecase-tool-tag qbot">Qbot 刷題</span>
+          <span class="usecase-tool-tag sensei">S.E.N.S.E.I 解題</span>
+        </div>
+      </div>
+      <div class="usecase-card reveal">
+        <div class="usecase-emoji">📚</div>
+        <h3>弱科加強特訓</h3>
+        <p>針對你最弱的科目，不限次數反覆練習。錯題自動收錄，重做到真的懂為止。</p>
+        <div class="usecase-tools">
+          <span class="usecase-tool-tag qbot">Qbot 錯題重做</span>
+          <span class="usecase-tool-tag sensei">S.E.N.S.E.I 拆解</span>
+        </div>
+      </div>
+      <div class="usecase-card reveal">
+        <div class="usecase-emoji">🗓️</div>
+        <h3>日常穩定練習</h3>
+        <p>每天花 20 分鐘刷一回測驗，搭配解題複習，養成穩定的學習節奏。</p>
+        <div class="usecase-tools">
+          <span class="usecase-tool-tag qbot">Qbot 每日練題</span>
+          <span class="usecase-tool-tag sensei">S.E.N.S.E.I 輔助</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INCLUDED DETAIL -->
+<section class="included-section" id="included">
+  <div class="container">
+    <div class="included-header reveal">
+      <div class="section-label">✦ 禮包內容</div>
+      <h2 class="section-title">兩大 AI 工具，60 天不限次數</h2>
+      <p class="section-desc">每個工具各司其職，搭配使用效果加倍。</p>
+    </div>
+    <div class="included-grid">
+      <div class="included-card reveal">
+        <div class="included-card-header">
+          <div class="included-card-icon">S</div>
+          <div>
+            <div class="included-card-name">S.E.N.S.E.I</div>
+            <div class="included-card-sub">AI 解題教練</div>
+          </div>
+        </div>
+        <ul>
+          <li>十大科目 AI 解題</li>
+          <li>輸入或上傳題目即時解答</li>
+          <li>完整推理過程拆解</li>
+          <li>延伸知識與關聯題目</li>
+          <li>問答紀錄分類管理</li>
+          <li><strong>60 天不限次數</strong></li>
+        </ul>
+      </div>
+      <div class="included-card reveal">
+        <div class="included-card-header">
+          <div class="included-card-icon">Q</div>
+          <div>
+            <div class="included-card-name">Qbot</div>
+            <div class="included-card-sub">刷題組卷</div>
+          </div>
+        </div>
+        <ul>
+          <li>龍騰版教科書題庫</li>
+          <li>自選範圍、題型、題數</li>
+          <li>計時作答模擬考試</li>
+          <li>錯題自動收錄與重做</li>
+          <li>學習儀表板數據追蹤</li>
+          <li><strong>60 天不限次數</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-header reveal">
+      <div class="section-label">✦ 常見問題</div>
+      <h2 class="section-title">還有疑問？</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          60 天怎麼計算？
+          <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a"><p>從購買完成當下開始計算，連續 60 個日曆天。例如 5 月 1 日購買，使用期限到 6 月 29 日為止。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          「不限次數」真的沒有上限嗎？
+          <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a"><p>是的，在 60 天有效期內，S.E.N.S.E.I 和 Qbot 的使用次數完全沒有上限，不限科目、不限題數。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          這組禮包有包含 WriteAhead 嗎？
+          <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a"><p>目前 60 天無限禮包包含 S.E.N.S.E.I 和 Qbot 兩項服務，WriteAhead（英文作文批閱）需另外購買批閱次數。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          179,900 點等於多少錢？
+          <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a"><p>LTrust 點數的兌換比例請參考平台的點數購買頁面，依購買的點數方案不同會有不同的換算價格。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          過了販售檔期還能買嗎？
+          <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a"><p>目前販售檔期為 2026/04/29 ~ 2026/05/31，逾期後是否會再開放販售，請關注 LTrust 平台最新公告。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-content">
+    <h2>60 天不限次數<br>解題 + 刷題，一包搞定</h2>
+    <p>限時販售中，把握檔期，讓 S.E.N.S.E.I 和 Qbot 陪你準備下一次段考。</p>
+    <a href="#buy" class="btn-white">立即購買 →</a>
+    <div class="cta-note">販售檔期：2026/04/29 ~ 2026/05/31</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">LTrust 通行證 by <a href="https://ltrust.tw" target="_blank">龍騰文化</a></div>
+    <div>© 2025 龍騰文化 Longteng Education Co., Ltd. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => observer.observe(el));
+function toggleFaq(el) { el.parentElement.classList.toggle('open'); }
+</script>
+
+</body>
+</html>

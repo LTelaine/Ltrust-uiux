@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LTrust 通行證 — S.E.N.S.E.I＋Qbot 無限禮包</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#38a1db;--blue-deep:#007BB5;--yellow:#fac03d;--red:#c92a2e;--terracotta:#cb6738;--orange:#E8792B;--cream:#FFF8F0;--white:#fff;--dark:#2a2a2a;--gray:#6b7280;--gray-light:#9ca3af;--border:#e5e7eb}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans TC',sans-serif;color:var(--dark);background:var(--cream);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,248,240,.88);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.04);transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.06)}
+nav .container{display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:900;text-decoration:none;color:var(--dark)}
+.nav-logo .icon{width:32px;height:32px;background:var(--terracotta);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:900}
+.nav-logo .l{color:var(--yellow)}
+.nav-logo .pass{font-size:12px;font-weight:700;color:var(--terracotta);background:rgba(203,103,56,.1);padding:2px 10px;border-radius:100px;margin-left:6px}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--gray);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--dark)}
+.nav-cta{padding:10px 28px;background:var(--terracotta);color:#fff;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;transition:all .3s;text-decoration:none}
+.nav-cta:hover{background:#b8572e;transform:translateY(-1px);box-shadow:0 6px 20px rgba(203,103,56,.3)}
+
+/* HERO */
+.hero{padding:140px 0 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(203,103,56,.06) 0%,transparent 60%);border-radius:50%;pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;background:var(--white);border:1.5px solid rgba(203,103,56,.15);border-radius:100px;font-size:14px;font-weight:700;color:var(--terracotta);margin-bottom:20px;animation:fadeInUp .5s ease-out}
+.hero-eyebrow{font-size:14px;font-weight:600;color:var(--terracotta);letter-spacing:3px;margin-bottom:12px;animation:fadeInUp .55s ease-out .08s both}
+.hero h1{font-size:clamp(34px,5vw,52px);font-weight:900;line-height:1.35;margin-bottom:24px;animation:fadeInUp .6s ease-out .1s both}
+.hero h1 .highlight{background:linear-gradient(135deg,var(--terracotta),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:18px;line-height:1.8;color:var(--gray);max-width:640px;margin:0 auto 16px;animation:fadeInUp .6s ease-out .2s both}
+.hero-sub-small{font-size:15px;line-height:1.7;color:var(--gray-light);max-width:560px;margin:0 auto 40px;animation:fadeInUp .6s ease-out .25s both}
+.hero-tools{display:flex;justify-content:center;gap:20px;margin-bottom:48px;animation:fadeInUp .6s ease-out .3s both}
+.hero-tool{display:flex;align-items:center;gap:12px;padding:16px 28px;background:var(--white);border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,.05);transition:all .3s}
+.hero-tool:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.08)}
+.hero-tool-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;font-weight:900}
+.hero-tool:nth-child(1) .hero-tool-icon{background:var(--blue)}
+.hero-tool:nth-child(2) .hero-tool-icon{background:var(--terracotta)}
+.hero-tool-name{font-size:16px;font-weight:700}
+.hero-tool-desc{font-size:12px;color:var(--gray)}
+.hero-tool-unlimited{font-size:11px;font-weight:700;color:var(--terracotta);background:rgba(203,103,56,.08);padding:2px 10px;border-radius:100px;margin-top:3px;display:inline-block}
+
+/* SECTION COMMON */
+section{padding:100px 0}
+.section-label{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--terracotta);letter-spacing:2px;margin-bottom:12px}
+.section-title{font-size:clamp(28px,3.5vw,40px);font-weight:900;line-height:1.35;margin-bottom:16px}
+.section-desc{font-size:17px;line-height:1.8;color:var(--gray);max-width:600px;margin:0 auto}
+
+/* PAIN + SOLUTION（合併版） */
+.pain-section{padding:100px 0;background:var(--white)}
+.pain-header{text-align:center;margin-bottom:48px}
+.pain-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;max-width:900px;margin:0 auto 40px}
+.pain-card{background:var(--cream);border-radius:16px;padding:24px 12px;text-align:center;transition:all .3s}
+.pain-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.05)}
+.pain-emoji{font-size:28px;margin-bottom:10px}
+.pain-card p{font-size:14px;font-weight:600;line-height:1.4}
+.pain-divider{text-align:center;margin-bottom:40px}
+.pain-divider-line{display:inline-block;width:48px;height:3px;background:var(--terracotta);border-radius:2px;margin-bottom:16px}
+.pain-divider-text{font-size:15px;color:var(--gray)}
+.solution-content{max-width:680px;margin:0 auto;text-align:center}
+.solution-quote{font-size:20px;line-height:1.7;font-weight:700;color:var(--dark);margin-bottom:20px}
+.solution-quote span{color:var(--terracotta)}
+.solution-body{font-size:16px;line-height:1.8;color:var(--gray);margin-bottom:28px}
+.solution-pills{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.solution-pill{padding:10px 24px;background:var(--cream);border-radius:100px;font-size:14px;font-weight:600;transition:all .3s}
+.solution-pill:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.05)}
+
+/* PRICING CARD（含禮包內容） */
+.price-section{padding:100px 0}
+.price-header{text-align:center;margin-bottom:48px}
+.price-card{max-width:760px;margin:0 auto;background:var(--white);border-radius:28px;padding:48px;box-shadow:0 16px 48px rgba(0,0,0,.06);border:2.5px solid var(--terracotta);position:relative;overflow:hidden}
+.price-card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--blue),var(--terracotta))}
+.price-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.price-card-name{font-size:26px;font-weight:900}
+.price-card-badge{padding:6px 16px;background:var(--terracotta);color:#fff;border-radius:100px;font-size:12px;font-weight:700}
+.price-card-includes{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px}
+.price-inc{padding:28px 24px;border-radius:20px;background:var(--cream);transition:all .3s}
+.price-inc:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.05)}
+.price-inc-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.price-inc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;font-weight:900;flex-shrink:0}
+.price-inc:nth-child(1) .price-inc-icon{background:var(--blue)}
+.price-inc:nth-child(2) .price-inc-icon{background:var(--terracotta)}
+.price-inc-name{font-size:16px;font-weight:900}
+.price-inc-sub{font-size:12px;color:var(--gray)}
+.price-inc-desc{font-size:13px;line-height:1.7;color:var(--gray);margin-bottom:14px}
+.price-inc-features{list-style:none;padding:0}
+.price-inc-features li{padding:6px 0;font-size:13px;display:flex;align-items:center;gap:8px}
+.price-inc-features li+li{border-top:1px solid rgba(0,0,0,.04)}
+.price-inc-features li::before{content:'✓';font-size:9px;font-weight:900;width:16px;height:16px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
+.price-inc:nth-child(1) .price-inc-features li::before{background:var(--blue)}
+.price-inc:nth-child(2) .price-inc-features li::before{background:var(--terracotta)}
+.price-inc-tag{display:inline-block;margin-top:12px;padding:4px 12px;background:rgba(203,103,56,.08);color:var(--terracotta);border-radius:100px;font-size:11px;font-weight:700}
+.price-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:28px;border-top:1.5px solid var(--border)}
+.price-label{font-size:14px;font-weight:700;color:var(--terracotta);margin-bottom:4px}
+.price-amount{display:flex;align-items:baseline;gap:6px}
+.price-points{font-size:40px;font-weight:900;color:var(--terracotta);line-height:1}
+.price-unit{font-size:14px;font-weight:600;color:var(--gray)}
+.price-buy-btn{padding:18px 48px;background:var(--terracotta);color:#fff;border:none;border-radius:14px;font-size:18px;font-weight:700;cursor:pointer;transition:all .3s;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.price-buy-btn:hover{background:#b8572e;transform:translateY(-2px);box-shadow:0 8px 28px rgba(203,103,56,.35)}
+
+/* HOW TO BUY */
+.howbuy-section{background:var(--white);padding:100px 0}
+.howbuy-header{text-align:center;margin-bottom:64px}
+.howbuy-steps{display:flex;gap:0;max-width:960px;margin:0 auto;position:relative}
+.howbuy-steps::before{content:'';position:absolute;top:40px;left:10%;right:10%;height:3px;background:linear-gradient(90deg,var(--terracotta),var(--yellow),var(--blue),var(--terracotta),var(--orange));opacity:.15}
+.howbuy-step{flex:1;text-align:center;position:relative;z-index:2}
+.howbuy-num{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.howbuy-step:nth-child(1) .howbuy-num{background:var(--terracotta)}
+.howbuy-step:nth-child(2) .howbuy-num{background:var(--yellow)}
+.howbuy-step:nth-child(3) .howbuy-num{background:var(--blue)}
+.howbuy-step:nth-child(4) .howbuy-num{background:var(--orange)}
+.howbuy-step:nth-child(5) .howbuy-num{background:var(--blue-deep)}
+.howbuy-step h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.howbuy-step p{font-size:12px;color:var(--gray);line-height:1.5;max-width:140px;margin:0 auto}
+.howbuy-note{text-align:center;margin-top:40px;font-size:13px;color:var(--gray-light);font-style:italic}
+
+/* FAQ */
+.faq-section{padding:100px 0}
+.faq-header{text-align:center;margin-bottom:56px}
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{background:var(--white);border-radius:16px;margin-bottom:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.faq-q{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:16px;font-weight:700;transition:color .2s;user-select:none}
+.faq-q:hover{color:var(--terracotta)}
+.faq-q .arrow{font-size:20px;color:var(--gray-light);transition:transform .3s;flex-shrink:0}
+.faq-item.open .faq-q .arrow{transform:rotate(180deg);color:var(--terracotta)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;padding:0 24px}
+.faq-item.open .faq-a{max-height:200px;padding:0 24px 20px}
+.faq-a p{font-size:14px;line-height:1.8;color:var(--gray)}
+
+/* CTA */
+.cta-section{padding:100px 0;text-align:center;background:linear-gradient(135deg,var(--terracotta) 0%,#b8572e 100%);color:#fff;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:-50%;right:-30%;width:600px;height:600px;background:radial-gradient(circle,rgba(250,192,61,.12) 0%,transparent 60%);border-radius:50%;pointer-events:none}
+.cta-content{position:relative;z-index:2}
+.cta-section h2{font-size:clamp(28px,4vw,44px);font-weight:900;margin-bottom:16px}
+.cta-section p{font-size:18px;opacity:.85;margin-bottom:40px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7}
+.btn-white{display:inline-flex;align-items:center;gap:8px;padding:18px 44px;background:#fff;color:var(--terracotta);border:none;border-radius:100px;font-size:18px;font-weight:700;cursor:pointer;transition:all .3s;text-decoration:none;font-family:inherit}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.2)}
+
+footer{padding:40px 0;text-align:center;font-size:13px;color:var(--gray);background:var(--cream);border-top:1px solid rgba(0,0,0,.04)}
+footer a{color:var(--terracotta);text-decoration:none}
+footer .footer-brand{font-weight:700;font-size:15px;color:var(--dark);margin-bottom:8px}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hero-tools{flex-direction:column;align-items:center;gap:12px}
+  .pain-grid{grid-template-columns:repeat(2,1fr)}
+  .price-card{padding:32px 24px}
+  .price-card-top{flex-direction:column;align-items:flex-start;gap:8px}
+  .price-card-includes{grid-template-columns:1fr}
+  .price-bottom{flex-direction:column;gap:20px;text-align:center}
+  .price-buy-btn{width:100%;justify-content:center}
+  .howbuy-steps{flex-wrap:wrap;gap:24px}
+  .howbuy-steps::before{display:none}
+  .howbuy-step{flex:0 0 calc(50% - 12px)}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo"><div class="icon">通</div><span><span class="l">L</span>Trust</span><span class="pass">通行證</span></a>
+    <div class="nav-links">
+      <a href="#pain">適合誰</a>
+      <a href="#buy">方案內容</a>
+      <a href="#howbuy">如何購買</a>
+      <a href="#faq">常見問題</a>
+    </div>
+    <a href="#buy" class="nav-cta">立即購買 →</a>
+  </div>
+</nav>
+
+<!-- ① HERO（移除學測/分科/普高/技高） -->
+<section class="hero">
+  <div class="hero-badge">🎫 LTrust 通行證</div>
+  <p class="hero-eyebrow">學習服務｜超值組合</p>
+  <h1>通行證 ·<br>S.E.N.S.E.I＋Qbot <span class="highlight">無限禮包</span></h1>
+  <p class="hero-sub">一次開通 LTrust 兩大學習工具，解題＋刷題不限次數使用。</p>
+  <p class="hero-sub-small">不需要反覆計算額度，想問就問、想練就練，讓複習更順暢。</p>
+  <div class="hero-tools">
+    <div class="hero-tool">
+      <div class="hero-tool-icon">S</div>
+      <div class="hero-tool-info"><div class="hero-tool-name">S.E.N.S.E.I</div><div class="hero-tool-desc">AI 解題教練</div><div class="hero-tool-unlimited">全科無限提問</div></div>
+    </div>
+    <div class="hero-tool">
+      <div class="hero-tool-icon">Q</div>
+      <div class="hero-tool-info"><div class="hero-tool-name">Qbot</div><div class="hero-tool-desc">刷題組卷</div><div class="hero-tool-unlimited">無限刷題</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ② 痛點＋解法（合併版，先痛點） -->
+<section class="pain-section" id="pain">
+  <div class="container">
+    <div class="pain-header reveal">
+      <div class="section-label">✦ 適合哪些人</div>
+      <h2 class="section-title">如果你常常有以下狀況</h2>
+    </div>
+    <div class="pain-grid reveal">
+      <div class="pain-card"><div class="pain-emoji">😵</div><p>題目看不懂</p></div>
+      <div class="pain-card"><div class="pain-emoji">🤯</div><p>詳解還是看不懂</p></div>
+      <div class="pain-card"><div class="pain-emoji">📝</div><p>想大量練題</p></div>
+      <div class="pain-card"><div class="pain-emoji">🔥</div><p>考前需要集中複習</p></div>
+      <div class="pain-card"><div class="pain-emoji">⏸️</div><p>不想被次數限制打斷</p></div>
+    </div>
+    <div class="pain-divider reveal">
+      <div class="pain-divider-line"></div>
+      <p class="pain-divider-text">那無限禮包會更適合你 ——</p>
+    </div>
+    <div class="solution-content reveal">
+      <p class="solution-quote">比起反覆計算額度，<br>你可以把時間更專注在<span>真正的學習</span>上。</p>
+      <p class="solution-body">想問題就問題、想刷題就刷題，讓複習節奏不中斷。S.E.N.S.E.I 負責幫你搞懂每一道題的「為什麼」，Qbot 負責讓你用大量練習把觀念內化——兩者搭配，形成完整的學習迴圈。</p>
+      <div class="solution-pills">
+        <div class="solution-pill">♾️ 不限次數</div>
+        <div class="solution-pill">🔄 刷題＋解題雙軌</div>
+        <div class="solution-pill">🎯 段考衝刺最適合</div>
+        <div class="solution-pill">📱 隨時隨地使用</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ③ 方案內容＋價格（禮包內容併入，售價→超值優惠，點→LT Points） -->
+<div class="price-section" id="buy">
+  <div class="container">
+    <div class="price-header reveal">
+      <div class="section-label">✦ 方案內容</div>
+      <h2 class="section-title">60天無限禮包</h2>
+    </div>
+    <div class="price-card reveal">
+      <div class="price-card-top">
+        <div class="price-card-name">S.E.N.S.E.I＋Qbot 無限禮包</div>
+        <div class="price-card-badge">超值組合</div>
+      </div>
+
+      <div class="price-card-includes">
+        <!-- S.E.N.S.E.I -->
+        <div class="price-inc">
+          <div class="price-inc-header">
+            <div class="price-inc-icon">S</div>
+            <div><div class="price-inc-name">S.E.N.S.E.I</div><div class="price-inc-sub">全科無限提問</div></div>
+          </div>
+          <p class="price-inc-desc">遇到不會的題目，可透過拍照、上傳圖片或手動輸入直接提問。支援數學、英文、國文、自然、社會等科目，幫助你快速理解卡住的題目與觀念。</p>
+          <ul class="price-inc-features">
+            <li>拍照或上傳圖片即時提問</li>
+            <li>手動輸入題目也 OK</li>
+            <li>全科支援</li>
+            <li>完整推理過程拆解</li>
+            <li>延伸知識補充</li>
+          </ul>
+          <div class="price-inc-tag">不限科目 · 不限次數</div>
+        </div>
+        <!-- Qbot -->
+        <div class="price-inc">
+          <div class="price-inc-header">
+            <div class="price-inc-icon">Q</div>
+            <div><div class="price-inc-name">Qbot</div><div class="price-inc-sub">無限刷題</div></div>
+          </div>
+          <p class="price-inc-desc">依照自己的複習需求自由練題。從日常練習、弱點補強到考前衝刺，都能反覆刷題與複習，提升準備效率。</p>
+          <ul class="price-inc-features">
+            <li>龍騰版教科書題庫</li>
+            <li>自選範圍、題型、題數</li>
+            <li>計時作答模擬考試</li>
+            <li>錯題自動收錄與重做</li>
+            <li>學習儀表板追蹤</li>
+          </ul>
+          <div class="price-inc-tag">不限科目 · 不限次數</div>
+        </div>
+      </div>
+
+      <div class="price-bottom">
+        <div>
+          <div class="price-label">超值優惠</div>
+          <div class="price-amount">
+            <span class="price-points">179,900</span>
+            <span class="price-unit">LT Points</span>
+          </div>
+        </div>
+        <a href="https://ltrust.tw/pass" class="price-buy-btn">前往購買 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ 如何購買（預留截圖位置） -->
+<section class="howbuy-section" id="howbuy">
+  <div class="container">
+    <div class="howbuy-header reveal">
+      <div class="section-label">✦ 如何購買</div>
+      <h2 class="section-title">五步驟，開始你的無限學習</h2>
+    </div>
+    <div class="howbuy-steps reveal">
+      <div class="howbuy-step"><div class="howbuy-num">1</div><h3>登入 LTrust</h3><p>前往 LTrust 官方網站並登入帳號</p></div>
+      <div class="howbuy-step"><div class="howbuy-num">2</div><h3>點擊「通」</h3><p>點擊右上角的通行證入口</p></div>
+      <div class="howbuy-step"><div class="howbuy-num">3</div><h3>進入禮包頁面</h3><p>瀏覽通行證／禮包的詳細內容</p></div>
+      <div class="howbuy-step"><div class="howbuy-num">4</div><h3>選擇方案</h3><p>確認方案內容並完成購買</p></div>
+      <div class="howbuy-step"><div class="howbuy-num">5</div><h3>開始使用</h3><p>購買完成即可無限使用</p></div>
+    </div>
+    <p class="howbuy-note reveal">＊ 實際操作畫面將於近期補上</p>
+  </div>
+</section>
+
+<!-- ⑤ FAQ（移除日期相關內容） -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-header reveal">
+      <div class="section-label">✦ 常見問題</div>
+      <h2 class="section-title">還有疑問？</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">購買後使用期限怎麼計算？<span class="arrow">▾</span></div>
+        <div class="faq-a"><p>從購買完成當下開始計算，連續 60 個日曆天內皆可無限使用。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">「不限次數」真的沒有上限嗎？<span class="arrow">▾</span></div>
+        <div class="faq-a"><p>是的，在有效期內，S.E.N.S.E.I 和 Qbot 的使用次數完全沒有上限，不限科目、不限題數。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">這組禮包有包含 WriteAhead 嗎？<span class="arrow">▾</span></div>
+        <div class="faq-a"><p>目前無限禮包包含 S.E.N.S.E.I 和 Qbot 兩項服務，WriteAhead（英文作文批閱）需另外購買批閱次數。</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">LT Points 是什麼？<span class="arrow">▾</span></div>
+        <div class="faq-a"><p>LT Points 是 LTrust 平台的點數貨幣，可在平台上購買各項學習服務。點數的購買方案與兌換比例請參考平台的點數購買頁面。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑥ CTA（移除檔期） -->
+<section class="cta-section">
+  <div class="cta-content">
+    <h2>想問就問，想練就練<br>不限次數的學習自由</h2>
+    <p>一次開通 S.E.N.S.E.I 和 Qbot，讓解題＋刷題成為你的日常。</p>
+    <a href="#buy" class="btn-white">立即購買 →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-brand">LTrust 通行證 by <a href="https://ltrust.tw" target="_blank">龍騰文化</a></div>
+    <div>© 2025 龍騰文化 Longteng Education Co., Ltd. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>20));
+document.querySelectorAll('.reveal').forEach(el=>{
+  new IntersectionObserver((entries,obs)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.15,rootMargin:'0px 0px -40px 0px'}).observe(el)
+});
+function toggleFaq(el){el.parentElement.classList.toggle('open')}
+</script>
+</body>
+</html>
